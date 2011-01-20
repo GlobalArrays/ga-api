@@ -10,3 +10,28 @@
 
 \newcommand{\access}[1]{\textcolor{green}{#1}}
 
+\newenvironment{desc}{
+\noindent
+\textcolor{blue}{API description:}\color{black}}{}
+
+\newenvironment{cdesc}{
+\noindent
+\textcolor{blue}{C API description:}\color{black}}{}
+
+\newenvironment{fdesc}{
+\noindent
+\textcolor{blue}{Fortran API description:}\color{black}}{}
+
+\newenvironment{cxxdesc}{
+\noindent
+\textcolor{blue}{C++ API description:}\color{black}}{}
+
+\newcommand{\codevar}[1]{\texttt{#1}}
+
+\newenvironment{codeseg}{
+\begin{alltt}
+}{
+\end{alltt}
+}
+
+

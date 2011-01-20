@@ -1,4 +1,5 @@
 \documentclass[12pt]{article}
+\usepackage{fullpage}
 \usepackage{color}
 \usepackage{alltt}
 \usepackage{underscore}
@@ -11,10 +12,12 @@
 \apih{INITIALIZE}
 
 \begin{capi}
+void NGA_Initialize()
 void GA_Initialize()
 \end{capi}
 
 \begin{fapi}
+subroutine nga_initialize()
 subroutine ga_initialize()
 \end{fapi}
 
@@ -184,7 +187,7 @@ logical function nga_create(type, ndim, dims, array_name, chunk, g_a)
   (chunk[0]*dims[0]); setting chunk[1]=dim[1] gives distribution by
   horizontal strips (chunk[1]*dims[1]). Actual chunks will be modified
   so that they are at least the size of the minimum and each process
-  has either zero or one chunk. Specifying chunk[i] as <1 will cause
+  has either zero or one chunk. Specifying chunk[i] as less than will cause
   that dimension to be distributed evenly.
 
   As a convenience, when chunk is specified as NULL, the entire array
@@ -1780,6 +1783,48 @@ This operation is local.
 
 \end{desc}
 
+\begin{fdesc}
+
+  Provides access to the specified patch of array. Returns leading
+  dimension ld and and MA-like index for the data. This routine is
+  intended for writing new GA operations. Call to ga_access should
+  normally follow a call to ga_distribution that returns coordinates
+  of the patch associated with a processor. You need to make sure that
+  the coordinates of the patch are valid (test values returned from
+  ga_distribution).
+
+Your code should include a MA include file, mafdecls.h. 
+\begin{codeseg}       
+          dbl_mb(index)  - for double precision data
+          int_mb(index)  - for integer data
+          dcpl_mb(index) - for double complex data
+\end{codeseg}
+
+The addressing convention refers the first element \codevar{(ilo,jlo)}
+of the patch. However, you can only pass that reference to another
+subroutine where it could be used like a normal array, see the
+following example. This constraint caused by the HP fortran compiler
+inability to reference shared memory data properly. The C interface
+has no such restrictions.
+
+Example
+
+For a given subroutine:
+\begin{codeseg}
+          subroutine foo(A,  nrows, ncols lda)
+          double precision A(lda,*)
+          integer nrows, ncols
+             ....
+          end
+\end{codeseg}
+you can reference A(ilo:ihi,jlo:jhi) in the following way:
+
+\begin{codeseg}
+          call foo(dbl_mb(index), ihi-ilo+1, jhi-jlo+1, lda)
+\end{codeseg}
+\end{fdesc}
+
+
 \apih{ACCESS_BLOCK_SEGMENT}
 
 \begin{capi}
@@ -1890,12 +1935,13 @@ subroutine nga_release(g_a, lo, hi)
 Releases access to a global array when the data was read only.
 
 Your code should look like:
+\begin{codeseg}
         NGA_Distribution(g_a, myproc, lo,hi);
         NGA_Access(g_a, lo, hi, \&ptr, ld);
            
              <operate on the data referenced by ptr> 
         GA_Release(g_a, lo, hi);
-
+\end{codeseg}
 NOTE: see restrictions specified for ga_access
 This operation is local.
 
