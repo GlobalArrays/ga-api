@@ -1,0 +1,40 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{color}
+\usepackage{alltt}
+\usepackage{underscore}
+\usepackage{environ}
+\usepackage{graphicx}
+\include{preamble}
+\include{otype}
+
+
+\begin{document}
+
+\section{Additional Explanations}
+
+Global arrays are distributed array objects supported in a message-passing program through the GA library calls. They can be created, destroyed, and manipulated using a set of GA operations.
+
+\subsection{Attributes of GA Operations}
+
+Global arrays can have the following attributes.
+
+\begin{itemize}
+\item One-sided/independent - references shared or remote data without remote process cooperation (unlike send/receive pair)
+\item Collective - requires all processes to make the call
+\item Local - operation is local to each process and does not require communication
+\item Atomic - operation has mutual exclusion built in 
+\item Non-blocking - Nonblocking operations initiate a communication call and then return control to the application. A return from a nonblocking operation call indicates a mere initiation of the data transfer process and the operation can be completed locally by making a call to the wait (e.g., nga_nbwait) routine.
+\end{itemize}
+ 
+\subsection{Language Interoperability}
+
+GA provides C and Fortran interfaces  to the same array objects in the same (mixed-language) program.
+
+\subsection{Higher-dimensional Array API}
+
+All releases of GA less than 3.0 supported only 2-dimensional arrays. Starting with the release of 3.0, GA arrays can be be essentially of arbitrary dimensions but the package as compiled supports up to 7 dimensions (Fortran limit for multidimensional arrays).
+
+The 2-D API for backward compatibility with older versions of the toolkit remained unchanged. For some GA operations, two versions of the API are available. They are identified with a ``GA" or ``NGA" prefix that correspond to either the old 2-dimensional or the new arbitrary(N)-dimensional version, respectively. 
+
+\end{document}
