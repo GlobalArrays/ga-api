@@ -37,4 +37,81 @@ All releases of GA less than 3.0 supported only 2-dimensional arrays. Starting w
 
 The 2-D API for backward compatibility with older versions of the toolkit remained unchanged. For some GA operations, two versions of the API are available. They are identified with a ``GA" or ``NGA" prefix that correspond to either the old 2-dimensional or the new arbitrary(N)-dimensional version, respectively. 
 
+\section{Python}
+This section describes using Global Arrays with Python.
+
+\subsection{Module ga}
+The Global Arrays (GA) Python interface.
+
+This module exports the GA C API, with a few enhancements. The notable exceptions include supporting Pythonic ranges. The ranges here are half-open e.g., [0,n) instead of in the C API where they are closed e.g., [0,n]. This follows the Python convention.
+
+\subsection{Variables}
+\begin{codeseg}
+C_CHAR = 1000
+C_DBL = 1004
+C_DCPL = 1007
+C_FLT = 1003
+C_INT = 1001
+C_LDBL = 1005
+C_LDCPL = 1008
+C_LONG = 1002
+C_LONGLONG = 1016
+C_SCPL = 1006
+F_BYTE = 1009
+F_DBL = 1013
+F_DCPL = 1015
+F_INT = 1010
+F_LOG = 1011
+F_REAL = 1012
+F_SCPL = 1014
+TYPE_BASE = 1000
+WORLD_PROC_GROUP = -1
+__package__ = None
+__test__ = \{u'_acc_common (line 249)': '_acc_common(int g_a, b...
+_to_dtype = \{1000: <type 'numpy.int8'>, 1001: <type 'numpy.int...
+_to_typenum = \{1000: 1, 1001: 5, 1002: 7, 1003: 11, 1004: 12, ...
+\end{codeseg}
+
+\subsection{Variables Details}
+The following are detailed examples of Python variables. 
+
+\begin{codeseg}
+  _test_
+    Value:
+    \{u'_acc_common (line 249)': '''_acc_common(int g_a, buffer, lo=None, h\
+    i=None, alpha=None, nb=False, periodic=False, skip=None)
+    Combines data from buffer with data in the global array patch.
+    
+       The buffer array is assumed to be have the same number of
+       dimensions as the global array.  If the buffer is not contiguous, \ a
+       contiguous copy will be made.
+       ...
+
+_to_dtype
+    Value:
+
+    \{1000: <type 'numpy.int8'>,
+     1001: <type 'numpy.int32'>,
+     1002: <type 'long'>,
+     1003: <type 'numpy.float32'>,
+     1004: <type 'numpy.float64'>,
+     1005: <type 'numpy.float128'>,
+     1006: <type 'numpy.complex64'>,
+     1007: <type 'numpy.complex128'>,
+    ...
+
+_to_typenum
+    Value:
+
+    \{1000: 1,
+     1001: 5,
+     1002: 7,
+     1003: 11,
+     1004: 12,
+     1005: 13,
+     1006: 14,
+     1007: 15,
+    ...
+\end{codeseg}
+
 \end{document}
