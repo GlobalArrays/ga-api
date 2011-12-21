@@ -1,0 +1,134 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{color}
+\usepackage{alltt}
+\usepackage{underscore}
+\usepackage{environ}
+\usepackage{graphicx}
+\usepackage{minted}
+
+\newcommand{\apih}[1]{
+\hspace*{\fill} \\ \\ \\
+\color{black}
+\noindent
+\textbf{\LARGE
+#1
+\newline
+}
+}
+
+\newenvironment{desc}{
+\noindent
+\textcolor{blue}{API description:}
+
+}{}
+
+\newenvironment{cdesc}{
+\noindent
+\textcolor{blue}{C API description:}
+
+}{}
+
+\newenvironment{fdesc}{
+\noindent
+\textcolor{blue}{Fortran API description:}
+
+}{}
+
+\newenvironment{cxxdesc}{
+\noindent
+\textcolor{blue}{C++ API description:}
+
+}{}
+
+\newenvironment{fapi}{
+\noindent
+\textcolor{blue}{Fortran Interface}
+\small
+}{
+}
+
+\newenvironment{f2dapi}{
+\noindent
+\textcolor{blue}{Fortran 2D Interface}
+\small
+}{
+}
+
+\newenvironment{capi}{
+\noindent
+\textcolor{blue}{C Interface}
+\small
+}{
+}
+
+\newenvironment{cxxapi}{
+\noindent
+\textcolor{blue}{C++ Interface}
+\small
+}{
+}
+
+\newenvironment{pyapi}{
+\noindent
+\textcolor{blue}{Python Interface}
+\small
+}{
+}
+
+\newenvironment{funcargs}{
+\begin{tabular}{ p{0.2\textwidth} p{0.2\textwidth} p{0.5\textwidth} p{0.1\textwidth} }
+}{
+\end{tabular}
+}
+
+\newcommand{\funcarg}[4]{
+\texttt{#1} & \texttt{#2} & \texttt{- #3} & \texttt{#4} \\
+}
+
+\newminted{c}{}
+\newminted{cpp}{}
+\newminted{fortran}{}
+\newminted{python}{}
+\newmint[cfuncsig]{c}{}
+\newmint[cppfuncsig]{cpp}{}
+\newmint[ffuncsig]{fortran}{}
+\newmint[pyfuncsig]{python}{}
+
+\begin{document}
+
+\apih{JEFF TEST}
+
+\begin{capi}
+\cfuncsig|void NGA_Initialize()|
+\cfuncsig|void GA_Initialize()|
+\end{capi}
+
+\begin{fapi}
+\ffuncsig|subroutine nga_initialize()|
+\ffuncsig|subroutine ga_initialize()|
+\end{fapi}
+
+\begin{cxxapi}
+\cppfuncsig|GA::Initialize(int argc, char *argv[], size_t limit)|
+\begin{cppcode}
+GA::Initialize(int argc, char *argv[], size_t limit)
+\end{cppcode}
+\begin{funcargs}
+\funcarg{int}{argc}{number of command line arguments}{input}
+\funcarg{char**}{argv}{command line arguments}{input}
+\funcarg{size_t}{limit}{amount of memory in bytes per process}{input}
+\end{funcargs}
+\end{cxxapi}
+
+\begin{pyapi}
+\pyfuncsig|from ga4py import ga|
+\end{pyapi}
+
+\begin{desc}
+Allocate and initialize internal data structures in Global Arrays.
+
+This is a collective operation.
+\end{desc}
+
+\end{document}
