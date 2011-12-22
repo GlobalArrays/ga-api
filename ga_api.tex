@@ -110,7 +110,7 @@ This is a collective operation.
 
 \end{desc}
 
-\seealso{SET MEMORY LIMIT, ANOTHER}
+\seealso{SET MEMORY LIMIT,INITIALIZE}
 
 \apih{PGROUP CREATE}{Create a GA processor group}
 
@@ -139,8 +139,8 @@ integer function ga_pgroup_create(list, size)
 PGroup::PGroup(int *plist, int size)
 \end{cxxcode}
 \begin{funcargs}
-\funcarg{}{size}{number of processors in group}{input}
-\funcarg{}{plist[size]}{list of processor IDs in group}{input}
+\funcarg{int}{size}{number of processors in group}{input}
+\funcarg{int*}{plist[size]}{list of processor IDs in group}{input}
 \end{funcargs}
 \end{cxxapi}
 
@@ -148,24 +148,25 @@ PGroup::PGroup(int *plist, int size)
 \begin{pycode}
 pgroup_create(list)
 \end{pycode}
+\begin{funcargs}
+\funcarg{iterable of ints}{list}{list of processor IDs in group}{input}
+\end{funcargs}
 \end{pyapi}
 
 \dcoll
 
 \begin{desc}
 
-  This command is used to create a processor group. At present, it
-  must be invoked by all processors in the current default processor
-  group. The list of processors use the indexing scheme of the default
-  processor group. If the default processor group is the world group,
-  then these indices are the usual processor indices. This function
-  returns a process group handle that can be used to reference this
-  group by other functions.
+This command is used to create a processor group. At present, it must be
+invoked by all processors in the current default processor group. The list of
+processors use the indexing scheme of the default processor group. If the
+default processor group is the world group, then these indices are the usual
+processor indices. This function returns a process group handle that can be
+used to reference this group by other functions.
 
-  This is a collective operation on the default processor group.
+This is a collective operation on the default processor group.
 
 \end{desc}
-
 
 \apih{PGROUP DESTROY}{Destroy a GA processor group}
 
@@ -174,7 +175,7 @@ pgroup_create(list)
 int GA_Pgroup_destroy(int p_handle)
 \end{ccode}
 \begin{funcargs}
-\funcarg{}{p_handle}{processor group handle}{input}
+\funcarg{int}{p_handle}{processor group handle}{input}
 \end{funcargs}
 \end{capi}
 
@@ -197,16 +198,19 @@ PGroup::~PGroup()
 \begin{pycode}
 pgroup_destroy(int pgroup)
 \end{pycode}
+\begin{funcargs}
+\funcarg{int}{pgroup}{processor group handle}{input}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
 
-  This command is used to free up a processor group handle. It returns
-  0 if the processor group handle was not previously active.
+This command is used to free up a processor group handle. It returns 0 if the
+processor group handle was not previously active.
 
-  This is a collective operation on the default processor group.
+This is a collective operation on the default processor group.
 
 \end{desc}
 
@@ -217,7 +221,7 @@ pgroup_destroy(int pgroup)
 void GA_Pgroup_set_default(int p_handle)
 \end{ccode}
 \begin{funcargs}
-\funcarg{}{p_handle}{processor group handle}{input}
+\funcarg{int}{p_handle}{processor group handle}{input}
 \end{funcargs}
 \end{capi}
 
@@ -235,7 +239,7 @@ subroutine ga_pgroup_set_default(p_handle)
 static void PGroup::setDefault(PGroup *p_handle)
 \end{cxxcode}
 \begin{funcargs}
-\funcarg{}{p_handle}{processor group}{input}
+\funcarg{PGroup*}{p_handle}{processor group}{input}
 \end{funcargs}
 \end{cxxapi}
 
@@ -243,29 +247,29 @@ static void PGroup::setDefault(PGroup *p_handle)
 \begin{pycode}
 pgroup_set_default(int pgroup)
 \end{pycode}
+\begin{funcargs}
+\funcarg{int}{pgroup}{processor group handle}{input}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
 
-  This function can be used to reset the default processor group on a
-  collection of processors. All processors in the group referenced by
-  p_handle must make a call to this function. Any standard global
-  array call that is made after resetting the default processor group
-  will be restricted to processors in that group. Global arrays that
-  are created after resetting the default processor group will only be
-  defined on that group and global operations, such as GA_Sync or
-  GA_Igop, and will be restricted to processors in that group. The
-  GA_Pgroup_set_default call can be used to rapidly convert large
-  applications, written with GA, into routines that run on processor
-  groups.
+This function can be used to reset the default processor group on a collection
+of processors. All processors in the group referenced by p_handle must make a
+call to this function. Any standard global array call that is made after
+resetting the default processor group will be restricted to processors in that
+group. Global arrays that are created after resetting the default processor
+group will only be defined on that group and global operations, such as GA_Sync
+or GA_Igop, and will be restricted to processors in that group. The
+GA_Pgroup_set_default call can be used to rapidly convert large applications,
+written with GA, into routines that run on processor groups.
 
-  The default processor group can be overridden by using GA calls that
-  require an explicit group handle as one of the arguments.
+The default processor group can be overridden by using GA calls that require an
+explicit group handle as one of the arguments.
 
-  This is a collective operation on the group represented by the
-  handle p_handle.
+This is a collective operation on the group represented by the handle p_handle.
 
 \end{desc}
 
@@ -276,11 +280,11 @@ pgroup_set_default(int pgroup)
 int NGA_Create(int type, int ndim, int dims[], char *array_name, int chunk[])
 \end{ccode}
 \begin{funcargs}
-\funcarg{}{array_name}{a unique character string}{input}
-\funcarg{}{type}{data type (MT_F_DBL,MT_F_INT,MT_F_DCPL)}{input}
-\funcarg{}{ndim}{number of array dimensions}{input}
-\funcarg{}{dims[ndim]}{array of dimensions}{input}
-\funcarg{}{chunk[ndim]}{array of chunks, each element specifies minimum size that given dimensions should be chunked up into}{input}
+\funcarg{char*}{array_name}{a unique character string}{input}
+\funcarg{int}{type}{data type (MT_F_DBL,MT_F_INT,MT_F_DCPL)}{input}
+\funcarg{int}{ndim}{number of array dimensions}{input}
+\funcarg{int*}{dims[ndim]}{array of dimensions}{input}
+\funcarg{int*}{chunk[ndim]}{array of chunks, each element specifies minimum size that given dimensions should be chunked up into}{input}
 \end{funcargs}
 \end{capi}
 
@@ -330,39 +334,39 @@ GlobalArray * GAServices::createGA(int type, int ndim, int dims[],
 \begin{pyapi}
 \begin{pycode}
 create(int gtype, dims, char *name='', chunk=None, int pgroup=-1)
-   gtype (int)                      - the type of the array
-   dims (1D array-like of integers) - shape of the array
-   name (string)                    - the name of the array
-   chunk (1D array-like of integers)- see above
-   pgroup (int)                     - create array only as part of
-                                      this processor group
 \end{pycode}
+\begin{funcargs}
+\funcarg{str}{name}{a unique character string}{input}
+\funcarg{int}{type}{data type e.g. C_DBL, C_INT, C_DCPL}{input}
+\funcarg{iter of ints}{dims}{shape of array}{input}
+\funcarg{iter of ints}{chunk}{each element specifies minimum size that given dimensions should be chunked up into}{input}
+\funcarg{int}{pgroup}{processor group handle}{input}
+\end{funcargs}
 \end{pyapi}
 
 \dcoll
 
 \begin{desc}
 
-  Creates an ndim-dimensional array using the regular distribution
-  model and returns an integer handle representing the array.
+Creates an ndim-dimensional array using the regular distribution model and
+returns an integer handle representing the array.
 
-  The array can be distributed evenly or not. The control over the
-  distribution is accomplished by specifying chunk (block) size for
-  all or some of array dimensions. For example, for a 2-dimensional
-  array, setting chunk[0]=dim[0] gives distribution by vertical strips
-  (chunk[0]*dims[0]); setting chunk[1]=dim[1] gives distribution by
-  horizontal strips (chunk[1]*dims[1]). Actual chunks will be modified
-  so that they are at least the size of the minimum and each process
-  has either zero or one chunk. Specifying chunk[i] as less than 1 will cause
-  that dimension to be distributed evenly.
+The array can be distributed evenly or not. The control over the distribution
+is accomplished by specifying chunk (block) size for all or some of array
+dimensions. For example, for a 2-dimensional array, setting chunk[0]=dim[0]
+gives distribution by vertical strips (chunk[0]*dims[0]); setting
+chunk[1]=dim[1] gives distribution by horizontal strips (chunk[1]*dims[1]).
+Actual chunks will be modified so that they are at least the size of the
+minimum and each process has either zero or one chunk. Specifying chunk[i] as
+less than 1 will cause that dimension to be distributed evenly.
 
-  As a convenience, when chunk is specified as NULL, the entire array
-  is distributed evenly.
+As a convenience, when chunk is specified as NULL, the entire array is
+distributed evenly.
 
-  Return value: a non-zero array handle means the call was succesful.
-  This is a collective operation.
+Return value: a non-zero array handle means the call was succesful.  This is a
+collective operation.
+
 \end{desc}
-
 
 \apih{CREATE CONFIG}{Create a GA with a specific configuration}
 
@@ -372,12 +376,12 @@ int NGA_Create_config(int type, int ndim, int dims[], char *array_name,
                       int chunk[], int p_handle)
 \end{ccode}
 \begin{funcargs}
-\funcarg{}{array_name}{a unique character string}{input}
-\funcarg{}{type}{data type (MT_F_DBL,MT_F_INT,MT_F_DCPL)}{input}
-\funcarg{}{ndim}{number of array dimensions}{input}
-\funcarg{}{dims[ndim]}{array of dimensions}{input}
-\funcarg{}{chunk[ndim]}{array of chunks, each element specifies minimum size that given dimensions should be chunked up into}{input}
-\funcarg{}{p_handle}{processor list handle}{input}
+\funcarg{char*}{array_name}{a unique character string}{input}
+\funcarg{int}{type}{data type (MT_F_DBL,MT_F_INT,MT_F_DCPL)}{input}
+\funcarg{int}{ndim}{number of array dimensions}{input}
+\funcarg{int*}{dims[ndim]}{array of dimensions}{input}
+\funcarg{int*}{chunk[ndim]}{array of chunks, each element specifies minimum size that given dimensions should be chunked up into}{input}
+\funcarg{int}{p_handle}{processor list handle}{input}
 \end{funcargs}
 \end{capi}
 
@@ -414,20 +418,33 @@ GlobalArray::GlobalArray(int type, int ndim, int64_t dims[], char *arrayname,
 \end{funcargs}
 \end{cxxapi}
 
+\begin{pyapi}
+\begin{pycode}
+create(int gtype, dims, char *name='', chunk=None, int pgroup=-1)
+\end{pycode}
+\begin{funcargs}
+\funcarg{str}{name}{a unique character string}{input}
+\funcarg{int}{type}{data type e.g. C_DBL, C_INT, C_DCPL}{input}
+\funcarg{iter of ints}{dims}{shape of array}{input}
+\funcarg{iter of ints}{chunk}{each element specifies minimum size that given dimensions should be chunked up into}{input}
+\funcarg{int}{pgroup}{processor group handle}{input}
+\end{funcargs}
+\end{pyapi}
+
 \dcoll
 
 \begin{desc}
 
-  Creates an ndim-dimensional array using the regular distribution
-  model but with an explicitly specified processor list handle and
-  returns an integer handle representing the array.
+Creates an ndim-dimensional array using the regular distribution model but with
+an explicitly specified processor list handle and returns an integer handle
+representing the array.
 
-  This call is essentially the same as the NGA_Create call, except for
-  the processor list handle p_handle. It can be used to create
-  mirrored arrays.
+This call is essentially the same as the NGA_Create call, except for the
+processor list handle p_handle. It can be used to create mirrored arrays.
 
-  Return value: a non-zero array handle means the call was succesful.
-  This is a collective operation.
+Return value: a non-zero array handle means the call was succesful.
+
+This is a collective operation.
 
 \end{desc}
 
@@ -2634,6 +2651,8 @@ Sets the amount of memory to be used (in bytes) per process
 This is a local operation.
 
 \end{desc}
+
+\seealso{INITIALIZE LTD}
 
 \apih{GET}{Get data from a global array}
 
