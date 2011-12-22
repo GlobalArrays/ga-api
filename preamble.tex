@@ -141,6 +141,18 @@
 \texttt{#1} & \texttt{#2} & \texttt{#3} & \texttt{#4} \\
 }
 
+\newcommand{\inarg}[3]{
+\texttt{#1} & \texttt{#2} & \texttt{#3} & \textcolor{blue}{\texttt{input}} \\
+}
+
+\newcommand{\inoutarg}[3]{
+\texttt{#1} & \texttt{#2} & \texttt{#3} & \texttt{\textcolor{blue}{input}/\textcolor{red}{output}} \\
+}
+
+\newcommand{\outarg}[3]{
+\texttt{#1} & \texttt{#2} & \texttt{#3} & \textcolor{red}{\texttt{output}} \\
+}
+
 \definecolor{copper}{RGB}{213,117,0}
 \definecolor{silver}{RGB}{112,114,118}
 \definecolor{bronze}{RGB}{168,60,15}
@@ -153,6 +165,7 @@
 \newcommand*{\seealso}[1]{%
 \noindent
 \textcolor{blue}{See Also:}
+\newline
 \def\mystring{#1}
 \StrCount{\mystring}{,}[\commacount]
 \setcounter{SeeAlsoCounter}{0}
