@@ -1,3 +1,6 @@
+\usepackage{etoolbox} % for @for \do
+\usepackage[hidelinks]{hyperref} % for hyperref
+
 %\IfFileExists{minted.sty}{
 %\usepackage{minted}
 %\newminted[ccode]{c}{}
@@ -11,24 +14,27 @@
 %}{
 \usepackage{listings}
 \lstnewenvironment{ccode}
-    {\lstset{language=C}}
+    {\lstset{language=C, breaklines=true, breakautoindent=true}}
     {}
 \lstnewenvironment{cxxcode}
-    {\lstset{language=C++}}
+    {\lstset{language=C++, breaklines=true, breakautoindent=true}}
     {}
 \lstnewenvironment{fcode}
-    {\lstset{language=Fortran}}
+    {\lstset{language=Fortran, breaklines=true, breakautoindent=true}}
     {}
 \lstnewenvironment{pycode}
-    {\lstset{language=Python}}
+    {\lstset{language=Python, breaklines=true, breakautoindent=true}}
     {}
 %}
 
 \newcommand{\apih}[2]{
-\hspace*{\fill} \\ \\ \\
-\color{black}
+%\hspace*{\fill} \\ \\ \\
+%\color{black}
 \noindent
-\textbf{\Large{#1} -- \normalsize{#2}}
+\section*{#1}
+\label{api:#1}
+\textit{#2}
+%\textbf{\Large{#1} -- \normalsize{#2}}
 \newline
 }
 
@@ -63,7 +69,6 @@
 \textcolor{blue}{Operation Type:} Local
 \newline
 }
-
 
 \newenvironment{desc}{
 \noindent
@@ -140,4 +145,14 @@
 \definecolor{gold}{RGB}{241,171,0}
 \definecolor{onyx}{RGB}{36,36,36}
 \definecolor{platinum}{RGB}{178,179,181}
+
+\makeatletter
+\newcommand*{\seealso}[1]{%
+\noindent
+\textcolor{blue}{See Also:}
+  \@for\arg:=#1\do{%
+    \hyperref[api:\arg]{\nameref*{api:\arg}}
+  }%
+}
+\makeatother
 

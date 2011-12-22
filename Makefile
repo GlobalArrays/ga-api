@@ -10,6 +10,7 @@ API_DEPENDENCIES += ga_api.tex
 
 ga_api.pdf: $(API_DEPENDENCIES)
 	pdflatex --shell-escape ga_api.tex
+	pdflatex --shell-escape ga_api.tex
 
 clean:
 	rm -f *.log *.aux *.pdf *.dvi

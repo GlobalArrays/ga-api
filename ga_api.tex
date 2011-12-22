@@ -11,7 +11,6 @@
 
 \apih{INITIALIZE}{Initialize GA}
 
-
 \begin{capi}
 \begin{ccode}
 void NGA_Initialize()
@@ -28,7 +27,7 @@ subroutine ga_initialize()
 
 \begin{cxxapi}
 \begin{cxxcode}
-GA::Initialize(int argc, char *argv[], size_t limit)
+GA::Initialize(int argc, char *argv[], size_t limit=0)
 \end{cxxcode}
 \begin{funcargs}
 \funcarg{int}{argc}{number of command line arguments}{input}
@@ -53,15 +52,14 @@ This is a collective operation.
 
 \end{desc}
 
-
-\apih{INITIALIZE_LTD}{Initialize GA with memory limit}
+\apih{INITIALIZE LTD}{Initialize GA with memory limit}
 
 \begin{capi}
 \begin{ccode}
 void GA_Initialize_ltd(size_t limit)
 \end{ccode}
 \begin{funcargs}
-\funcarg{}{limit}{amount of memory in bytes per process}{input}
+\funcarg{size_t}{limit}{amount of memory in bytes per process}{input}
 \end{funcargs}
 \end{capi}
 
@@ -80,12 +78,12 @@ GA::Initialize(int argc, char *argv[], unsigned long heapSize,
                unsigned long stackSize, int type, size_t limit = 0)
 \end{cxxcode}
 \begin{funcargs}
-\funcarg{}{argc}{number of command line arguments}{input}
-\funcarg{}{argv}{command line arguments}{input}
-\funcarg{}{limit}{amount of memory in bytes per process}{input}
-\funcarg{}{heapSize}{all of the dynamically allocated local memory}{input}
-\funcarg{}{stackSize}{all of the dynamically allocated local memory}{input}
-\funcarg{}{type}{data type}{input}
+\funcarg{int}{argc}{number of command line arguments}{input}
+\funcarg{char**}{argv}{command line arguments}{input}
+\funcarg{size_t}{limit}{amount of memory in bytes per process}{input}
+\funcarg{unsigned long}{heapSize}{all of the dynamically allocated local memory}{input}
+\funcarg{unsigned long}{stackSize}{all of the dynamically allocated local memory}{input}
+\funcarg{int}{type}{data type}{input}
 \end{funcargs}
 \end{cxxapi}
 
@@ -112,16 +110,17 @@ This is a collective operation.
 
 \end{desc}
 
+\seealso{SET MEMORY LIMIT, ANOTHER}
 
-\apih{PGROUP_CREATE}{Create a GA processor group}
+\apih{PGROUP CREATE}{Create a GA processor group}
 
 \begin{capi}
 \begin{ccode}
 int GA_Pgroup_create(int *list, int size)
 \end{ccode}
 \begin{funcargs}
-\funcarg{}{list[size]}{list of processor IDs in group}{input}
-\funcarg{size}{}{number of processors in group}{input}
+\funcarg{int*}{list[size]}{list of processor IDs in group}{input}
+\funcarg{int}{size}{number of processors in group}{input}
 \end{funcargs}
 \end{capi}
 
@@ -168,7 +167,7 @@ pgroup_create(list)
 \end{desc}
 
 
-\apih{PGROUP_DESTROY}{Destroy a GA processor group}
+\apih{PGROUP DESTROY}{Destroy a GA processor group}
 
 \begin{capi}
 \begin{ccode}
@@ -211,7 +210,7 @@ pgroup_destroy(int pgroup)
 
 \end{desc}
 
-\apih{PGROUP_SET_DEFAULT}{Set a default GA processor group}
+\apih{PGROUP SET DEFAULT}{Set a default GA processor group}
 
 \begin{capi}
 \begin{ccode}
@@ -365,7 +364,7 @@ create(int gtype, dims, char *name='', chunk=None, int pgroup=-1)
 \end{desc}
 
 
-\apih{CREATE_CONFIG}{Create a GA with a specific configuration}
+\apih{CREATE CONFIG}{Create a GA with a specific configuration}
 
 \begin{capi}
 \begin{ccode}
@@ -432,7 +431,7 @@ GlobalArray::GlobalArray(int type, int ndim, int64_t dims[], char *arrayname,
 
 \end{desc}
 
-\apih{CREATE_GHOSTS}{Create a GA with ghost cells}
+\apih{CREATE GHOSTS}{Create a GA with ghost cells}
 
 \begin{capi}
 \begin{ccode}
@@ -527,7 +526,7 @@ create_ghosts(int gtype, dims, width, char *name='', chunk=None, int pgroup=-1)
 \end{desc}
 
 
-\apih{CREATE_GHOSTS_CONFIG}{Create a GA with ghost cells and specific configuration}
+\apih{CREATE GHOSTS CONFIG}{Create a GA with ghost cells and specific configuration}
 
 \begin{capi}
 \begin{ccode}
@@ -601,7 +600,7 @@ GlobalArray::GlobalArray(int type, int ndim, int64_t dims[], int64_t width[],
 
 \end{desc}
 
-\apih{CREATE_IRREG}{Create an irregular-distributed GA}
+\apih{CREATE IRREG}{Create an irregular-distributed GA}
 
 \begin{capi}
 \begin{ccode}
@@ -719,7 +718,7 @@ nblock[2]=\{3,2\}, the size of the map array is s=5 and the array map contains t
 \end{desc}
 
 
-\apih{CREATE_IRREG_CONFIG}{Create an irregular-distributed GA with a specific configuration}
+\apih{CREATE IRREG CONFIG}{Create an irregular-distributed GA with a specific configuration}
 
 \begin{capi}
 \begin{ccode}
@@ -792,7 +791,7 @@ GlobalArray::  GlobalArray(int type, int ndim, int64_t dims[],
 \end{desc}
 
 
-\apih{CREATE_GHOST_IRREG}{Create an irregular-distributed GA with ghost cells}
+\apih{CREATE GHOST IRREG}{Create an irregular-distributed GA with ghost cells}
 
 \begin{capi}
 \begin{ccode}
@@ -901,7 +900,7 @@ This is a collective operation.
 \end{desc}
 
 
-\apih{CREATE_GHOSTS_IRREG_CONFIG}{Create an irregular-distributed GA with ghost cells and a specific configuration}
+\apih{CREATE GHOSTS IRREG CONFIG}{Create an irregular-distributed GA with ghost cells and a specific configuration}
 
 \begin{capi}
 \begin{ccode}
@@ -980,7 +979,7 @@ This is a collective operation.
 \end{desc}
 
 
-\apih{CREATE_HANDLE}{Create a handle to a global array}
+\apih{CREATE HANDLE}{Create a handle to a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -1025,7 +1024,7 @@ create_handle()
 \end{desc}
 
 
-\apih{SET_ARRAY_NAME}{Set the array name for a GA handle}
+\apih{SET ARRAY NAME}{Set the array name for a GA handle}
 
 \begin{capi}
 \begin{ccode}
@@ -1074,7 +1073,7 @@ set_array_name(int g_a, char *name)
 \end{desc}
 
 
-\apih{SET_DATA}{Set the data properties for a GA handle}
+\apih{SET DATA}{Set the data properties for a GA handle}
 
 \begin{capi}
 \begin{ccode}
@@ -1129,7 +1128,7 @@ set_data(int g_a, dims, int type)
 \end{desc}
 
 
-\apih{SET_IRREG_DISTR}{Specify irregular distribution for a GA handle}
+\apih{SET IRREG DISTR}{Specify irregular distribution for a GA handle}
 
 \begin{capi}
 \begin{ccode}
@@ -1203,7 +1202,7 @@ An example is shown in Figure \ref{setirregdist}.
 
 \end{desc}
 
-\apih{SET_PGROUP}{Set the processor group for a GA handle}
+\apih{SET PGROUP}{Set the processor group for a GA handle}
 
 \begin{capi}
 \begin{ccode}
@@ -1254,7 +1253,7 @@ set_pgroup(int g_a, int pgroup)
 
 \end{desc}
 
-\apih{SET_RESTRICTED}{Specify a GA handle to be allocated on a subset of processors}
+\apih{SET RESTRICTED}{Specify a GA handle to be allocated on a subset of processors}
 
 \begin{capi}
 \begin{ccode}
@@ -1307,7 +1306,7 @@ This is a collective operation.
 
 \end{desc}
 
-\apih{SET_RESTRICTED_RANGE}{Specify a GA handle to be created on a subset (as a range) of processors}
+\apih{SET RESTRICTED RANGE}{Specify a GA handle to be created on a subset (as a range) of processors}
 
 \begin{capi}
 \begin{ccode}
@@ -1356,7 +1355,7 @@ void GlobalArray::setRestrictedRange(int lo_proc, int hi_proc) const
 
 \end{desc}
 
-\apih{SET_GHOSTS}{Specify ghost cells for a GA handle}
+\apih{SET GHOSTS}{Specify ghost cells for a GA handle}
 
 \begin{capi}
 \begin{ccode}
@@ -1407,7 +1406,7 @@ set_ghosts(int g_a, width)
 
 \end{desc}
 
-\apih{SET_CHUNK}{Specify chunk size for a GA handle}
+\apih{SET CHUNK}{Specify chunk size for a GA handle}
 
 \begin{capi}
 \begin{ccode}
@@ -1457,7 +1456,7 @@ set_chunk(int g_a, chunk)
 
 \end{desc}
 
-\apih{SET_BLOCK_CYCLIC}{Specify round-robin distribution for a GA handle}
+\apih{SET BLOCK CYCLIC}{Specify round-robin distribution for a GA handle}
 
 \begin{capi}
 \begin{ccode}
@@ -1525,7 +1524,7 @@ Figure \ref{stblkcy} illustrates an array containing 25 blocks distributed on 4 
 
 \end{desc}
 
-\apih{SET_BLOCK_CYCLIC_PROC_GRID}{Specify block-cyclic processor distribution for a GA handle}
+\apih{SET BLOCK CYCLIC PROC GRID}{Specify block-cyclic processor distribution for a GA handle}
 
 \begin{capi}
 \begin{ccode}
@@ -1644,7 +1643,7 @@ Returns True if allocation of g_a was successful.
 
 \end{desc}
 
-\apih{UPDATE_GHOSTS}{Update ghost cells}
+\apih{UPDATE GHOSTS}{Update ghost cells}
 
 \begin{capi}
 \begin{ccode}
@@ -1688,7 +1687,7 @@ This is a collective operation.
 
 \end{desc}
 
-\apih{UPDATE_GHOST_DIR}{Update ghost cells along a specific direction}
+\apih{UPDATE GHOST DIR}{Update ghost cells along a specific direction}
 
 \begin{capi}
 \begin{ccode}
@@ -1765,7 +1764,7 @@ This is a  collective operation.
 
 \end{desc}
 
-\apih{HAS_GHOSTS}{Check whether a GA has ghost cells}
+\apih{HAS GHOSTS}{Check whether a GA has ghost cells}
 
 \begin{capi}
 \begin{ccode}
@@ -1803,7 +1802,7 @@ This is a collective operation.
 
 \end{desc}
 
-\apih{ACCESS_GHOSTS}{Access the ghost cells allocated locally on a GA}
+\apih{ACCESS GHOSTS}{Access the ghost cells allocated locally on a GA}
 
 \begin{capi}
 \begin{ccode}
@@ -1867,7 +1866,7 @@ This is a local operation.
 
 \end{desc}
 
-\apih{ACCESS_GHOST_ELEMENT}{Access a specific ghost element locally allocated on a GA}
+\apih{ACCESS GHOST ELEMENT}{Access a specific ghost element locally allocated on a GA}
 
 \begin{capi}
 \begin{ccode}
@@ -1929,7 +1928,7 @@ access_ghost_element(int g_a, subscript, ld)
 
 \end{desc}
 
-\apih{TOTAL_BLOCKS}{Number of blocks allocated when using block-cyclic distribution}
+\apih{TOTAL BLOCKS}{Number of blocks allocated when using block-cyclic distribution}
 
 \begin{capi}
 \begin{ccode}
@@ -1969,7 +1968,7 @@ with a block-cyclic data distribution. This is a local operation.
 
 \end{desc}
 
-\apih{GET_BLOCK_INFO}{Information on block-cyclic information for a GA}
+\apih{GET BLOCK INFO}{Information on block-cyclic information for a GA}
 
 \begin{capi}
 \begin{ccode}
@@ -2190,7 +2189,7 @@ This is a collective operation.
 
 \end{desc}
 
-\apih{MASK_SYNC}{Mask GA synchronization operations}
+\apih{MASK SYNC}{Mask GA synchronization operations}
 
 \begin{capi}
 \begin{ccode}
@@ -2592,7 +2591,7 @@ This is a collective operation.
 
 \end{desc}
 
-\apih{SET_MEMORY_LIMIT}{Limit the internal memory used by the GA runtime}
+\apih{SET MEMORY LIMIT}{Limit the internal memory used by the GA runtime}
 
 \begin{capi}
 \begin{ccode}
@@ -2718,7 +2717,7 @@ Return: The local array buffer.
 
  \end{desc}
 
-\apih{PERIODIC_GET}{Get, with periodic boundary conditions, data from a global array}
+\apih{PERIODIC GET}{Get, with periodic boundary conditions, data from a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -2785,7 +2784,7 @@ Returns: The local Array buffer.
 
 \end{desc}
 
-\apih{STRIDED_GET}{Get strided data from a global array }
+\apih{STRIDED GET}{Get strided data from a global array }
 
 \begin{capi}
 \begin{ccode}
@@ -2934,7 +2933,7 @@ This is a one-sided operation.
 
 \end{desc}
 
-\apih{PERIODIC_PUT}{Put, with periodic boundary conditions, data into a global array}
+\apih{PERIODIC PUT}{Put, with periodic boundary conditions, data into a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -3000,7 +2999,7 @@ This is a one-sided operation.
 
 \end{desc}
 
-\apih{STRIDED_PUT}{Put strided data into a global array}
+\apih{STRIDED PUT}{Put strided data into a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -3167,7 +3166,7 @@ This is a one-sided and atomic operation.
 
 \end{desc}
 
-\apih{PERIODIC_ACC}{Accumulate, with periodic boundary conditions, data into a global array}
+\apih{PERIODIC ACC}{Accumulate, with periodic boundary conditions, data into a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -3246,7 +3245,7 @@ This is a one-sided and atomic operation.
 
 \end{desc}
 
-\apih{STRIDED_ACC}{Accumulate strided data into a global array}
+\apih{STRIDED ACC}{Accumulate strided data into a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -3403,7 +3402,7 @@ no elements are owned by iproc.
 
 \end{desc}
 
-\apih{COMPARE_DISTR}{Compare distribution of two global arrays}
+\apih{COMPARE DISTR}{Compare distribution of two global arrays}
 
 \begin{capi}
 \begin{ccode}
@@ -3577,7 +3576,7 @@ you can reference A(ilo:ihi,jlo:jhi) in the following way:
 \end{fdesc}
 
 
-\apih{ACCESS_BLOCK_SEGMENT}{Access local data for a specific global array block}
+\apih{ACCESS BLOCK SEGMENT}{Access local data for a specific global array block}
 
 \begin{capi}
 \begin{ccode}
@@ -3644,7 +3643,7 @@ Returns: ndarray representing local block
 
 \end{desc}
 
-\apih{ACCESS_BLOCK}{Access a block in a block-cyclic distributed global array}
+\apih{ACCESS BLOCK}{Access a block in a block-cyclic distributed global array}
 
 \begin{capi}
 \begin{ccode}
@@ -3710,7 +3709,7 @@ This is a local operation.
 Returns: ndarray representing local block  
 \end{desc}
 
-\apih{ACCESS_BLOCK_GRID}{Access data block in a block-cyclic distributed global array}
+\apih{ACCESS BLOCK GRID}{Access data block in a block-cyclic distributed global array}
 
 \begin{capi}
 \begin{ccode}
@@ -3850,7 +3849,7 @@ This operation is local.
 
 \end{desc}
 
-\apih{RELEASE_UPDATE}{Release access to a global array after an update}
+\apih{RELEASE UPDATE}{Release access to a global array after an update}
 
 \begin{capi}
 \begin{ccode}
@@ -3910,7 +3909,7 @@ NOTE: see restrictions specified for ga_access.
 This operation is local.
 \end{desc}
 
-\apih{RELEASE_BLOCK}{Release access to a block of a global array}
+\apih{RELEASE BLOCK}{Release access to a block of a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -3957,7 +3956,7 @@ distribution. This is a local operation.
 
 \end{desc}
 
-\apih{RELEASE_UPDATE_BLOCK}{Release after update access to a block in a global array}
+\apih{RELEASE UPDATE BLOCK}{Release after update access to a block in a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -4004,7 +4003,7 @@ to block-cyclic data distributions created using the simple block-cyclic
 distribution. This is a local operation.
 \end{desc}
 
-\apih{RELEASE_BLOCK_GRID}{Release access to a block-cyclic distributed global array}
+\apih{RELEASE BLOCK GRID}{Release access to a block-cyclic distributed global array}
 
 \begin{capi}
 \begin{ccode}
@@ -4052,7 +4051,7 @@ distribution. This is a local operation.
 
 \end{desc}
 
-\apih{RELEASE_UPDATE_BLOCK_GRID}{Release after update access to a block in a block-cyclic distributed global array}
+\apih{RELEASE UPDATE BLOCK GRID}{Release after update access to a block in a block-cyclic distributed global array}
 
 \begin{capi}
 \begin{ccode}
@@ -4101,7 +4100,7 @@ distribution. This is a local operation.
 
 \end{desc}
 
-\apih{RELEASE_BLOCK_SEGMENT}{Release access to a block in a GA}
+\apih{RELEASE BLOCK SEGMENT}{Release access to a block in a GA}
 
 \begin{capi}
 \begin{ccode}
@@ -4147,7 +4146,7 @@ array, when data was accessed as read-only. This is a local operation.
 
 \end{desc}
 
-\apih{RELEASE_UPDATE_BLOCK_SEGMENT}{Release access to a block of a GA}
+\apih{RELEASE UPDATE BLOCK SEGMENT}{Release access to a block of a GA}
 
 \begin{capi}
 \begin{ccode}
@@ -4192,7 +4191,7 @@ array, when data was accessed as read-only. This is a local operation.
 
 \end{desc}
 
-\apih{RELEASE_GHOST_ELEMENT}{Release access to ghost cells in a GA}
+\apih{RELEASE GHOST ELEMENT}{Release access to ghost cells in a GA}
 
 \begin{capi}
 \begin{ccode}
@@ -4238,7 +4237,7 @@ elements, when data was accessed as read-only. This is a local operation.
 
 \end{desc}
 
-\apih{RELEASE_UPDATE_GHOST_ELEMENT}{Release after update access to ghost cells in a GA}
+\apih{RELEASE UPDATE GHOST ELEMENT}{Release after update access to ghost cells in a GA}
 
 \begin{capi}
 \begin{ccode}
@@ -4285,7 +4284,7 @@ when data was accessed in read-write mode. This is a local operation.
 
 \end{desc}
 
-\apih{RELEASE_GHOSTS}{Release access to ghost cells}
+\apih{RELEASE GHOSTS}{Release access to ghost cells}
 
 \begin{capi}
 \begin{ccode}
@@ -4326,7 +4325,7 @@ elements, when data was accessed as read-only. This is a local operation.
 
 \end{desc}
 
-\apih{RELEASE_UPDATE_GHOSTS}{Release after access to ghosts}
+\apih{RELEASE UPDATE GHOSTS}{Release after access to ghosts}
 
 \begin{capi}
 \begin{ccode}
@@ -4368,7 +4367,7 @@ This is a local operation.
 
 \end{desc}
 
-\apih{READ_INC}{Atomically read and increment an element in a global array}
+\apih{READ INC}{Atomically read and increment an element in a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -4621,7 +4620,7 @@ This is a one-sided operation.
 
 \end{desc}
 
-\apih{SCATTER_ACC}{Scatter accumulate elements into a global array}
+\apih{SCATTER ACC}{Scatter accumulate elements into a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -4827,7 +4826,7 @@ This operation is local.
 
 \end{desc}
 
-\apih{LOCATE_REGION}{Locate a region of a global array}
+\apih{LOCATE REGION}{Locate a region of a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -4971,7 +4970,7 @@ void GlobalArray::inquire(int *type, int *ndim, int64_t dims[]) const
 Returns data type and dimensions of the array.
 This operation is local. 
 
-\apih{INQUIRE_MEMORY}{Inquire the memory used by global arrays on the calling processor}
+\apih{INQUIRE MEMORY}{Inquire the memory used by global arrays on the calling processor}
 
 \begin{capi}
 \begin{ccode}
@@ -5004,7 +5003,7 @@ This operation is local.
 
 \end{desc}
 
-\apih{INQUIRE_NAME}{Inquire a global array's name}
+\apih{INQUIRE NAME}{Inquire a global array's name}
 
 \begin{capi}
 \begin{ccode}
@@ -5137,7 +5136,7 @@ returns the number of partitions of each array dimension. This
 operation is local.
 \end{desc}
 
-\apih{MEMORY_AVAIL}{Inquire the memory available on the invoking processor to allocate global arrays}
+\apih{MEMORY AVAIL}{Inquire the memory available on the invoking processor to allocate global arrays}
 
 \begin{capi}
 \begin{ccode}
@@ -5180,7 +5179,7 @@ that the bound on currently available memory cannot be determined.
 This operation is local.
 \end{desc}
 
-\apih{USES_MA}{Check whether GA uses MA}
+\apih{USES MA}{Check whether GA uses MA}
 
 \begin{capi}
 \begin{ccode}
@@ -5218,7 +5217,7 @@ This operation is local.
 TODO
 \end{desc}
 
-\apih{MEMORY_LIMITED}{Check whether memory available to GA's runtime is limited}
+\apih{MEMORY LIMITED}{Check whether memory available to GA's runtime is limited}
 
 \begin{capi}
 \begin{ccode}
@@ -5255,7 +5254,7 @@ Returns:
 True for "yes", False for "no"
 \end{desc}
 
-\apih{PROC_TOPOLOGY}{Inquire the linear location of a processor in the processor topology employed by a global array}
+\apih{PROC TOPOLOGY}{Inquire the linear location of a processor in the processor topology employed by a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -5310,7 +5309,7 @@ doesn't ``own" any section of the array represented by g_a.
 This operation is local.
 \end{desc}
 
-\apih{PRINT_FILE}{Print the contents of a global array to a file}
+\apih{PRINT FILE}{Print the contents of a global array to a file}
 
 \begin{capi}
 \begin{ccode}
@@ -5348,7 +5347,7 @@ Prints an entire array to a file.
 This is a collective operation.
 \end{desc}
 
-\apih{PRINT_PATCH}{Print a patch of a global array to a file}
+\apih{PRINT PATCH}{Print a patch of a global array to a file}
 
 \begin{capi}
 \begin{ccode}
@@ -5434,7 +5433,7 @@ Prints an entire array to the standard output.
 This is a collective operation.
 \end{desc}
 
-\apih{PRINT_STATS}{Print GA runtime statistics}
+\apih{PRINT STATS}{Print GA runtime statistics}
 
 \begin{capi}
 \begin{ccode}
@@ -5477,7 +5476,7 @@ This non-collective (MIMD) operation prints information about:
 This operation is local.
 \end{desc}
 
-\apih{PRINT_DISTRIBUTION}{Print the distribution of a global array}
+\apih{PRINT DISTRIBUTION}{Print the distribution of a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -5517,7 +5516,7 @@ Prints the array distribution.
 This is a collective operation.
 \end{desc}
 
-\apih{CHECK_HANDLE}{Check whether a GA handle is valid}
+\apih{CHECK HANDLE}{Check whether a GA handle is valid}
 
 \begin{capi}
 \begin{ccode}
@@ -5561,7 +5560,7 @@ ga_error with the string provided and some more info.
 This operation is local.
 \end{desc}
 
-\apih{INIT_FENCE}{Initialize tracing of completion of data movement operations}
+\apih{INIT FENCE}{Initialize tracing of completion of data movement operations}
 
 \begin{capi}
 \begin{ccode}
@@ -5652,7 +5651,7 @@ The calling process will be blocked until data movements initiated by two calls
 to ga_put and one ga_scatter complete.
 \end{desc}
 
-\apih{CREATE_MUTEXES}{Create mutexes}
+\apih{CREATE MUTEXES}{Create mutexes}
 
 \begin{capi}
 \begin{ccode}
@@ -5705,7 +5704,7 @@ True on success, False on failure
 
 \end{desc}
 
-\apih{DESTROY_MUTEXES}{Destroy mutexes}
+\apih{DESTROY MUTEXES}{Destroy mutexes}
 
 \begin{capi}
 \begin{ccode}
@@ -5993,7 +5992,7 @@ multiplication as follows:
 This is a collective operation.
 \end{desc}
 
-\apih{COPY_PATCH}{Copy a patch of a global array}
+\apih{COPY PATCH}{Copy a patch of a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -6066,7 +6065,7 @@ Patches must be non-overlapping (if g_a=g_b).
 This is a collective operation.
 \end{desc}
 
-\apih{DOT_PATCH}{Dot product of patches of global arrays}
+\apih{DOT PATCH}{Dot product of patches of global arrays}
 
 \begin{capi}
 \begin{ccode}
@@ -6170,7 +6169,7 @@ patches which must be of the same type and have the same number of elements.
 This is a collective operation.
 \end{desc}
 
-\apih{MATMUL_PATCH}{Matrix multiplication of patches of global arrays}
+\apih{MATMUL PATCH}{Matrix multiplication of patches of global arrays}
 
 \begin{capi}
 \begin{ccode}
@@ -6342,7 +6341,7 @@ the 2-D interface:
 This is a collective operation.
 \end{desc}
 
-\apih{ADD_PATCH}{Add patches of global arrays}
+\apih{ADD PATCH}{Add patches of global arrays}
 
 \begin{capi}
 \begin{ccode}
@@ -6424,7 +6423,7 @@ c[ ][ ] = alpha * a[ ][ ] + beta * b[ ][ ]
 This is a collective operation.
 \end{desc}
 
-\apih{FILL_PATCH}{Fill a patch of a global array with a specified value}
+\apih{FILL PATCH}{Fill a patch of a global array with a specified value}
 
 \begin{capi}
 \begin{ccode}
@@ -6480,7 +6479,7 @@ Fill the patch of g_a with value of `val'
 This is a collective operation.
 \end{desc}
 
-\apih{ZERO_PATCH}{Zero a patch of a global array}
+\apih{ZERO PATCH}{Zero a patch of a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -6524,7 +6523,7 @@ This is a collective operation.
 
 \end{desc}
 
-\apih{SCALE_PATCH}{Scale elements in the patch of a global array}
+\apih{SCALE PATCH}{Scale elements in the patch of a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -6778,7 +6777,7 @@ available regardless of the message-passing library that GA is running with.
 This is a collective operation.
 \end{desc}
 
-\apih{CLUSTER_NNODES}{Total number of cluster (shared memory) nodes}
+\apih{CLUSTER NNODES}{Total number of cluster (shared memory) nodes}
 
 \begin{capi}
 \begin{ccode}
@@ -6814,7 +6813,7 @@ of processors.
 This is a  local operation.
 \end{desc}
 
-\apih{CLUSTER_NODEID}{Cluster node Rank of the invoking process}
+\apih{CLUSTER NODEID}{Cluster node Rank of the invoking process}
 
 \begin{capi}
 \begin{ccode}
@@ -6850,7 +6849,7 @@ than one processor per node, several processes may return the same node id.
 This is a  local operation.
 \end{desc}
 
-\apih{CLUSTER_PROC_NODEID}{Cluster node rank of a specified process}
+\apih{CLUSTER PROC NODEID}{Cluster node rank of a specified process}
 
 \begin{capi}
 \begin{ccode}
@@ -6889,7 +6888,7 @@ processes may return the same node id.
 This is a  local operation.
 \end{desc}
 
-\apih{CLUSTER_NPROCS}{Number of processes in a given cluster node}
+\apih{CLUSTER NPROCS}{Number of processes in a given cluster node}
 
 \begin{capi}
 \begin{ccode}
@@ -6932,7 +6931,7 @@ This function returns the number of processors available on node inode.
 This is a local operation.
 \end{desc}
 
-\apih{CLUSTER_PROCID}{Rank of a process from a cluster node rank and intra-node rank}
+\apih{CLUSTER PROCID}{Rank of a process from a cluster node rank and intra-node rank}
 
 \begin{capi}
 \begin{ccode}
@@ -7040,7 +7039,7 @@ All eigen-values as an ndarray in ascending order.
 This is a collective operation.
 \end{desc}
 
-\apih{DIAG_REUSE}{Diagonalize a global array for repeated diagonalizations}
+\apih{DIAG REUSE}{Diagonalize a global array for repeated diagonalizations}
 
 \begin{capi}
 \begin{ccode}
@@ -7119,7 +7118,7 @@ All eigen-values as an ndarray in ascending order.
 This is a collective operation.
 \end{desc}
 
-\apih{DIAG_STD}{Standard diagonalization of a global array}
+\apih{DIAG STD}{Standard diagonalization of a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -7176,7 +7175,7 @@ ndarray in ascending order
 This is a collective operation.
 \end{desc}
 
-\apih{LLT_SOLVE}{Cholesky factorization of a global array}
+\apih{LLT SOLVE}{Cholesky factorization of a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -7239,7 +7238,7 @@ It returns:
 This is a collective operation.
 \end{desc}
 
-\apih{LU_SOLVE}{LU decomposition of a global array}
+\apih{LU SOLVE}{LU decomposition of a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -7365,7 +7364,7 @@ It returns
 This is a collective operation.
 \end{desc}
 
-\apih{SPD_INVERT}{Invert a symmetric positive definite matrix a global array}
+\apih{SPD INVERT}{Invert a symmetric positive definite matrix a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -7424,7 +7423,7 @@ It returns
 This is a collective operation.
 \end{desc}
 
-\apih{SELECT_ELEM}{select an element in a global returned by the chosen operation (eg., min, max, etc.)}
+\apih{SELECT ELEM}{select an element in a global returned by the chosen operation (eg., min, max, etc.)}
 
 \begin{capi}
 \begin{ccode}
@@ -7604,7 +7603,7 @@ Transposes a matrix: B = A', where A and B are represented by handles g_a and g_
 This is a collective operation.
 \end{desc}
 
-\apih{ABS_VALUE}{Convert a global array to contain absolute values of its elements}
+\apih{ABS VALUE}{Convert a global array to contain absolute values of its elements}
 
 \begin{capi}
 \begin{ccode}
@@ -7649,7 +7648,7 @@ Take the element-wise absolute value of the array.
 This is a collective operation.
 \end{desc}
 
-\apih{ABS_VALUE_PATCH}{Convert a patch of a global array to have absolute values of its elements}
+\apih{ABS VALUE PATCH}{Convert a patch of a global array to have absolute values of its elements}
 
 \begin{capi}
 \begin{ccode}
@@ -7689,7 +7688,7 @@ Take the element-wise absolute value of the patch.
 This is a collective operation.
 \end{desc}
 
-\apih{ADD_CONSTANT}{Add a constant to all elements in a global array}
+\apih{ADD CONSTANT}{Add a constant to all elements in a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -7739,7 +7738,7 @@ Add the constant pointed by alpha to each element of the array.
 This is a collective operation.
 \end{desc}
 
-\apih{ADD_CONSTANT_PATCH}{Add a constant to all elements in a global array patch}
+\apih{ADD CONSTANT PATCH}{Add a constant to all elements in a global array patch}
 
 \begin{capi}
 \begin{ccode}
@@ -7825,7 +7824,7 @@ Take the element-wise reciprocal of the array.
 This is a collective operation.
 \end{desc}
 
-\apih{RECIP_PATCH}{Translate a global array patch to contain reciprocal of its elements}
+\apih{RECIP PATCH}{Translate a global array patch to contain reciprocal of its elements}
 
 \begin{capi}
 \begin{ccode}
@@ -7865,7 +7864,7 @@ Take element-wise reciprocal of the patch.
 This is a collective operation.
 \end{desc}
 
-\apih{ELEM_MULTIPLY}{Element-wise multiplication of global arrays}
+\apih{ELEM MULTIPLY}{Element-wise multiplication of global arrays}
 
 \begin{capi}
 \begin{ccode}
@@ -7937,7 +7936,7 @@ The result (c) may replace one of the input arrays (a/b).
 This is a collective operation.
 \end{desc}
 
-\apih{ELEM_MULTIPLY_PATCH}{Element-wise multiplication of global array patches}
+\apih{ELEM MULTIPLY PATCH}{Element-wise multiplication of global array patches}
 
 \begin{capi}
 \begin{ccode}
@@ -8005,7 +8004,7 @@ The result (c) may replace one of the input arrays (a/b).
 This is a collective operation.
 \end{desc}
 
-\apih{ELEM_DIVIDE}{Element-wise division of global arrays}
+\apih{ELEM DIVIDE}{Element-wise division of global arrays}
 
 \begin{capi}
 \begin{ccode}
@@ -8077,7 +8076,7 @@ for the element of g_c will be set to GA_NEGATIVE_INFINITY.
 This is a collective operation.
 \end{desc}
 
-\apih{ELEM_DIVIDE_PATCH}{Element-wise division of global array patches}
+\apih{ELEM DIVIDE PATCH}{Element-wise division of global array patches}
 
 \begin{capi}
 \begin{ccode}
@@ -8146,7 +8145,7 @@ The result (c) may replace one of the input arrays (a/b).
 This is a collective operation.
 \end{desc}
 
-\apih{ELEM_MAXIMUM}{Element-wise maximum of global arrays}
+\apih{ELEM MAXIMUM}{Element-wise maximum of global arrays}
 
 \begin{capi}
 \begin{ccode}
@@ -8216,7 +8215,7 @@ The result (c) may replace one of the input arrays (a/b).
 This is a collective operation.
 \end{desc}
 
-\apih{ELEM_MAXIMUM_PATCH}{Element-wise maximum of global array patches}
+\apih{ELEM MAXIMUM PATCH}{Element-wise maximum of global array patches}
 
 \begin{capi}
 \begin{ccode}
@@ -8289,7 +8288,7 @@ The result (c) may replace one of the input arrays (a/b).
 This is a collective operation.
 \end{desc}
 
-\apih{ELEM_MINIMUM}{Element-wise minimum of global arrays}
+\apih{ELEM MINIMUM}{Element-wise minimum of global arrays}
 
 \begin{capi}
 \begin{ccode}
@@ -8336,7 +8335,7 @@ The result (c) may replace one of the input arrays (a/b).
 This is a collective operation.
 \end{desc}
 
-\apih{ELEM_MINIMUM_PATCH}{Element-wise minimum of global array patches}
+\apih{ELEM MINIMUM PATCH}{Element-wise minimum of global array patches}
 
 \begin{capi}
 \begin{ccode}
@@ -8409,7 +8408,7 @@ The result (c) may replace one of the input arrays (a/b).
 This is a collective operation.
 \end{desc}
 
-\apih{SHIFT_DIAGONAL}{Add specified constant to diagonal elements of a global array}
+\apih{SHIFT DIAGONAL}{Add specified constant to diagonal elements of a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -8454,7 +8453,7 @@ Adds this constant to the diagonal elements of the matrix.
 This is a collective operation.
 \end{desc}
 
-\apih{SET_DIAGONAL}{Set the diagonal elements of a global array}
+\apih{SET DIAGONAL}{Set the diagonal elements of a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -8497,7 +8496,7 @@ Sets the diagonal elements of this matrix g_a with the elements of the vector g_
 This is a collective operation.
 \end{desc}
 
-\apih{ZERO_DIAGONAL}{Zero the diagonal elements of a global array}
+\apih{ZERO DIAGONAL}{Zero the diagonal elements of a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -8536,7 +8535,7 @@ Sets the diagonal elements of this matrix g_a with zeros.
 This is a collective operation.
 \end{desc}
 
-\apih{ADD_DIAGONAL}{Add to the diagonal elements of a global array}
+\apih{ADD DIAGONAL}{Add to the diagonal elements of a global array}
 
 \begin{capi}
 \begin{ccode}
@@ -8581,7 +8580,7 @@ Adds the elements of the vector g_v to the diagonal of this matrix g_a.
 This is a collective operation.
 \end{desc}
 
-\apih{GET_DIAG}{Copy diagonal elements of a global array into another global array}
+\apih{GET DIAG}{Copy diagonal elements of a global array into another global array}
 
 \begin{capi}
 \begin{ccode}
@@ -8625,7 +8624,7 @@ Inserts the diagonal elements of this matrix g_a into the vector g_v.
 This is a collective operation.
 \end{desc}
 
-\apih{SCALE_ROWS}{Scale the rows of a global array with elements in another global array}
+\apih{SCALE ROWS}{Scale the rows of a global array with elements in another global array}
 
 \begin{capi}
 \begin{ccode}
@@ -8667,7 +8666,7 @@ Scales the rows of this matrix g_a using the vector g_v.
 This is a collective operation.
 \end{desc}
 
-\apih{SCALE_COLS}{Scale columns of a global array with elements in another gobal array}
+\apih{SCALE COLS}{Scale columns of a global array with elements in another gobal array}
 
 \begin{capi}
 \begin{ccode}
@@ -8754,7 +8753,7 @@ Computes the 1-norm of the matrix or vector g_a.
 This is a collective operation.
 \end{desc}
 
-\apih{NORM_INFINITY}{Compute a global array's infinite norm}
+\apih{NORM INFINITY}{Compute a global array's infinite norm}
 
 \begin{capi}
 \begin{ccode}
@@ -8872,7 +8871,7 @@ the input arrays (a/b/c).
 This is a collective operation.
 \end{desc}
 
-\apih{MEDIAN_PATCH}{Compute a global array patch's median}
+\apih{MEDIAN PATCH}{Compute a global array patch's median}
 
 \begin{capi}
 \begin{ccode}
@@ -8942,7 +8941,7 @@ one of the input patches (a/b/c).
 This is a collective operation.
 \end{desc}
 
-\apih{STEP_MAX}{Compute a global array's step max}
+\apih{STEP MAX}{Compute a global array's step max}
 
 \begin{capi}
 \begin{ccode}
@@ -8989,7 +8988,7 @@ this vector g_a while keeping each element of this vector non-negative.
 This is a collective operation.
 \end{desc}
 
-\apih{STEP_MAX2}{Compute a global array's step max2}
+\apih{STEP MAX2}{Compute a global array's step max2}
 
 \begin{capi}
 \begin{ccode}
@@ -9023,7 +9022,7 @@ Calculates the largest step size that should be used in a projected bound line s
 This is a collective operation.
 \end{desc}
 
-\apih{STEP_MAX_PATCH}{Compute a global array patch's step max}
+\apih{STEP MAX PATCH}{Compute a global array patch's step max}
 
 \begin{capi}
 \begin{ccode}
@@ -9070,7 +9069,7 @@ Calculates the largest multiple of a vector g_b that can be added to this vector
 This is a collective operation.
 \end{desc}
 
-\apih{PGROUP_GET_DEFAULT}{Set default GA processor group}
+\apih{PGROUP GET DEFAULT}{Set default GA processor group}
 
 \begin{capi}
 \begin{ccode}
@@ -9104,7 +9103,7 @@ This function will return a handle to the default processor group, which can the
 This is a local operation. 
 \end{desc}
 
-\apih{PGROUP_GET_MIRROR}{Get the mirrored processor group}
+\apih{PGROUP GET MIRROR}{Get the mirrored processor group}
 
 \begin{capi}
 \begin{ccode}
@@ -9138,7 +9137,7 @@ This function will return a handle to the mirrored processor group, which can th
 This is a local operation. 
 \end{desc}
 
-\apih{PGROUP_GET_WORLD}{Get the world processor group}
+\apih{PGROUP GET WORLD}{Get the world processor group}
 
 \begin{capi}
 \begin{ccode}
@@ -9172,7 +9171,7 @@ This function will return a handle to the world processor group, which can then 
 This is a local operation.
 \end{desc}
 
-\apih{PGROUP_SYNC}{Synchronize processes in a processor group}
+\apih{PGROUP SYNC}{Synchronize processes in a processor group}
 
 \begin{capi}
 \begin{ccode}
@@ -9212,7 +9211,7 @@ This operation executes a synchronization group across the processors in the pro
 This is a collective operation on the processor group specified by p_handle. 
 \end{desc}
 
-\apih{PGROUP_BRDCST}{Broadcast elements among processes in a processor group}
+\apih{PGROUP BRDCST}{Broadcast elements among processes in a processor group}
 
 \begin{capi}
 \begin{ccode}
@@ -9272,7 +9271,7 @@ Returns:
 The buffer in case a temporary was passed in. 
 \end{desc}
 
-\apih{PGROUP_DGOP}{Double global operation with a processor group}
+\apih{PGROUP DGOP}{Double global operation with a processor group}
 
 \begin{capi}
 \begin{ccode}
@@ -9317,7 +9316,7 @@ The buf[n] is a double precision array present on each processor in the processo
 This is a collective operation on the processor group specifed by p_handle. 
 \end{desc}
 
-\apih{PGROUP_IGOP}{Integer global operation within a processor group}
+\apih{PGROUP IGOP}{Integer global operation within a processor group}
 
 \begin{capi}
 \begin{ccode}
@@ -9362,7 +9361,7 @@ The buf[n] is an integer array present on each processor in the processor group 
 This is a collective operation on the processor group specifed by p_handle. 
 \end{desc}
 
-\apih{PGROUP_LGOP}{Long global operation in a processor group}
+\apih{PGROUP LGOP}{Long global operation in a processor group}
 
 \begin{capi}
 \begin{ccode}
@@ -9394,7 +9393,7 @@ The buf[n] is a long integer array present on each processor in the processor gr
 This is a collective operation on the processor group specifed by p_handle. 
 \end{desc}
 
-\apih{PGROUP_FGOP}{Floating point global operation in a processor group}
+\apih{PGROUP FGOP}{Floating point global operation in a processor group}
 
 \begin{capi}
 \begin{ccode}
@@ -9439,7 +9438,7 @@ The buf[n] is a single precision array present on each processor in the processo
 This is a collective operation on the processor group specifed by p_handle. 
 \end{desc}
 
-\apih{PGROUP_NNODES}{Number of GA ranks in a processor group}
+\apih{PGROUP NNODES}{Number of GA ranks in a processor group}
 
 \begin{capi}
 \begin{ccode}
@@ -9483,7 +9482,7 @@ pgroup.
 This is a local operation.
 \end{desc}
 
-\apih{PGROUP_NODEID}{GA rank of invoking process in a processor group}
+\apih{PGROUP NODEID}{GA rank of invoking process in a processor group}
 
 \begin{capi}
 \begin{ccode}
@@ -9527,7 +9526,7 @@ This is a local operation.
 
 \end{desc}
 
-\apih{MERGE_MIRRORED}{Merge a mirrored global array}
+\apih{MERGE MIRRORED}{Merge a mirrored global array}
 
 \begin{capi}
 \begin{ccode}
@@ -9568,7 +9567,7 @@ This is a  collective  operation.
 
 \end{desc}
 
-\apih{IS_MIRRORED}{Check whether a global array is mirrored}
+\apih{IS MIRRORED}{Check whether a global array is mirrored}
 
 \begin{capi}
 \begin{ccode}
@@ -9609,7 +9608,7 @@ This is a local operation.
 
 \end{desc}
 
-\apih{MERGE_DISTR_PATCH}{Merge a patched of a mirrored global array}
+\apih{MERGE DISTR PATCH}{Merge a patched of a mirrored global array}
 
 \begin{capi}
 \begin{ccode}
@@ -10034,7 +10033,7 @@ This is a local operation.
 This function is only available in release 4.1 or greater.
 \end{desc}
 
-\apih{SET_DEBUG}{Set GA debug flag}
+\apih{SET DEBUG}{Set GA debug flag}
 
 \begin{capi}
 \begin{ccode}
@@ -10077,7 +10076,7 @@ This function sets an internal flag in the GA library to either true or false. T
 This is a local operation.
 \end{desc}
 
-\apih{GET_DEBUG}{Retrieve value of GA debug flag}
+\apih{GET DEBUG}{Retrieve value of GA debug flag}
 
 \begin{capi}
 \begin{ccode}
@@ -10111,7 +10110,7 @@ This function returns the value of an internal flag in the GA library whose valu
 This is a local operation.
 \end{desc}
 
-\apih{PATCH_ENUM}{Enumerate a global array patch}
+\apih{PATCH ENUM}{Enumerate a global array patch}
 
 \begin{capi}
 \begin{ccode}
@@ -10163,7 +10162,7 @@ g_a:  7  9 11 13 15 17 19 21 23 ...
 This is a collective operation.
 \end{desc}
 
-\apih{SCAN_ADD}{Scan add (fixme)}
+\apih{SCAN ADD}{Scan add (fixme)}
 
 \begin{capi}
 \begin{ccode}
@@ -10243,7 +10242,7 @@ g_dest:   0  1  3  6 10 15  0  7  0  9 19  0 12 25  0  0 16
 This is a collective operation.
 \end{desc}
 
-\apih{SCAN_COPY}{Scan copy (fixme)}
+\apih{SCAN COPY}{Scan copy (fixme)}
 
 \begin{capi}
 \begin{ccode}
