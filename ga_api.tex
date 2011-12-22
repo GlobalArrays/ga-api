@@ -11,6 +11,7 @@
 
 \apih{INITIALIZE}{Initialize GA}
 
+
 \begin{capi}
 \begin{ccode}
 void NGA_Initialize()
@@ -41,6 +42,8 @@ GA::Initialize(int argc, char *argv[], size_t limit)
 from ga4py import ga
 \end{pycode}
 \end{pyapi}
+
+\gcoll
 
 \begin{desc}
 
@@ -91,6 +94,8 @@ GA::Initialize(int argc, char *argv[], unsigned long heapSize,
 initialize_ltd(size_t limit)
 \end{pycode}
 \end{pyapi}
+
+\gcoll
 
 \begin{desc}
 
@@ -146,6 +151,8 @@ pgroup_create(list)
 \end{pycode}
 \end{pyapi}
 
+\dcoll
+
 \begin{desc}
 
   This command is used to create a processor group. At present, it
@@ -193,6 +200,8 @@ pgroup_destroy(int pgroup)
 \end{pycode}
 \end{pyapi}
 
+\gcoll
+
 \begin{desc}
 
   This command is used to free up a processor group handle. It returns
@@ -236,6 +245,8 @@ static void PGroup::setDefault(PGroup *p_handle)
 pgroup_set_default(int pgroup)
 \end{pycode}
 \end{pyapi}
+
+\gcoll
 
 \begin{desc}
 
@@ -329,6 +340,8 @@ create(int gtype, dims, char *name='', chunk=None, int pgroup=-1)
 \end{pycode}
 \end{pyapi}
 
+\dcoll
+
 \begin{desc}
 
   Creates an ndim-dimensional array using the regular distribution
@@ -401,6 +414,8 @@ GlobalArray::GlobalArray(int type, int ndim, int64_t dims[], char *arrayname,
 \funcarg{}{p_handle}{processor group handle}{input}
 \end{funcargs}
 \end{cxxapi}
+
+\dcoll
 
 \begin{desc}
 
@@ -484,6 +499,8 @@ create_ghosts(int gtype, dims, width, char *name='', chunk=None, int pgroup=-1)
 \end{pycode}
 \end{pyapi}
 
+\dcoll
+
 \begin{desc}
 
   Creates an ndim-dimensional array with a layer of ghost cells around
@@ -565,6 +582,8 @@ GlobalArray::GlobalArray(int type, int ndim, int64_t dims[], int64_t width[],
 \funcarg{}{ghosts}{this is a dummy parameter: added to increase the number of arguments, inorder to avoid the conflicts among constructors. (ghosts = 'g' or 'G')}{input}
 \end{funcargs}
 \end{cxxapi}
+
+\dcoll
 
 \begin{desc}
 
@@ -668,6 +687,7 @@ create_irreg(int gtype, dims, block, map, char *name='', int pgroup=-1)
                                        processor group
 \end{pycode}
 \end{pyapi}
+\dcoll
 
 \begin{desc}
 
@@ -754,6 +774,7 @@ GlobalArray::  GlobalArray(int type, int ndim, int64_t dims[],
 \funcarg{}{p_handle}{processor group handle}{input}
 \end{funcargs}
 \end{cxxapi}
+\dcoll
 
 \begin{desc}
 
@@ -843,6 +864,7 @@ int pgroup=-1)
                                        processor group
 \end{pycode}
 \end{pyapi}
+\dcoll
 
 \begin{desc}
 
@@ -941,6 +963,7 @@ GlobalArray::GlobalArray(int type, int ndim, int64_t dims[],
 \funcarg{}{ghosts}{this is a dummy parameter: added to increase the number of arguments, inorder to avoid the conflicts among constructors. (ghosts = 'g' or 'G')}{input}
 \end{funcargs}
 \end{cxxapi}
+\dcoll
 
 \begin{desc}
 
@@ -982,6 +1005,7 @@ GlobalArray::GlobalArray()
 create_handle()
 \end{pycode}
 \end{pyapi}
+\dcoll
 
 \begin{desc}
 
@@ -1037,6 +1061,7 @@ void GlobalArray::setArrayName(char *name) const
 set_array_name(int g_a, char *name)
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -1092,6 +1117,7 @@ void GlobalArray::setData(int ndim, int64_t dims[], int type) const
 set_data(int g_a, dims, int type)
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -1143,6 +1169,7 @@ void GlobalArray::setIrregDistr(int64_t mapc[], int64_t nblock[]) const
 set_irreg_distr(int g_a, mapc, nblock)
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -1212,6 +1239,7 @@ void GlobalArray::setPGroup(PGroup *pHandle) const
 set_pgroup(int g_a, int pgroup)
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -1259,6 +1287,7 @@ void GlobalArray::setRestricted(int list[], int nprocs) const
 \funcarg{}{nprocs}{number of processors in list}{input}
 \end{funcargs}
 \end{cxxapi}
+\gcoll
 
 \begin{desc}
 
@@ -1311,6 +1340,7 @@ void GlobalArray::setRestrictedRange(int lo_proc, int hi_proc) const
 \funcarg{}{hi_proc}{high end of processor range}{input}
 \end{funcargs}
 \end{cxxapi}
+\gcoll
 
 \begin{desc}
 
@@ -1363,6 +1393,7 @@ void GlobalArray::setGhosts(int64_t width[]) const
 set_ghosts(int g_a, width)
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -1413,6 +1444,7 @@ void GlobalArray::setChunk(int64_t chunk[]) const
 set_chunk(int g_a, chunk)
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -1461,6 +1493,7 @@ void GlobalArray::setBlockCyclic(int dims[]) const
 set_block_cyclic(int g_a, dims)
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -1530,6 +1563,7 @@ void GlobalArray::setBlockCyclicProcGrid(int dims[], int proc_grid[]) const
 set_block_cyclic_proc_grid(int g_a, block, proc_grid)
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -1594,6 +1628,7 @@ allocate(int g_a)
    g_a (int)                         - the array handle
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -1637,6 +1672,7 @@ void GlobalArray::updateGhosts() const
 update_ghosts(int g_a)
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -1694,6 +1730,7 @@ int GlobalArray::updateGhostDir(int dimension, int idir, int cflag) const
 update_ghost_dir(int g_a, int dimension, int dir, int flag)
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -1756,6 +1793,7 @@ int GlobalArray::hasGhosts() const
 has_ghosts(int g_a)
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -1811,6 +1849,7 @@ access_ghosts(int g_a)
 \funcarg{g_a}{(int)}{the array handle}{input}
 \end{funcargs}
 \end{pyapi}
+\local
 
 \begin{desc}
 
@@ -1876,6 +1915,7 @@ access_ghost_element(int g_a, subscript, ld)
    subscript (1D array-like of integers) - index of the desired element
 \end{pycode}
 \end{pyapi}
+\local
 
 \begin{desc}
 
@@ -1920,6 +1960,7 @@ int GlobalArray::totalBlocks() const
 total_blocks(int g_a)
 \end{pycode}
 \end{pyapi}
+\local
 
 \begin{desc}
 
@@ -1968,6 +2009,7 @@ get_block_info(int g_a)
    g_a (int)            - the array handle
 \end{pycode}
 \end{pyapi}
+\local
 
 \begin{desc}
 
@@ -2023,6 +2065,7 @@ duplicate(int g_a, char *name='')
    name (string) - the new name of the created array
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -2066,6 +2109,7 @@ void GlobalArray::destroy()
 destroy(int g_a)
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -2100,6 +2144,7 @@ void GA::Terminate()
 terminate()
 \end{pycode}
 \end{pyapi}
+\wcoll
 
 \begin{desc}
 
@@ -2135,6 +2180,7 @@ GA::sync()
 sync()
 \end{pycode}
 \end{pyapi}
+\dcoll
 
 \begin{desc}
 
@@ -2184,7 +2230,7 @@ mask_sync(int first, int last)
    last (bool)    - mask for post internal synchronization
 \end{pycode}
 \end{pyapi}
-
+\dcoll
 \begin{desc}
 
 This subroutine can be used to remove synchronization calls from around collective
@@ -2227,6 +2273,7 @@ void GlobalArray::zero() const
 zero(int g_a, lo=None, hi=None)
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -2275,7 +2322,7 @@ fill(int g_a, value, lo=None, hi=None)
    hi (1D array-like of integers) - higher bound patch coordinates, exclusive
 \end{pycode}
 \end{pyapi}
-
+\gcoll
 \begin{desc}
 
 Assign a single value to all elements in the array.
@@ -2344,6 +2391,7 @@ int tb=False)
                                      be applied to g_b True=applied
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -2391,6 +2439,7 @@ void GlobalArray::scale(void *value) const
 scale(int g_a, value, lo=None, hi=None)
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -2463,6 +2512,7 @@ blo=None, bhi=None, clo=None, chi=None)
                                      g_c, exclusive
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -2527,6 +2577,7 @@ copy(int g_a, int g_b, alo=None, ahi=None, blo=None, bhi=None, int trans=False)
                                      be applied True=applied
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -2575,6 +2626,7 @@ set_memory_limit(size_t limit)
    limit (size_t) - the amount of memory in bytes per process 
 \end{pycode}
 \end{pyapi}
+\local
 
 \begin{desc}
 
@@ -2636,7 +2688,7 @@ get(int g_a, lo=None, hi=None, ndarray buffer=None)
                                     large enough to hold lo,hi 
 \end{pycode}
 \end{pyapi}
-
+\ncoll
 \begin{desc}
 
   Copies data from global array section to the local array buffer. The
@@ -2720,7 +2772,7 @@ periodic_get(int g_a, lo, hi, buffer, alpha=None)
                                     elements as patch
 \end{pycode}
 \end{pyapi}
-
+\ncoll
 \begin{desc}
 
 Same as nga_get except the indices can extend beyond the array boundary/dimensions
@@ -2792,6 +2844,7 @@ strided_get(int g_a, lo=None, hi=None, skip=None, ndarray buffer=None)
                                       large enough to hold lo,hi 
 \end{pycode}
 \end{pyapi}
+\ncoll
 
 \begin{desc}
 
@@ -2869,6 +2922,7 @@ put(int g_a, buffer, lo=None, hi=None)
     hi (array-like of integers)    - higher bound patch coordinates, exclusive
 \end{pycode}
 \end{pyapi}
+\ncoll
 
 \begin{desc}
 
@@ -2932,7 +2986,7 @@ periodic_put(int g_a, buffer, lo=None, hi=None)
    hi (array-like of integers)    - higher bound patch coordinates, exclusive
 \end{pycode}
 \end{pyapi}
-
+\ncoll
 \begin{desc}
 
 Same as nga_put except the indices can extend beyond the array boundary/dimensions
@@ -3005,6 +3059,7 @@ strided_put(int g_a, buffer, lo=None, hi=None, skip=None)
    skip (1D array-like of integers) - strides for each dimension
 \end{pycode}
 \end{pyapi}
+\ncoll
 
 \begin{desc}
 
@@ -3096,6 +3151,7 @@ acc(int g_a, buffer, lo=None, hi=None, alpha=None)
    alpha (object)      - multiplier (converted to appropriate type)
 \end{pycode}
 \end{pyapi}
+\ncoll
 
 \begin{desc}
 
@@ -3171,6 +3227,7 @@ void GlobalArray::periodicAcc(int64_t lo[], int64_t hi[], void* buf,
                                     appropriate type)
 \end{pycode}
 \end{pyapi}
+\ncoll
 
 \begin{desc}
 
@@ -3256,6 +3313,7 @@ Parameters:
                                     appropriate type)
 \end{pycode}
 \end{pyapi}
+\ncoll
 
 \begin{desc}
 
@@ -3331,7 +3389,7 @@ void GlobalArray::distribution(int me, int64_t* lo, int64_t* hi) const
 distribution(int g_a, int iproc=-1)
 \end{pycode}
 \end{pyapi}
-
+\local
 \begin{desc}
 
 If no array elements are owned by process iproc, the range is returned as 
@@ -3379,7 +3437,7 @@ int GlobalArray::compareDistr(const GlobalArray *g_a) const
 compare_distr(int g_a, int g_b) 
 \end{pycode}
 \end{pyapi}
-
+\gcoll
 \begin{desc}
 
 Compares distributions of two global arrays. Returns 0 if distributions 
@@ -3451,7 +3509,7 @@ access(int g_a, lo=None, hi=None)
    hi (1D array-like) - higher bound patch coordinates, exclusive 
 \end{pycode}
 \end{pyapi}
-
+\local
 \begin{desc}
 
 Provides access to the specified patch of a global array. Returns array 
@@ -3566,7 +3624,7 @@ Do not use.
    proc (int)       - processor ID 
 \end{pycode}
 \end{pyapi}
-
+\local
 \begin{desc}
 
 This function can be used to gain access to the all the locally held 
@@ -3633,6 +3691,7 @@ void GlobalArray::accessBlock(int64_t idx, void *ptr, int64_t ld[]) const
 \end{pycode}
 \end{pyapi}
 
+\local
 
 \begin{desc}
 
@@ -3700,6 +3759,7 @@ access_block_grid(int g_a, subscript)
 \end{pycode}
 \end{pyapi}
 
+\local
 
 \begin{desc}
 
@@ -3770,6 +3830,7 @@ void GlobalArray::release(int64_t lo[], int64_t hi[]) const
 release(int g_a, lo=None, hi=None)  
 \end{pycode}
 \end{pyapi}
+\local
 
 \begin{desc}
 
@@ -3840,6 +3901,7 @@ void GlobalArray::releaseUpdate(int64_t lo[], int64_t hi[]) const
 release_update(int g_a, lo=None, hi=None)
 \end{pycode}
 \end{pyapi}
+\local
 
 \begin{desc}
 
@@ -3884,6 +3946,7 @@ void GlobalArray::releaseBlock(int index) const
 release_block(int g_a, int index)  
 \end{pycode}
 \end{pyapi}
+\local
 
 \begin{desc}
 
@@ -3931,6 +3994,7 @@ release_update_block(int g_a, int index)
 \end{pycode}
 \end{pyapi}
 
+\local
 
 \begin{desc}
 
@@ -3977,6 +4041,7 @@ void GlobalArray::releaseBlockGrid(int index[]) const
 release_block_grid(int g_a, subscript) 
 \end{pycode}
 \end{pyapi}
+\local
 
 \begin{desc}
 
@@ -4025,6 +4090,7 @@ release_update_block_grid(int g_a, subscript)
 \end{pycode}
 \end{pyapi} 
 
+\local
 
 \begin{desc}
 
@@ -4072,6 +4138,7 @@ release_block_segment(int g_a, int iproc)
 \end{pycode}
 \end{pyapi} 
 
+\local
 
 \begin{desc}
 
@@ -4116,6 +4183,7 @@ void GlobalArray::releaseUpdateBlockSegment(int proc) const
 release_update_block_segment(int g_a, int iproc) 
 \end{pycode}
 \end{pyapi}
+\local
 
 \begin{desc}
 
@@ -4161,6 +4229,7 @@ void GlobalArray::releaseGhostElement(int64_t subscript[]) const
 release_ghost_element(int g_a, subscript)  
 \end{pycode}
 \end{pyapi} 
+\local
 
 \begin{desc}
 
@@ -4207,6 +4276,7 @@ release_update_ghost_element(int g_a, subscript)
 \end{pycode}
 \end{pyapi} 
 
+\local
 
 \begin{desc}
 
@@ -4247,6 +4317,7 @@ release_ghosts(int g_a)
 \end{pycode}
 \end{pyapi} 
 
+\local
 
 \begin{desc}
 
@@ -4287,6 +4358,7 @@ release_update_ghosts(int g_a)
 \end{pycode}
 \end{pyapi} 
 
+\local
 
 \begin{desc}
 
@@ -4350,7 +4422,7 @@ read_inc(int g_a, subscript, long inc=1)
 \end{pycode}
  \end{pyapi} 
 
-
+\ncoll
 \begin{desc}
 
 Atomically read and increment an element in an integer array.
@@ -4423,7 +4495,7 @@ void GlobalArray::scatter(void *v, int64_t *subsarray[], int64_t n) const
 scatter(int g_a, values, subsarray)  
 \end{pycode}
 \end{pyapi}
-
+\ncoll
 
 \begin{desc}
 
@@ -4512,6 +4584,7 @@ void GlobalArray::gather(void *v, int64_t * subsarray[], int64_t n) const
 gather(int g_a, subsarray, ndarray values=None)
 \end{pycode}
 \end{pyapi}
+\ncoll
 
 \begin{desc}
 
@@ -4610,6 +4683,7 @@ scatter_acc(int g_a, values, subsarray, alpha=None)
 \end{pycode}
 \end{pyapi}
 
+\ncoll
 
 \begin{desc}
 
@@ -4683,7 +4757,7 @@ GAServices::error(const char *message, int code)
 error(char *message, int code=1)
 \end{pycode}
 \end{pyapi}
-
+\local
 \begin{desc}
 
 To be called in case of an error. Print an error message and an 
@@ -4744,7 +4818,7 @@ locate(int g_a, subscript)
    subscript (1D array-like of integers) - len(subscript) should be ndim
 \end{pycode}
 \end{pyapi}
-
+\local
 \begin{desc}
 
 Return in owner the GA compute process ID that `owns' the data. If any 
@@ -4815,6 +4889,7 @@ locate_region(int g_a, lo, hi)
 \end{pycode}
 \end{pyapi}
 
+\local
 
 \begin{desc}
 
@@ -4889,6 +4964,7 @@ void GlobalArray::inquire(int *type, int *ndim, int64_t dims[]) const
  inquire(int g_a) 
 \end{pycode}
 \end{pyapi}
+\local
 
 \begin{desc}
 
@@ -4962,6 +5038,7 @@ inquire_name(int g_a)
 \end{pycode}
 \end{pyapi}
 
+\local
 
 \begin{desc}
 
@@ -5004,6 +5081,7 @@ ndim(int g_a)
 \end{pyapi}
 
 
+\local
 
 \begin{desc}
 
@@ -5050,6 +5128,7 @@ nblock(int g_a)
 \end{pycode}
 \end{pyapi}
 
+\local
 
 \begin{desc}
 
@@ -5084,6 +5163,7 @@ memory_avail()
 \end{pycode}
 \end{pyapi}
 
+\local
 
 \begin{desc}
 
@@ -5126,6 +5206,7 @@ uses_ma()
 \end{pycode}
 \end{pyapi} 
  
+\local
 
 \begin{desc}
 
@@ -5162,6 +5243,7 @@ int GAServices::memoryLimited()
 memory_limited() 
 \end{pycode}
 \end{pyapi}
+\local
 
 \begin{desc}
 
@@ -5215,6 +5297,7 @@ proc_topology(int g_a, int proc)
 \end{pyapi}
  
 
+\local
 
 \begin{desc}
 
@@ -5257,7 +5340,7 @@ print_file(int g_a, file)
 \end{pycode}
 \end{pyapi}
 
-
+\gcoll
 \begin{desc}
 
 Prints an entire array to a file.
@@ -5305,7 +5388,7 @@ void GlobalArray::printPatch(int* lo, int* hi, int pretty) const
 print_patch(int g_a, lo=None, hi=None, int pretty=True)
 \end{pycode}
 \end{pyapi}
-
+\gcoll
 \begin{desc}
 
 Prints a patch of g_a array to the standard output. If the variable 
@@ -5342,6 +5425,7 @@ void GlobalArray::print() const
 \end{cxxapi}
 
 
+\gcoll
 
 \begin{desc}
 
@@ -5375,7 +5459,7 @@ void GAServices::printStats()
 print_stats()  
 \end{pycode}
 \end{pyapi}
-
+\local
 \begin{desc}
 
 This non-collective (MIMD) operation prints information about:
@@ -5425,7 +5509,7 @@ print_distribution(int g_a)
 \end{pycode}
 \end{pyapi} 
 
-
+\gcoll
 \begin{desc}
 
 Prints the array distribution.
@@ -5469,7 +5553,7 @@ void GlobalArray::checkHandle(char* string) const
 check_handle(int g_a, char *message)
 \end{pycode}
 \end{pyapi}
-
+\local
 \begin{desc}
 
 Check that the global array handle g_a is valid ... if not, call 
@@ -5503,7 +5587,7 @@ init_fence()
 \end{pycode}
 \end{pyapi} 
 
-
+\local
 \begin{desc}
 
 Initializes tracing of the completion status of data movement operations.
@@ -5536,7 +5620,7 @@ fence()
 \end{pycode}
 \end{pyapi}
 
-
+\ncoll
 \begin{desc}
 
 Blocks the calling process until all the data transfers corresponding to GA 
@@ -5604,7 +5688,7 @@ create_mutexes(int number)
 \end{pycode}
 \end{pyapi}
 
-
+\wcoll
 \begin{desc}
 
 Creates a set containing the number of mutexes. Returns 0 if the operation 
@@ -5647,7 +5731,7 @@ destroy_mutexes()
 \end{pycode}
 \end{pyapi} 
 
-
+\wcoll
 \begin{desc}
 
 Destroys the set of mutexes created with ga_create_mutexes. Returns 0 if 
@@ -5692,7 +5776,7 @@ lock(int mutex)
 \end{pycode}
 \end{pyapi}
 
-
+\ncoll
 \begin{desc}
 
 Locks a mutex object identified by the mutex number. It is a fatal 
@@ -5729,6 +5813,7 @@ GAServices::unlock(int mutex)
 \funcarg{}{mutex}{mutex object id}{input}
 \end{funcargs}
 \end{cxxapi}
+\ncoll
 
 \begin{desc}
 
@@ -5763,7 +5848,7 @@ nodeid()
 \end{pycode}
 \end{pyapi} 
 
-
+\local
 \begin{desc}
 
 Returns the GA process id (0, ..., ga_Nnodes()-1) of the requesting compute process.
@@ -5796,6 +5881,7 @@ nnodes()
 \end{pycode}
 \end{pyapi} 
 
+\local
 
 \begin{desc}
 
@@ -5881,7 +5967,7 @@ int g_b, beta, int g_c)
 \end{pycode}
 \end{pyapi}
 
-
+\gcoll
 \begin{desc}
 
 Performs one of the matrix-matrix operations:
@@ -5964,6 +6050,7 @@ void GlobalArray::copyPatch(char trans, const GlobalArray* ga, int64_talo[],
 \funcarg{}{bhi}{this GlobalArray's patch coordinates}{input}
 \end{funcargs}
 \end{cxxapi}
+\gcoll
 
 \begin{desc}
 
@@ -6073,6 +6160,7 @@ long GlobalArray::ldotPatch(char ta, int64_t alo[], int64_t ahi[],
 \end{funcargs}
 \end{cxxapi}
 
+\gcoll
 
 \begin{desc}
 
@@ -6224,6 +6312,7 @@ int g_b, blo, bhi, int g_c, clo, chi)
 \end{pycode}
 \end{pyapi}
 
+\gcoll
 
 \begin{desc}
 
@@ -6323,6 +6412,7 @@ void GlobalArray::addPatch(void *alpha, const GlobalArray * g_a, int64_t alo[],
 \funcarg{}{chi}{patch of this GlobalArray}{input}
 \end{funcargs}
 \end{cxxapi}
+\gcoll
 
 \begin{desc}
 
@@ -6381,6 +6471,7 @@ void GlobalArray::fillPatch (int64_t lo[], int64_t hi[], void *val) const
 \funcarg{}{val}{value to fill}{input}
 \end{funcargs}
 \end{cxxapi}
+\gcoll
 
 \begin{desc}
 
@@ -6422,6 +6513,7 @@ void GlobalArray::zeroPatch (int64_t lo[], int64_t hi[]) const
 \funcarg{}{hi}{patch of this GlobalArray}{input}
 \end{funcargs}
 \end{cxxapi}
+\gcoll
 
 \begin{desc}
 
@@ -6479,6 +6571,7 @@ void GlobalArray::scalePatch (int64_t lo[], int64_t hi[], void *val) const
 \funcarg{}{val}{scale factor}{input}
 \end{funcargs}
 \end{cxxapi}
+\gcoll
 
 \begin{desc}
 
@@ -6532,7 +6625,7 @@ brdcst(buffer, int root)
 \end{pycode}
 \end{pyapi}
 
-
+\wcoll
 \begin{desc}
 
 Broadcast from process root to all other processes a message of length lenbuf.
@@ -6587,7 +6680,7 @@ void GAServices::dgop(double x[], int n, char *op);
 \end{cxxapi}
 
 
-
+\wcoll
 \begin{desc}
 
 Double Global OPeration.
@@ -6637,7 +6730,7 @@ void GAServices::igop(int x[], int n, char *op);
 \funcarg{}{op}{operator}{input}
 \end{funcargs}
 \end{cxxapi}
-
+\wcoll
 \begin{desc}
 
 Integer Global OPeration. The integer (more precisely long) version
@@ -6672,6 +6765,7 @@ void GAServices::lgop(long x[], int n, char *op);
 \funcarg{}{op}{operator}{input}
 \end{funcargs}
 \end{cxxapi}
+\wcoll
 
 \begin{desc}
 
@@ -6709,7 +6803,7 @@ int GAServices::clusterNnodes()
 cluster_nnodes() 
 \end{pycode}
 \end{pyapi}
-
+\local
 \begin{desc}
 
 
@@ -6746,6 +6840,7 @@ cluster_nodeid(int proc=-1)
    proc (int)    - process ID to lookup
 \end{pycode}
 \end{pyapi}
+\local
 
 \begin{desc}
 
@@ -6783,6 +6878,7 @@ int GAServices::clusterProcNodeid(int iproc)
 \funcarg{}{iproc}{process id}{input}
 \end{funcargs}
 \end{cxxapi}
+\local
 
 \begin{desc}
 
@@ -6827,6 +6923,7 @@ int GAServices::clusterNprocs(int inode)
 cluster_nprocs(int inode) 
 \end{pycode}
 \end{pyapi}
+\local
 
 \begin{desc}
 
@@ -6873,6 +6970,7 @@ cluster_procid(int inode, int iproc)
 \end{pycode}
 \end{pyapi} 
 
+\local
 
 \begin{desc}
 
@@ -6930,7 +7028,7 @@ diag(int g_a, int g_s, int g_v, evalues=None)
 \end{pycode}
 \end{pyapi}
 
-
+\gcoll
 \begin{desc}
 
 Solve the generalized eigenvalue problem returning all eigenvectors and 
@@ -6996,6 +7094,7 @@ diag_reuse(int control, int g_a, int g_s, int g_v, evalues=None)
 \end{pycode}
 \end{pyapi}
 
+\gcoll
 
 \begin{desc}
 
@@ -7062,6 +7161,7 @@ diag_std(int g_a, int g_v, evalues=None)
 \end{pycode}
 \end{pyapi}
 
+\gcoll
 
 \begin{desc}
 
@@ -7115,6 +7215,7 @@ llt_solve(int g_a, int g_b)
 \end{pycode}
 \end{pyapi}
 
+\gcoll
 
 \begin{desc}
 
@@ -7184,6 +7285,7 @@ lu_solve(int g_a, int g_b, int trans=False)
 \end{pycode}
 \end{pyapi} 
 
+\gcoll
 
 \begin{desc}
 
@@ -7240,6 +7342,7 @@ solve(int g_a, int g_b)
 \end{pyapi} 
 
 
+\gcoll
 
 \begin{desc}
 
@@ -7298,6 +7401,7 @@ spd_invert(int g_a)
 \end{pyapi} 
 
 
+\gcoll
 
 \begin{desc}
 
@@ -7366,6 +7470,7 @@ select_elem(int g_a, char *op)
 \end{pycode}
 \end{pyapi} 
 
+\gcoll
 
 \begin{desc}
 
@@ -7408,7 +7513,7 @@ void GlobalArray::summarize(int verbose) const
 summarize(int verbose)
 \end{pycode}
 \end{pyapi}
-
+\local
 \begin{desc}
 
 Prints info about allocated arrays.
@@ -7446,7 +7551,7 @@ symmetrize(int g_a)
 \end{pycode}
 \end{pyapi} 
 
-
+\gcoll
 \begin{desc}
 
 Symmetrizes matrix A represented with handle g_a: A:= .5 * (A+A').
@@ -7490,7 +7595,7 @@ void GlobalArray::transpose(const GlobalArray * g_a) const
 transpose(int g_a, int g_b)
 \end{pycode}
 \end{pyapi}
-
+\gcoll
 \begin{desc}
 
 
@@ -7536,6 +7641,7 @@ abs_value(int g_a, lo=None, hi=None)
 
 
 
+\gcoll
 
 \begin{desc}
 
@@ -7575,6 +7681,7 @@ void GlobalArray::absValuePatch(int64_t *lo, int64_t *hi) const
 \funcarg{}{hi}{upper corner patch coordinates}{input}
 \end{funcargs}
 \end{cxxapi}
+\gcoll
 
 \begin{desc}
 
@@ -7624,6 +7731,7 @@ add_constant(int g_a, alpha, lo=None, hi=None)
 \end{pycode}
 \end{pyapi}
 
+\gcoll
 
 \begin{desc}
 
@@ -7670,6 +7778,7 @@ void GlobalArray::addConstantPatch(int64_t *lo, int64_t *hi, void *alpha) const
 
 
 
+\gcoll
 
 \begin{desc}
 
@@ -7708,6 +7817,7 @@ void GlobalArray::recip() const
 recip(int g_a, lo=None, hi=None) 
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -7747,6 +7857,7 @@ void GlobalArray::recipPatch(int *lo, int *hi) const
 \funcarg{}{hi}{upper corner patch coordinates}{input}
 \end{funcargs}
 \end{cxxapi}
+\gcoll
 
 \begin{desc}
 
@@ -7810,6 +7921,7 @@ bhi=None, clo=None, chi=None)
 \end{pyapi}
 
 
+\gcoll
 
 \begin{desc}
 
@@ -7878,6 +7990,7 @@ void GlobalArray::elemMultiplyPatch(const GlobalArray * g_a, int64_t *alo,
 \funcarg{}{chi}{g_c upper corner patch coordinates}{input}
 \end{funcargs}
 \end{cxxapi}
+\gcoll
 
 \begin{desc}
 
@@ -7946,6 +8059,7 @@ bhi=None, clo=None, chi=None)
                                      exclusive 
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -8017,6 +8131,7 @@ void GlobalArray::elemDividePatch(const GlobalArray * g_a, int64_t *alo,
 \funcarg{}{chi}{g_c upper corner patch coordinates}{input}
 \end{funcargs}
 \end{cxxapi}
+\gcoll
 
 \begin{desc}
 
@@ -8086,6 +8201,7 @@ bhi=None, clo=None, chi=None)
 \end{pycode}
 \end{pyapi}
 
+\gcoll
 
 \begin{desc}
 
@@ -8153,6 +8269,7 @@ void GlobalArray::elemMaximumPatch(const GlobalArray * g_a, int64_t *alo,
 \funcarg{}{chi}{g_c upper corner patch coordinates}{input}
 \end{funcargs}
 \end{cxxapi}
+\gcoll
 
 \begin{desc}
 
@@ -8204,6 +8321,7 @@ void GlobalArray::elemMinimum(const GlobalArray * g_a, const
 \funcarg{}{g_b}{global array}{input}
 \end{funcargs}
 \end{cxxapi}
+\gcoll
 
 \begin{desc}
 
@@ -8271,6 +8389,7 @@ void GlobalArray::elemMinimumPatch(const GlobalArray * g_a, int64_t *alo,
 \funcarg{}{chi}{g_c upper corner patch coordinates}{input}
 \end{funcargs}
 \end{cxxapi}
+\gcoll
 
 \begin{desc}
 
@@ -8327,6 +8446,7 @@ shift_diagoal(int g_a, value=None)
 \end{pycode}
 \end{pyapi} 
 
+\gcoll
 
 \begin{desc}
 
@@ -8369,6 +8489,7 @@ set_diagonal(int g_a, int g_v)
 \end{pycode}
 \end{pyapi} 
 
+\gcoll
 
 \begin{desc}
 
@@ -8407,6 +8528,7 @@ void GlobalArray::zeroDiagonal() const
 zero_diagonal(int g_a)  
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -8451,6 +8573,7 @@ add_diagonal(int g_a, int g_v)
 \end{pycode}
 \end{pyapi}
 
+\gcoll
 
 \begin{desc}
 
@@ -8494,6 +8617,7 @@ get_diag(int g_a, int g_v)
    g_a (int)        - the array handle
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -8535,6 +8659,7 @@ void GlobalArray::scaleRows(const GlobalArray * g_v) const
 g_a (int)                 - the array handle
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -8575,6 +8700,7 @@ void GlobalArray::scaleCols(const GlobalArray * g_v) const
 scale_cols(int g_a, int g_v)
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -8620,6 +8746,7 @@ norm1(int g_a)
 \end{pycode}
 \end{pyapi}
 
+\gcoll
 
 \begin{desc}
 
@@ -8664,6 +8791,7 @@ norm_infinity(int g_a)
    g_a (int)           - the array handle
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -8734,6 +8862,7 @@ bhi=None, clo=None, chi=None, mlo=None, mhi=None)
 \end{pycode}
 \end{pyapi}
 
+\gcoll
 
 \begin{desc}
 
@@ -8803,6 +8932,7 @@ void GlobalArray::medianPatch(const GlobalArray *g_a, int64_t *alo,
 \funcarg{}{mhi}{g_m upper corner patch coordinates}{input}
 \end{funcargs}
 \end{cxxapi}
+\gcoll
 
 \begin{desc}
 
@@ -8850,6 +8980,7 @@ step_max(int g_a, int g_b, alo=None, ahi=None, blo=None, bhi=None)
 \end{pycode}
 \end{pyapi} 
 
+\gcoll
 
 \begin{desc}
 
@@ -8884,6 +9015,7 @@ subroutine ga_step_max2(g_xx, g_vv, g_xxll, g_xxuu, step2)
 \funcarg{}{g_xxuu}{upper bounds}{input}
 \end{funcargs}
 \end{fapi}
+\gcoll
 
 \begin{desc}
 
@@ -8930,6 +9062,7 @@ void GlobalArray::stepMaxPatch(int64_t *alo, int64_t *ahi, const GlobalArray
 \funcarg{}{bhi}{g_b upper corner patch coordinates}{input}
 \end{funcargs}
 \end{cxxapi}
+\gcoll
 
 \begin{desc}
 
@@ -8963,7 +9096,7 @@ pgroup_get_default()
 \end{pycode}
 \end{pyapi} 
 
-
+\local
 \begin{desc}
 
 This function will return a handle to the default processor group, which can then be used to create a global array using one of the NGA_create_*_config or GA_Set_pgroup calls.
@@ -8997,7 +9130,7 @@ pgroup_get_mirror()
 \end{pycode}
 \end{pyapi} 
 
-
+\local
 \begin{desc}
 
 This function will return a handle to the mirrored processor group, which can then be used to create a global array using one of the NGA_create_*_config or GA_Set_pgroup calls.
@@ -9031,7 +9164,7 @@ pgroup_get_world()
 \end{pycode}
 \end{pyapi} 
 
-
+\local
 \begin{desc}
 
 This function will return a handle to the world processor group, which can then be used to create a global array using one of the NGA_create_*_config or GA_Set_pgroup calls.
@@ -9071,7 +9204,7 @@ pgroup_sync(int pgroup)
 \end{pycode}
 \end{pyapi} 
 
-
+\gcoll
 \begin{desc}
 
 This operation executes a synchronization group across the processors in the processor group specified by p_handle. Nodes outside this group are unaffected.
@@ -9125,7 +9258,7 @@ pgroup_brdcst(int pgroup, ndarray buffer, int root)
    root (int)          - the process which is sending 
 \end{pycode}
 \end{pyapi}
-
+\gcoll
 \begin{desc}
 
 Broadcast data from processor specified by root to all other processors in the processor group specified by p_handle. The length of the message in bytes is specified by lenbuf. The initial and broadcasted data can be found in the buffer specified by the pointer buf.
@@ -9176,7 +9309,7 @@ void PGroup::gop(double *buf, int n, char* op)
 \funcarg{}{op}{operator}{input}
 \end{funcargs}
 \end{cxxapi}
-
+\gcoll
 \begin{desc}
 
 The buf[n] is a double precision array present on each processor in the processor group p_handle. The GA_Pgroup_dgop `sums' all elements in buf[n] across all processors in the group specified by p_handle using the commutative operation specified by the character string op.  The result is broadcast to all processor in p_handle. Allowed strings are `+', `*', `max', `min', `absmax', `absmin'. The use of lowerecase for operators is necessary.
@@ -9221,7 +9354,7 @@ void PGroup::gop(int *buf, int n, char* op)
 \funcarg{}{op}{operator}{input}
 \end{funcargs}
 \end{cxxapi}
-
+\gcoll
 \begin{desc}
 
 The buf[n] is an integer array present on each processor in the processor group p_handle. The GA_Pgroup_igop `sums' all elements in buf[n] across all processors in the group specified by p_handle using the commutative operation specified by the character string op.  The result is broadcast to all processors in p_handle. Allowed strings are `+', `*', `max', `min', `absmax', `absmin'. The use of lowerecase for operators is necessary.
@@ -9253,7 +9386,7 @@ void PGroup::gop(long *buf, int n, char* op)
 \funcarg{}{op}{operator}{input}
 \end{funcargs}
 \end{cxxapi}
-
+\gcoll
 \begin{desc}
 
 The buf[n] is a long integer array present on each processor in the processor group p_handle. The GA_Pgroup_lgop `sums' all elements in buf[n] across all processors in the group specified by p_handle using the commutative operation specified by the character string op.  The result is broadcast to all processors in p_handle. Allowed strings are `+', `*', `max', `min', `absmax', `absmin'. The use of lowerecase for operators is necessary.
@@ -9298,7 +9431,7 @@ void PGroup::gop(float *buf, int n, char* op)
 \funcarg{}{op}{operator}{input}
 \end{funcargs}
 \end{cxxapi}
-
+\gcoll
 \begin{desc}
 
 The buf[n] is a single precision array present on each processor in the processor group p_handle. The GA_Pgroup_fgop `sums' all elements in buf[n] across all processors in the group specified by p_handle using the commutative operation specified by the character string op.  The result is broadcast to all processors in p_handle. Allowed strings are `+', `*', `max', `min', `absmax', `absmin'. The use of lowerecase for operators is necessary.
@@ -9339,7 +9472,7 @@ pgroup_nnodes(int pgroup)
 \end{pycode}
 \end{pyapi}
 
-
+\local
 \begin{desc}
 
 This function returns the number of processors contained in the group specified by p_handle.
@@ -9382,7 +9515,7 @@ pgroup_nodeid(int pgroup)
    pgroup (int)                  - the group handle
 \end{pycode}
 \end{pyapi}
-
+\local
 \begin{desc}
 
 This function returns the relative index of the processor in the processor group specified by p_handle. This index will generally differ from the absolute processor index returned by GA_Nodeid if the processor group is not the world group.
@@ -9426,7 +9559,7 @@ merge_mirrored(int g_a)
    g_a (int)                     - array handle
 \end{pycode}
 \end{pyapi}
-
+\gcoll
 \begin{desc}
 
 This subroutine merges mirrored arrays by adding the contents of each array across nodes. The result is that each mirrored copy of the array represented by g_a is the sum of the individual arrays before the merge operation. After the merge, all mirrored arrays are equal.
@@ -9467,7 +9600,7 @@ is_mirrored(int g_a)
 \end{pycode}
 \end{pyapi} 
 
-
+\local
 \begin{desc}
 
 This subroutine checks if the array is a mirrored array or not. Returns 1 if it is a mirrored array, else it returns 0.
@@ -9528,7 +9661,7 @@ merge_distr_patch(int g_a, alo, ahi, int g_b, blo, bhi)
    bhi (1D array-like of integers) - g_b patch coordinate 
 \end{pycode}
 \end{pyapi}
-
+\gcoll
 \begin{desc}
 
 This function merges all copies of a patch of a mirrored array (g_a) into a patch in a distributed array (g_b).
@@ -9608,7 +9741,7 @@ nbget(int g_a, lo=None, hi=None, ndarray buffer=None)
 \end{pycode}
 \end{pyapi}
 
-
+\ncoll
 \begin{desc}
 
 A non-blocking version of the blocking get operation. The get operation can be completed locally by making a call to the wait (e.g., NGA_NbWait) routine.
@@ -9696,6 +9829,7 @@ nbput(int g_a, buffer, lo=None, hi=None)
 \end{pycode}
 \end{pyapi}
 
+\ncoll
 
 \begin{desc}
 
@@ -9785,6 +9919,7 @@ nbacc(int g_a, buffer, lo=None, hi=None, alpha=None)
    alpha (object)                 - multiplier (converted to the appropriate type)
 \end{pycode}
 \end{pyapi}
+\ncoll
 
 \begin{desc}
 
@@ -9847,6 +9982,7 @@ nbwait(ga_nbhdl_t nbhandle)
 \end{pycode}
 \end{pyapi} 
 
+\ncoll
 
 \begin{desc}
 
@@ -9881,7 +10017,7 @@ wtime()
 \end{pycode}
 \end{pyapi} 
 
-
+\local
 \begin{desc}
 
 This function returns a wall (or elapsed) time on the calling processor. Returns time in seconds representing elapsed wall-clock time since an arbitrary time in the past. Example:
@@ -9933,7 +10069,7 @@ set_debug(int debug)
 \end{pycode}
 \end{pyapi} 
 
-
+\local
 \begin{desc}
 
 This function sets an internal flag in the GA library to either true or false. The value of this flag can be recovered at any time using the GA_Get_debug function. The flag is set to false when the the GA library is initialized. This can be useful in a number of debugging situations, especially when examining the behavior of routines that are called in multiple locations in a code.
@@ -9967,7 +10103,7 @@ get_debug()
 \end{pycode}
 \end{pyapi} 
 
-
+\local
 \begin{desc}
 
 This function returns the value of an internal flag in the GA library whose value can be set using the GA_Set_debug subroutine.
@@ -10013,7 +10149,7 @@ void GlobalArray::patchEnum(int64_t lo, int64_t hi, void *start, void *inc)
 \funcarg{}{inc}{increment value}{input}
 \end{funcargs}
 \end{cxxapi}
-
+\gcoll
 \begin{desc}
 
 This subroutine enumerates the values of an array between elements lo and hi starting with the value start and incrementing each subsequent value by inc. This operation is only applicable to 1-dimensional arrays. An example of its use is shown below:
@@ -10084,6 +10220,7 @@ scan_add(int g_src, int g_dst, int g_msk, lo=None, hi=None, int excl=False)
    excl (bool)                    - whether the first value is set to 0 (see above)
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -10152,6 +10289,7 @@ void GlobalArray::scanCopy(const GlobalArray *g_dest, const GlobalArray *g_mask,
 scan_copy(int g_src, int g_dst, int g_msk, lo=None, hi=None)  
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -10226,6 +10364,7 @@ pack(int g_src, int g_dst, int g_msk, lo=None, hi=None)
                                     is performed 
 \end{pycode}
 \end{pyapi}
+\gcoll
 
 \begin{desc}
 
@@ -10301,6 +10440,7 @@ unpack(int g_src, int g_dst, int g_msk, lo=None, hi=None)
 \end{pycode}
 \end{pyapi}
 
+\gcoll
 
 \begin{desc}
 

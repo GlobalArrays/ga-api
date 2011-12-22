@@ -32,17 +32,38 @@
 \newline
 }
 
-\newcommand{\wcoll}{Collective on the world processor group}
-\newcommand{\dcoll}{Collective on the default processor group}
-\newcommand{\gcoll}{Collective on the global array's processor group}
-\newcommand{\ncoll}{One-sided (non-collective)}
-\newcommand{\local}{Local}
+%\newcommand{\optype}[1]{
+%\newline
+%\textbf{Operation Type:}#1
+%\newline
+%}
 
-\newcommand{\optype}[1]{
-\newline
-\textbf{Operation Type:}#1
+\newcommand{\wcoll}{
+\noindent
+\textcolor{blue}{Operation Type:} Collective on the world processor group
 \newline
 }
+\newcommand{\dcoll}{
+\noindent
+\textcolor{blue}{Operation Type:} Collective on the default processor group
+\newline
+}
+\newcommand{\gcoll}{
+\noindent
+\textcolor{blue}{Operation Type:} Collective on the processor group inferred from the arguments
+\newline
+}
+\newcommand{\ncoll}{
+\noindent
+\textcolor{blue}{Operation Type:} One-sided (non-collective)
+\newline
+}
+\newcommand{\local}{
+\noindent
+\textcolor{blue}{Operation Type:} Local
+\newline
+}
+
 
 \newenvironment{desc}{
 \noindent
