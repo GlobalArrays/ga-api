@@ -1,37 +1,112 @@
+%\IfFileExists{minted.sty}{
+%\usepackage{minted}
+%\newminted[ccode]{c}{}
+%\newminted[cxxcode]{c++}{}
+%\newminted[fcode]{fortran}{}
+%\newminted[pycode]{python}{}
+%\newmint[cfuncsig]{c}{}
+%\newmint[cxxfuncsig]{c++}{}
+%\newmint[ffuncsig]{fortran}{}
+%\newmint[pyfuncsig]{python}{}
+%}{
+\usepackage{listings}
+\lstnewenvironment{ccode}
+    {\lstset{language=C}}
+    {}
+\lstnewenvironment{cxxcode}
+    {\lstset{language=C++}}
+    {}
+\lstnewenvironment{fcode}
+    {\lstset{language=Fortran}}
+    {}
+\lstnewenvironment{pycode}
+    {\lstset{language=Python}}
+    {}
+%}
+
 \newcommand{\apih}[1]{
 \hspace*{\fill} \\ \\ \\
 \color{black}
 \noindent
-\textbf{\LARGE
+\textbf{\Large
 #1
 \newline
 }
 }
 
-\newcommand{\access}[1]{\textcolor{green}{#1}}
-
 \newenvironment{desc}{
 \noindent
-\textcolor{blue}{API description:}\color{black}}{}
+\textcolor{blue}{API description:}
+
+}{}
 
 \newenvironment{cdesc}{
 \noindent
-\textcolor{blue}{C API description:}\color{black}}{}
+\textcolor{blue}{C API description:}
+
+}{}
 
 \newenvironment{fdesc}{
 \noindent
-\textcolor{blue}{Fortran API description:}\color{black}}{}
+\textcolor{blue}{Fortran API description:}
+
+}{}
 
 \newenvironment{cxxdesc}{
 \noindent
-\textcolor{blue}{C++ API description:}\color{black}}{}
+\textcolor{blue}{C++ API description:}
 
-\newcommand{\codevar}[1]{\texttt{#1}}
+}{}
 
-\newenvironment{codeseg}{
-\begin{alltt}
+\newenvironment{fapi}{
+\noindent
+\textcolor{blue}{Fortran Interface}
+\small
 }{
-\end{alltt}
 }
 
+\newenvironment{f2dapi}{
+\noindent
+\textcolor{blue}{Fortran 2D Interface}
+\small
+}{
+}
+
+\newenvironment{capi}{
+\noindent
+\textcolor{blue}{C Interface}
+\small
+}{
+}
+
+\newenvironment{cxxapi}{
+\noindent
+\textcolor{blue}{C++ Interface}
+\small
+}{
+}
+
+\newenvironment{pyapi}{
+\noindent
+\textcolor{blue}{Python Interface}
+\small
+}{
+}
+
+\newenvironment{funcargs}{
+\begin{tabular}{ p{0.15\textwidth} p{0.15\textwidth} p{0.5\textwidth} p{0.1\textwidth} }
+}{
+\end{tabular}
+}
+
+\newcommand{\funcarg}[4]{
+\texttt{#1} & \texttt{#2} & \texttt{#3} & \texttt{#4} \\
+}
+
+\definecolor{copper}{RGB}{213,117,0}
+\definecolor{silver}{RGB}{112,114,118}
+\definecolor{bronze}{RGB}{168,60,15}
+\definecolor{gold}{RGB}{241,171,0}
+\definecolor{onyx}{RGB}{36,36,36}
+\definecolor{platinum}{RGB}{178,179,181}
 
