@@ -27,11 +27,11 @@ subroutine ga_initialize()
 
 \begin{cxxapi}
 \begin{cxxcode}
-GA::Initialize(int argc, char *argv[], size_t limit=0)
+void GA::Initialize(int argc, char *argv[], size_t limit=0)
 \end{cxxcode}
 \begin{funcargs}
 \inarg{int}{argc}{number of command line arguments}
-\inarg{char**}{argv} {command line arguments}
+\inarg{char**}{argv}{command line arguments}
 \inarg{size_t}{limit}{amount of memory in bytes per process}
 \end{funcargs}
 \end{cxxapi}
@@ -74,8 +74,8 @@ subroutine ga_initialize_ltd(limit)
 
 \begin{cxxapi}
 \begin{cxxcode}
-GA::Initialize(int argc, char *argv[], unsigned long heapSize,
-               unsigned long stackSize, int type, size_t limit = 0)
+void GA::Initialize(int argc, char *argv[], unsigned long heapSize,
+                    unsigned long stackSize, int type, size_t limit=0)
 \end{cxxcode}
 \begin{funcargs}
 \inarg{int}{argc}{number of command line arguments}
@@ -89,8 +89,11 @@ GA::Initialize(int argc, char *argv[], unsigned long heapSize,
 
 \begin{pyapi}
 \begin{pycode}
-initialize_ltd(size_t limit)
+None initialize_ltd(size_t limit)
 \end{pycode}
+\begin{funcargs}
+\inarg{size_t}{limit}{amount of memory in bytes per process}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
@@ -121,6 +124,7 @@ int GA_Pgroup_create(int *list, int size)
 \begin{funcargs}
 \inarg{int*}{list[size]}{list of processor IDs in group}
 \inarg{int}{size}{number of processors in group}
+\outarg{int}{}{pgroup handle}
 \end{funcargs}
 \end{capi}
 
@@ -131,6 +135,7 @@ integer function ga_pgroup_create(list, size)
 \begin{funcargs}
 \inarg{integer}{size}{number of processors in group}
 \inarg{integer}{list(size)}{list of processors in processor group}
+\outarg{integer}{}{pgroup handle}
 \end{funcargs}
 \end{fapi}
 
@@ -141,15 +146,17 @@ PGroup::PGroup(int *plist, int size)
 \begin{funcargs}
 \inarg{int}{size}{number of processors in group}
 \inarg{int*}{plist[size]}{list of processor IDs in group}
+\outarg{PGroup}{}{pgroup object}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-pgroup_create(list)
+ret = pgroup_create(list)
 \end{pycode}
 \begin{funcargs}
-\inarg{iterable of ints}{list}{list of processor IDs in group}
+\inarg{iter of ints}{list}{list of processor IDs in group}
+\outarg{int}{pgroup}{pgroup handle}
 \end{funcargs}
 \end{pyapi}
 
@@ -176,6 +183,7 @@ int GA_Pgroup_destroy(int p_handle)
 \end{ccode}
 \begin{funcargs}
 \inarg{int}{p_handle}{processor group handle}
+\outarg{int}{}{0 if processor group was not previously active}
 \end{funcargs}
 \end{capi}
 
@@ -185,6 +193,7 @@ logical function ga_pgroup_destroy(p_handle)
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{p_handle}{processor group handle}
+\outarg{integer}{}{.FALSE. if processor group was not previously active}
 \end{funcargs}
 \end{fapi}
 
@@ -196,10 +205,11 @@ PGroup::~PGroup()
 
 \begin{pyapi}
 \begin{pycode}
-pgroup_destroy(int pgroup)
+ret = pgroup_destroy(int pgroup)
 \end{pycode}
 \begin{funcargs}
 \inarg{int}{pgroup}{processor group handle}
+\outarg{bool}{ret}{False if processor group was not previously active}
 \end{funcargs}
 \end{pyapi}
 
@@ -245,7 +255,7 @@ static void PGroup::setDefault(PGroup *p_handle)
 
 \begin{pyapi}
 \begin{pycode}
-pgroup_set_default(int pgroup)
+None pgroup_set_default(int pgroup)
 \end{pycode}
 \begin{funcargs}
 \inarg{int}{pgroup}{processor group handle}
@@ -323,17 +333,17 @@ GlobalArray * GAServices::createGA(int type, int ndim, int dims[],
                                    char *arrayname, int chunk[])
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{type}{data type(MT_F_DBL,MT_F_INT,MT_F_DCPL)}
-\inarg{}{ndim}{number of array dimensions}
-\inarg{}{dims[ndim]}{array of dimensions}
-\inarg{}{arrayname}{a unique character string}
-\inarg{}{chunk[ndim]}{array of chunks, each element specifies minimum size that given dimensions should be chunked up into}
+\inarg{int}{type}{data type(MT_F_DBL,MT_F_INT,MT_F_DCPL)}
+\inarg{int}{ndim}{number of array dimensions}
+\inarg{int*}{dims[ndim]}{array of dimensions}
+\inarg{char*}{arrayname}{a unique character string}
+\inarg{int*}{chunk[ndim]}{array of chunks, each element specifies minimum size that given dimensions should be chunked up into}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-create(int gtype, dims, char *name='', chunk=None, int pgroup=-1)
+g_a = create(int gtype, dims, char *name='', chunk=None, int pgroup=-1)
 \end{pycode}
 \begin{funcargs}
 \inarg{str}{name}{a unique character string}
@@ -341,6 +351,7 @@ create(int gtype, dims, char *name='', chunk=None, int pgroup=-1)
 \inarg{iter of ints}{dims}{shape of array}
 \inarg{iter of ints}{chunk}{each element specifies minimum size that given dimensions should be chunked up into}
 \inarg{int}{pgroup}{processor group handle}
+\outarg{int}{g_a}{global array handle}
 \end{funcargs}
 \end{pyapi}
 
@@ -382,6 +393,7 @@ int NGA_Create_config(int type, int ndim, int dims[], char *array_name,
 \inarg{int*}{dims[ndim]}{array of dimensions}
 \inarg{int*}{chunk[ndim]}{array of chunks, each element specifies minimum size that given dimensions should be chunked up into}
 \inarg{int}{p_handle}{processor list handle}
+\outarg{int}{g_a}{global array handle}
 \end{funcargs}
 \end{capi}
 
@@ -403,9 +415,11 @@ logical function nga_create_config(type, ndim, dims, array_name, chunk,
 
 \begin{cxxapi}
 \begin{cxxcode}
-GlobalArray::GlobalArray(int type, int ndim, int dims[], char *arrayname,
+GlobalArray::GlobalArray(int type, int ndim, int dims[],
+                         char *arrayname,
                          int chunk[],PGroup* p_handle)
-GlobalArray::GlobalArray(int type, int ndim, int64_t dims[], char *arrayname,
+GlobalArray::GlobalArray(int type, int ndim, int64_t dims[],
+                         char *arrayname,
                          int64_t chunk[], PGroup* p_handle)
 \end{cxxcode}
 \begin{funcargs}
@@ -420,7 +434,7 @@ GlobalArray::GlobalArray(int type, int ndim, int64_t dims[], char *arrayname,
 
 \begin{pyapi}
 \begin{pycode}
-create(int gtype, dims, char *name='', chunk=None, int pgroup=-1)
+g_a = create(int gtype, dims, char *name='', chunk=None, int pgroup=-1)
 \end{pycode}
 \begin{funcargs}
 \inarg{str}{name}{a unique character string}
@@ -428,6 +442,7 @@ create(int gtype, dims, char *name='', chunk=None, int pgroup=-1)
 \inarg{iter of ints}{dims}{shape of array}
 \inarg{iter of ints}{chunk}{each element specifies minimum size that given dimensions should be chunked up into}
 \inarg{int}{pgroup}{processor group handle}
+\outarg{int}{g_a}{global array handle}
 \end{funcargs}
 \end{pyapi}
 
@@ -456,12 +471,13 @@ int NGA_Create_ghosts(int type, int ndim, int dims[], int width[],
                       char *array_name, int chunk[])
 \end{ccode}
 \begin{funcargs}
-\inarg{}{array_name}{a unique character string}
-\inarg{}{type}{data type (MT_DBL,MT_INT,MT_DCPL)}
-\inarg{}{ndim}{number of array dimensions}
-\inarg{}{dims[ndim]}{array of dimensions}
-\inarg{}{width[ndim]}{array of ghost cell widths}
-\inarg{}{chunk[ndim]}{array of chunks, each element specifies minimum size that given dimensions should be chunked up into}
+\inarg{char*}{array_name}{a unique character string}
+\inarg{int}{type}{data type (MT_DBL,MT_INT,MT_DCPL)}
+\inarg{int}{ndim}{number of array dimensions}
+\inarg{int*}{dims[ndim]}{array of dimensions}
+\inarg{int*}{width[ndim]}{array of ghost cell widths}
+\inarg{int*}{chunk[ndim]}{array of chunks, each element specifies minimum size that given dimensions should be chunked up into}
+\outarg{int}{}{global array handle}
 \end{funcargs}
 \end{capi}
 
@@ -492,56 +508,57 @@ GlobalArray * GAServices::createGA_Ghosts(int type, int ndim, int dims[],
                                           int chunk[])
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{type}{data type (MT_DBL,MT_INT,MT_DCPL)}
-\inarg{}{ndim}{number of array dimensions}
-\inarg{}{dims[ndim]}{array of dimensions}
-\inarg{}{width[ndim]}{array of ghost cell widths}
-\inarg{}{array_name}{a unique character string}
-\inarg{}{chunk[ndim]}{array of chunks, each element specifies minimum size that given dimensions should be chunked up into}
-\inarg{}{ghosts}{this is a dummy parameter: added to increase the number of arguments, in order to avoid the conflicts among constructors. (ghosts = 'g' or 'G')}
+\inarg{int}{type}{data type (MT_DBL,MT_INT,MT_DCPL)}
+\inarg{int}{ndim}{number of array dimensions}
+\inarg{int*}{dims[ndim]}{array of dimensions}
+\inarg{int*}{width[ndim]}{array of ghost cell widths}
+\inarg{char*}{array_name}{a unique character string}
+\inarg{int*}{chunk[ndim]}{array of chunks, each element specifies minimum size that given dimensions should be chunked up into}
+\inarg{char}{ghosts}{this is a dummy parameter: added to increase the number of arguments, in order to avoid the conflicts among constructors. (ghosts = 'g' or 'G')}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-create_ghosts(int gtype, dims, width, char *name='', chunk=None, int pgroup=-1)
-   gtype (int)                       - the type of the array
-   dims (1D array-like of integers)  - shape of the array
-   width (1D array-like of integers) - ghost cell widths
-   name (string)                     - the name of the array
-   chunk (1D array-like of integers) - see above
-   pgroup (int)                      - create array only as part of this
-                                       processor group
+g_a create_ghosts(int gtype, dims, width, char *name='',
+                  chunk=None, int pgroup=-1)
 \end{pycode}
+\begin{funcargs}
+\inarg{char*}{name}{a unique character string}
+\inarg{int}{gtype}{data type (C_DBL,C_INT,C_DCPL)}
+\inarg{iter of ints}{dims}{array of dimensions}
+\inarg{iter of ints}{width}{array of ghost cell widths}
+\inarg{iter of ints}{chunk}{array of chunks, each element specifies minimum size that given dimensions should be chunked up into}
+\outarg{int}{}{global array handle}
+\end{funcargs}
 \end{pyapi}
 
 \dcoll
 
 \begin{desc}
 
-  Creates an ndim-dimensional array with a layer of ghost cells around
-  the visible data on each processor using the regular distribution
-  model and returns an integer handle representing the array.
+Creates an ndim-dimensional array with a layer of ghost cells around the
+visible data on each processor using the regular distribution model and returns
+an integer handle representing the array.
 
-  The array can be distributed evenly or not evenly. The control over
-  the distribution is accomplished by specifying chunk (block) size
-  for all or some of the array dimensions. For example, for a
-  2-dimensional array, setting chunk(1)=dim(1) gives distribution by
-  vertical strips (chunk(1)*dims(1)); setting chunk(2)=dim(2) gives
-  distribution by horizontal strips (chunk(2)*dims(2)). Actual chunks
-  will be modified so that they are at least the size of the minimum
-  and each process has either zero or one chunk. Specifying chunk(i)
-  as \textless 1 will cause that dimension (i-th) to be distributed evenly. The
-  width of the ghost cell layer in each dimension is specified using
-  the array width(). The local data of the global array residing on
-  each processor will have a layer width[n] ghosts cells wide on
-  either side of the visible data along the dimension n.
+The array can be distributed evenly or not evenly. The control over the
+distribution is accomplished by specifying chunk (block) size for all or some
+of the array dimensions. For example, for a 2-dimensional array, setting
+chunk(1)=dim(1) gives distribution by vertical strips (chunk(1)*dims(1));
+setting chunk(2)=dim(2) gives distribution by horizontal strips
+(chunk(2)*dims(2)). Actual chunks will be modified so that they are at least
+the size of the minimum and each process has either zero or one chunk.
+Specifying chunk(i) as \textless 1 will cause that dimension (i-th) to be
+distributed evenly. The width of the ghost cell layer in each dimension is
+specified using the array width(). The local data of the global array residing
+on each processor will have a layer width[n] ghosts cells wide on either side
+of the visible data along the dimension n.
 
-  Return value: a non-zero array handle means the call was successful.
+Return value: a non-zero array handle means the call was successful.
 
-  This is a collective operation.
+This is a collective operation.
+
 \end{desc}
-
 
 \apih{CREATE GHOSTS CONFIG}{Create a GA with ghost cells and specific configuration}
 
@@ -552,13 +569,14 @@ int NGA_Create_ghosts_config(int type, int ndim, int dims[],
                              int p_handle)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{array_name}{a unique character string}
-\inarg{}{type}{data type (MT_DBL,MT_INT,MT_DCPL)}
-\inarg{}{ndim}{number of array dimensions}
-\inarg{}{dims[ndim]}{array of dimensions}
-\inarg{}{width[ndim]}{array of ghost cell widths}
-\inarg{}{chunk[ndim]}{array of chunks, each element specifies minimum size that given dimensions should be chunked up into}
-\inarg{}{p_handle}{processor list handle}
+\inarg{char*}{array_name}{a unique character string}
+\inarg{int}{type}{data type (MT_DBL,MT_INT,MT_DCPL)}
+\inarg{int}{ndim}{number of array dimensions}
+\inarg{int*}{dims[ndim]}{array of dimensions}
+\inarg{int*}{width[ndim]}{array of ghost cell widths}
+\inarg{int*}{chunk[ndim]}{array of chunks, each element specifies minimum size that given dimensions should be chunked up into}
+\inarg{int*}{p_handle}{processor list handle}
+\outarg{int}{}{global array handle}
 \end{funcargs}
 \end{capi}
 
