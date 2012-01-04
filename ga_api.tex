@@ -336,15 +336,13 @@ GlobalArray * GAServices::createGA(int type, int ndim, int dims[],
 
 \begin{pyapi}
 \begin{pycode}
-g_a = ga.create(int gtype, dims, char *name='', chunk=None,
-                int pgroup=-1)
+g_a = ga.create(int gtype, dims, char *name='', chunk=None)
 \end{pycode}
 \begin{funcargs}
 \inarg{str}{name}{a unique character string}
 \inarg{int}{type}{data type e.g. C_DBL, C_INT, C_DCPL}
 \inarg{1D array-like of ints}{dims}{shape of array}
 \inarg{1D array-like of ints}{chunk}{each element specifies minimum size that given dimensions should be chunked up into}
-\inarg{int}{pgroup}{processor group handle}
 \outarg{int}{g_a}{global array handle}
 \end{funcargs}
 \end{pyapi}
@@ -514,13 +512,13 @@ GlobalArray * GAServices::createGA_Ghosts(int type, int ndim, int dims[],
 \begin{pyapi}
 \begin{pycode}
 g_a = ga.create_ghosts(int gtype, dims, width, char *name='',
-                       chunk=None, int pgroup=-1)
+                       chunk=None)
 \end{pycode}
 \begin{funcargs}
-\inarg{char*}{name}{a unique character string}
 \inarg{int}{gtype}{data type (C_DBL,C_INT,C_DCPL)}
 \inarg{1D array-like of ints}{dims}{array of dimensions}
 \inarg{1D array-like of ints}{width}{array of ghost cell widths}
+\inarg{char*}{name}{a unique character string}
 \inarg{1D array-like of ints}{chunk}{array of chunks, each element specifies minimum size that given dimensions should be chunked up into}
 \outarg{int}{}{global array handle}
 \end{funcargs}
@@ -616,11 +614,12 @@ g_a = ga.create_ghosts(int gtype, dims, width, char *name='',
                        chunk=None, int pgroup=-1)
 \end{pycode}
 \begin{funcargs}
-\inarg{char*}{name}{a unique character string}
 \inarg{int}{gtype}{data type (C_DBL,C_INT,C_DCPL)}
 \inarg{1D array-like of ints}{dims}{array of dimensions}
 \inarg{1D array-like of ints}{width}{array of ghost cell widths}
+\inarg{char*}{name}{a unique character string}
 \inarg{1D array-like of ints}{chunk}{array of chunks, each element specifies minimum size that given dimensions should be chunked up into}
+\inarg{int}{pgroup}{processor group handle}
 \outarg{int}{}{global array handle}
 \end{funcargs}
 \end{pyapi}
@@ -716,8 +715,7 @@ GlobalArray::GlobalArray(int type, int ndim, int64_t dims[],
 
 \begin{pyapi}
 \begin{pycode}
-g_a = ga.create_irreg(int gtype, dims, block, map, char *name='',
-                      int pgroup=-1)
+g_a = ga.create_irreg(int gtype, dims, block, map, char *name='')
 \end{pycode}
 \begin{funcargs}
 \inarg{int}{gtype}{data type (C_DBL,C_INT,C_DCPL)}
@@ -725,7 +723,6 @@ g_a = ga.create_irreg(int gtype, dims, block, map, char *name='',
 \inarg{1D array-like of ints}{block}{no. of blocks each dimension is divided into}
 \inarg{1D array-like of ints}{map}{starting index for for each block; len(map) is a sum all elements of block array}
 \inarg{char*}{name}{a unique character string}
-\inarg{int}{pgroup}{processor group handle}
 \outarg{int}{}{array handle}
 \end{funcargs}
 \end{pyapi}
@@ -906,8 +903,8 @@ GlobalArray::GlobalArray(int type, int ndim, int64_t dims[],
 
 \begin{pyapi}
 \begin{pycode}
-g_a = ga.create_irreg(int gtype, dims, width, block, map, char *name='',
-                      int pgroup=-1)
+g_a = ga.create_ghosts_irreg(int gtype, dims, width, block, map,
+                             char *name='')
 \end{pycode}
 \begin{funcargs}
 \inarg{int}{gtype}{data type (C_DBL,C_INT,C_DCPL)}
@@ -916,7 +913,6 @@ g_a = ga.create_irreg(int gtype, dims, width, block, map, char *name='',
 \inarg{1D array-like of ints}{block}{no. of blocks each dimension is divided into}
 \inarg{1D array-like of ints}{map}{starting index for for each block; len(map) is a sum all elements of block array}
 \inarg{char*}{name}{a unique character string}
-\inarg{int}{pgroup}{processor group handle}
 \outarg{int}{}{array handle}
 \end{funcargs}
 \end{pyapi}
@@ -1074,7 +1070,7 @@ GlobalArray::GlobalArray()
 
 \begin{pyapi}
 \begin{pycode}
-create_handle()
+ret = ga.create_handle()
 \end{pycode}
 \end{pyapi}
 
@@ -1247,7 +1243,7 @@ ga.set_irreg_distr(int g_a, mapc, nblock)
 \begin{funcargs}
 \inarg{int}{g_a}{array handle}
 \inarg{1D array-like of ints}{mapc}{starting index for for each block; len(map) is a sum all elements of block array}
-\inarg{1D array-like of ints}{block}{no. of blocks each dimension is divided into}
+\inarg{1D array-like of ints}{nblock}{no. of blocks each dimension is divided into}
 \end{funcargs}
 \end{pyapi}
 
@@ -1593,7 +1589,7 @@ void GlobalArray::setBlockCyclic(int dims[]) const
 
 \begin{pyapi}
 \begin{pycode}
-set_block_cyclic(int g_a, dims)
+ga.set_block_cyclic(int g_a, dims)
 \end{pycode}
 \begin{funcargs}
 \inarg{int}{g_a}{global array handle}
@@ -1974,7 +1970,7 @@ void GlobalArray::accessGhosts(int64_t dims[], void *ptr, int64_t ld[]) const
 
 \begin{pyapi}
 \begin{pycode}
-ret = access_ghosts(int g_a)
+ret = ga.access_ghosts(int g_a)
 \end{pycode}
 \begin{funcargs}
 \inarg{int}{g_a}{the array handle}
@@ -2437,12 +2433,10 @@ void GlobalArray::zero() const
 
 \begin{pyapi}
 \begin{pycode}
-ga.zero(int g_a, lo=None, hi=None)
+ga.zero(int g_a)
 \end{pycode}
 \begin{funcargs}
 \inarg{int}{g_a}{array handle}
-\inarg{1D array-like of ints}{lo}{lower bound patch coordinates, inclusive}
-\inarg{1D array-like of ints}{hi}{higher bound patch coordinates, exclusive}
 \end{funcargs}
 \end{pyapi}
 
@@ -2487,13 +2481,11 @@ void GlobalArray::fill(void *value) const
 
 \begin{pyapi}
 \begin{pycode}
-ga.fill(int g_a, value, lo=None, hi=None)
+ga.fill(int g_a, value)
 \end{pycode}
 \begin{funcargs}
 \inarg{int}{g_a}{array handle}
 \inarg{object}{value}{object of the value of appropriate type (double/double complex/long) that matches array type}
-\inarg{1D array-like of ints}{lo}{lower bound patch coordinates, inclusive}
-\inarg{1D array-like of ints}{hi}{higher bound patch coordinates, exclusive}
 \end{funcargs}
 \end{pyapi}
 
@@ -2548,19 +2540,11 @@ double complex GlobalArray::zdot(const GlobalArray * g_a) const
 
 \begin{pyapi}
 \begin{pycode}
-ret = ga.dot(int g_a, int g_b,
-             alo=None, ahi=None, blo=None, bhi=None,
-             int ta=False, int tb=False)
+ret = ga.dot(int g_a, int g_b)
 \end{pycode}
 \begin{funcargs}
 \inarg{int}{g_a}{the array handle}
 \inarg{int}{g_b}{the array handle}
-\inarg{1D array-like of ints}{alo}{lower bound patch coordinates of g_a, inclusive}
-\inarg{1D array-like of ints}{ahi}{higher bound patch coordinates of g_a, exclusive}
-\inarg{1D array-like of ints}{blo}{lower bound patch coordinates of g_b, inclusive}
-\inarg{1D array-like of ints}{bhi}{higher bound patch coordinates of g_b, exclusive}
-\inarg{bool}{ta}{whether the transpose operator should be applied to g_a True=applied}
-\inarg{bool}{tb}{whether the transpose operator should be applied to g_b True=applied}
 \end{funcargs}
 \end{pyapi}
 
@@ -2608,13 +2592,11 @@ void GlobalArray::scale(void *value) const
 
 \begin{pyapi}
 \begin{pycode}
-ga.scale(int g_a, value, lo=None, hi=None)
+ga.scale(int g_a, value)
 \end{pycode}
 \begin{funcargs}
 \inarg{int}{g_a}{array handle}
 \inarg{object}{value}{object of the value of appropriate type (double/double complex/long) that matches array type}
-\inarg{1D array-like of ints}{lo}{lower bound patch coordinates, inclusive}
-\inarg{1D array-like of ints}{hi}{higher bound patch coordinates, exclusive}
 \end{funcargs}
 \end{pyapi}
 
@@ -2668,8 +2650,7 @@ void GlobalArray::add(void *alpha, const GlobalArray * g_a, void *beta, const Gl
 
 \begin{pyapi}
 \begin{pycode}
-ga.add(int g_a, int g_b, int g_c, alpha=None, beta=None,
-       alo=None, ahi=None, blo=None, bhi=None, clo=None, chi=None)
+ga.add(int g_a, int g_b, int g_c, alpha=None, beta=None)
 \end{pycode}
 \begin{funcargs}
 \inarg{int}{g_a}{the array handle}
@@ -2677,12 +2658,6 @@ ga.add(int g_a, int g_b, int g_c, alpha=None, beta=None,
 \inarg{int}{g_c}{the array handle}
 \inarg{object}{alpha}{multiplier (converted to appropriate type)}
 \inarg{object}{beta}{multiplier (converted to appropriate type)}
-\inarg{1D array-like of ints}{alo}{lower bound patch coordinates of g_a, inclusive}
-\inarg{1D array-like of ints}{ahi}{higher bound patch coordinates of g_a, exclusive}
-\inarg{1D array-like of ints}{blo}{lower bound patch coordinates of g_b, inclusive}
-\inarg{1D array-like of ints}{bhi}{higher bound patch coordinates of g_b, exclusive}
-\inarg{1D array-like of ints}{clo}{lower bound patch coordinates of g_c, inclusive}
-\inarg{1D array-like of ints}{chi}{higher bound patch coordinates of g_c, exclusive}
 \end{funcargs}
 \end{pyapi}
 
@@ -2734,17 +2709,11 @@ void GlobalArray::copy(const GlobalArray *g_a) const
 
 \begin{pyapi}
 \begin{pycode}
-ga.copy(int g_a, int g_b, alo=None, ahi=None,
-        blo=None, bhi=None, int trans=False)
+ga.copy(int g_a, int g_b)
 \end{pycode}
 \begin{funcargs}
 \inarg{int}{g_a}{the array handle copying from}
 \inarg{int}{g_b}{the array handle copying to}
-\inarg{1D array-like of integers}{alo}{lower bound patch coordinates of g_a, inclusive}
-\inarg{1D array-like of integers}{ahi}{higher bound patch coordinates of g_a, exclusive}
-\inarg{1D array-like of integers}{blo}{lower bound patch coordinates of g_b, inclusive}
-\inarg{1D array-like of integers}{bhi}{higher bound patch coordinates of g_b, exclusive}
-\inarg{bool}{trans}{whether the transpose operator should be applied True=applied}
 \end{funcargs}
 \end{pyapi}
 
@@ -3888,7 +3857,7 @@ void GlobalArray::accessBlock(int64_t idx, void *ptr, int64_t ld[]) const
 
 \begin{pyapi}
 \begin{pycode}
-ret = access_block_grid(int g_a, int idx)
+ret = ga.access_block_grid(int g_a, int idx)
 \end{pycode}
 \begin{funcargs}
 \inarg{int}{g_a}{array handle}
@@ -3957,7 +3926,7 @@ void GlobalArray::accessBlockGrid(int64_t index[], void *ptr, int64_t ld[])
 
 \begin{pyapi}
 \begin{pycode}
-ret = access_block_grid(int g_a, subscript)
+ret = ga.access_block_grid(int g_a, subscript)
 \end{pycode}
 \begin{funcargs}
 \inarg{int}{g_a}{array handle}
@@ -4211,7 +4180,7 @@ void GlobalArray::releaseUpdateBlock(int index) const
 
 \begin{pyapi}
 \begin{pycode}
-release_update_block(int g_a, int index)
+ga.release_update_block(int g_a, int index)
 \end{pycode}
 \begin{funcargs}
 \inarg{int}{g_a}{array handle}
@@ -6580,12 +6549,12 @@ void GA_Matmul_patch (char transa, char transb, void* alpha, void *beta,
                       int g_c, int cilo, int cihi, int cjlo, int cjhi)
 \end{ccode}
 \begin{funcargs}
-\inarg{g_a}{, g_b, g_c}{array handles}
-\inarg{ailo}{, aihi, ajlo, ajhi}{patch of g_a}
-\inarg{bilo}{, bihi, bjlo, bjhi}{patch of g_b}
-\inarg{cilo}{, cihi, cjlo, cjhi}{patch of g_c}
-\inarg{alpha}{, beta}{scale factors}
-\inarg{transa}{, transb}{transpose operators}
+\inarg{int}{g_a, g_b, g_c}{array handles}
+\inarg{int}{ailo, aihi, ajlo, ajhi}{patch of g_a}
+\inarg{int}{bilo, bihi, bjlo, bjhi}{patch of g_b}
+\inarg{int}{cilo, cihi, cjlo, cjhi}{patch of g_c}
+\inarg{void*}{alpha, beta}{scale factors}
+\inarg{char}{transa, transb}{transpose operators}
 \end{funcargs}
 \end{capi}
 
@@ -6597,12 +6566,12 @@ void NGA_Matmul_patch(char transa, char transb, void* alpha, void *beta,
                       int g_c, int clo[], int chi[])
 \end{ccode}
 \begin{funcargs}
-\inarg{g_a}{, g_b, g_c}{array handles}
-\inarg{alo}{, ahi}{patch of g_a}
-\inarg{blo}{, bhi}{patch of g_b}
-\inarg{clo}{, chi}{patch of g_c}
-\inarg{alpha}{, beta}{scale factors}
-\inarg{transa}{, transb}{transpose operators}
+\inarg{int}{g_a, g_b, g_c}{array handles}
+\inarg{int*}{alo, ahi}{patch of g_a}
+\inarg{int*}{blo, bhi}{patch of g_b}
+\inarg{int*}{clo, chi}{patch of g_c}
+\inarg{void*}{alpha, beta}{scale factors}
+\inarg{char}{transa, transb}{transpose operators}
 \end{funcargs}
 \end{capi}
 
@@ -6655,24 +6624,24 @@ void GlobalArray::matmulPatch(char transa, char transb,
                               int64_t cjhi) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{transa}{transpose operators}
-\inarg{}{transb}{transpose operators}
-\inarg{}{g_a}{global array}
-\inarg{}{g_b}{global array}
-\inarg{}{ailo}{patch of g_a}
-\inarg{}{aihi}{patch of g_a}
-\inarg{}{ajlo}{patch of g_a}
-\inarg{}{ajhi}{patch of g_a}
-\inarg{}{bilo}{patch of g_b}
-\inarg{}{bihi}{patch of g_b}
-\inarg{}{bjlo}{patch of g_b}
-\inarg{}{bjhi}{patch of g_b}
-\inarg{}{cilo}{patch of g_c}
-\inarg{}{cihi}{patch of g_c}
-\inarg{}{cjlo}{patch of g_c}
-\inarg{}{cjhi}{patch of g_c}
-\inarg{}{alpha}{scale factors}
-\inarg{}{beta}{scale factors}
+\inarg{char}{transa}{transpose operators}
+\inarg{char}{transb}{transpose operators}
+\inarg{int}{g_a}{global array}
+\inarg{int}{g_b}{global array}
+\inarg{int}{ailo}{patch of g_a}
+\inarg{int}{aihi}{patch of g_a}
+\inarg{int}{ajlo}{patch of g_a}
+\inarg{int}{ajhi}{patch of g_a}
+\inarg{int}{bilo}{patch of g_b}
+\inarg{int}{bihi}{patch of g_b}
+\inarg{int}{bjlo}{patch of g_b}
+\inarg{int}{bjhi}{patch of g_b}
+\inarg{int}{cilo}{patch of g_c}
+\inarg{int}{cihi}{patch of g_c}
+\inarg{int}{cjlo}{patch of g_c}
+\inarg{int}{cjhi}{patch of g_c}
+\inarg{void*}{alpha}{scale factors}
+\inarg{void*}{beta}{scale factors}
 \end{funcargs}
 \end{cxxapi}
 
@@ -6689,27 +6658,37 @@ void GlobalArray::matmulPatch(char transa, char transb, void* alpha,
                               int64_t *clo, int64_t *chi) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{g_a}{global array}
-\inarg{}{g_b}{global array}
-\inarg{}{alo}{array of patch of g_a}
-\inarg{}{ahi}{array of patch of g_a}
-\inarg{}{blo}{array of patch of g_b}
-\inarg{}{bhi}{array of patch of g_b}
-\inarg{}{clo}{array of patch of g_c}
-\inarg{}{chi}{array of patch of g_c}
-\inarg{}{alpha}{scale factors}
-\inarg{}{beta}{scale factors}
-\inarg{}{transa}{transpose operators}
-\inarg{}{transb}{transpose operators}
+\inarg{int}{g_a}{global array}
+\inarg{int}{g_b}{global array}
+\inarg{int*}{alo}{array of patch of g_a}
+\inarg{int*}{ahi}{array of patch of g_a}
+\inarg{int*}{blo}{array of patch of g_b}
+\inarg{int*}{bhi}{array of patch of g_b}
+\inarg{int*}{clo}{array of patch of g_c}
+\inarg{int*}{chi}{array of patch of g_c}
+\inarg{void*}{alpha}{scale factors}
+\inarg{void*}{beta}{scale factors}
+\inarg{char}{transa}{transpose operators}
+\inarg{char}{transb}{transpose operators}
 \end{funcargs}
 \end{cxxapi}
 
 
 \begin{pyapi}
 \begin{pycode}
-matmul_patch(int transa, int transb, alpha, beta, int g_a, alo, ahi,
-int g_b, blo, bhi, int g_c, clo, chi)
+matmul_patch(bint transa, bint transb, alpha, beta,
+             int g_a, alo, ahi,
+             int g_b, blo, bhi,
+             int g_c, clo, chi)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a, g_b, g_c}{array handles}
+\inarg{1D array-like of ints}{alo, ahi}{patch of g_a}
+\inarg{1D array-like of ints}{blo, bhi}{patch of g_b}
+\inarg{1D array-like of ints}{clo, chi}{patch of g_c}
+\inarg{object}{alpha, beta}{scale factors}
+\inarg{bool}{transa, transb}{transpose operators}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
@@ -6750,11 +6729,11 @@ void NGA_Add_patch(void *alpha, int g_a, int alo[], int ahi[],
                    int g_c, int clo[], int chi[])
 \end{ccode}
 \begin{funcargs}
-\inarg{g_a}{, g_b, g_c}{array handles}
-\inarg{}{alo[], ahi[]}{patch of g_a}
-\inarg{}{blo[], bhi[]}{patch of g_b}
-\inarg{}{clo[], chi[]}{patch of g_c}
-\inarg{alpha}{, beta}{scale factors}
+\inarg{int}{g_a, g_b, g_c}{array handles}
+\inarg{int*}{alo[], ahi[]}{patch of g_a}
+\inarg{int*}{blo[], bhi[]}{patch of g_b}
+\inarg{int*}{clo[], chi[]}{patch of g_c}
+\inarg{void*}{alpha, beta}{scale factors}
 \end{funcargs}
 \end{capi}
 
@@ -6799,18 +6778,38 @@ void GlobalArray::addPatch(void *alpha, const GlobalArray * g_a, int64_t alo[],
                            int64_t chi[]) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{alpha}{scale factor}
-\inarg{}{g_a}{global array}
-\inarg{}{alo}{patch of g_a}
-\inarg{}{ahi}{patch of g_a}
-\inarg{}{beta}{scale factor}
-\inarg{}{g_b}{global array}
-\inarg{}{blo}{patch of g_b}
-\inarg{}{bhi}{patch of g_b}
-\inarg{}{clo}{patch of this GlobalArray}
-\inarg{}{chi}{patch of this GlobalArray}
+\inarg{void*}{alpha}{scale factor}
+\inarg{int}{g_a}{global array}
+\inarg{int*}{alo}{patch of g_a}
+\inarg{int*}{ahi}{patch of g_a}
+\inarg{void*}{beta}{scale factor}
+\inarg{int}{g_b}{global array}
+\inarg{int*}{blo}{patch of g_b}
+\inarg{int*}{bhi}{patch of g_b}
+\inarg{int*}{clo}{patch of this GlobalArray}
+\inarg{int*}{chi}{patch of this GlobalArray}
 \end{funcargs}
 \end{cxxapi}
+
+\begin{pyapi}
+\begin{pycode}
+ga.add(int g_a, int g_b, int g_c, alpha=None, beta=None,
+       alo=None, ahi=None, blo=None, bhi=None, clo=None, chi=None)
+\end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{the array handle}
+\inarg{int}{g_b}{the array handle}
+\inarg{int}{g_c}{the array handle}
+\inarg{object}{alpha}{multiplier (converted to appropriate type)}
+\inarg{object}{beta}{multiplier (converted to appropriate type)}
+\inarg{1D array-like of ints}{alo}{lower bound patch coordinates of g_a, inclusive}
+\inarg{1D array-like of ints}{ahi}{higher bound patch coordinates of g_a, exclusive}
+\inarg{1D array-like of ints}{blo}{lower bound patch coordinates of g_b, inclusive}
+\inarg{1D array-like of ints}{bhi}{higher bound patch coordinates of g_b, exclusive}
+\inarg{1D array-like of ints}{clo}{lower bound patch coordinates of g_c, inclusive}
+\inarg{1D array-like of ints}{chi}{higher bound patch coordinates of g_c, exclusive}
+\end{funcargs}
+\end{pyapi}
 
 \gcoll
 
@@ -6831,9 +6830,9 @@ c[ ][ ] = alpha * a[ ][ ] + beta * b[ ][ ]
 void NGA_Fill_patch(int g_a, int lo[], int hi[], void *val)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a}{array handles}
-\inarg{}{lo[], hi[]}{patch of g_a}
-\inarg{}{val}{value to fill}
+\inarg{int}{g_a}{array handles}
+\inarg{int*}{lo[], hi[]}{patch of g_a}
+\inarg{void*}{val}{value to fill}
 \end{funcargs}
 \end{capi}
 
@@ -6866,11 +6865,23 @@ void GlobalArray::fillPatch (int lo[], int hi[], void *val) const
 void GlobalArray::fillPatch (int64_t lo[], int64_t hi[], void *val) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{lo}{patch of this GlobalArray}
-\inarg{}{hi}{patch of this GlobalArray}
-\inarg{}{val}{value to fill}
+\inarg{int*}{lo}{patch of this GlobalArray}
+\inarg{int*}{hi}{patch of this GlobalArray}
+\inarg{void*}{val}{value to fill}
 \end{funcargs}
 \end{cxxapi}
+
+\begin{pyapi}
+\begin{pycode}
+ga.fill(int g_a, value, lo=None, hi=None)
+\end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\inarg{object}{value}{object of the value of appropriate type (double/double complex/long) that matches array type}
+\inarg{1D array-like of ints}{lo}{lower bound patch coordinates, inclusive}
+\inarg{1D array-like of ints}{hi}{higher bound patch coordinates, exclusive}
+\end{funcargs}
+\end{pyapi}
 
 \gcoll
 
@@ -6880,6 +6891,9 @@ Fill the patch of g_a with value of `val'
 
 \end{desc}
 
+\seealso{FILL}
+
+
 \apih{ZERO PATCH}{Zero a patch of a global array}
 
 \begin{capi}
@@ -6887,8 +6901,8 @@ Fill the patch of g_a with value of `val'
 void NGA_Zero_patch(int g_a, int lo[], int hi[])
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a}{array handles}
-\inarg{}{lo[], hi[]}{patch of g_a}
+\inarg{int}{g_a}{array handles}
+\inarg{int*}{lo[], hi[]}{patch of g_a}
 \end{funcargs}
 \end{capi}
 
@@ -6909,19 +6923,32 @@ void GlobalArray::zeroPatch (int lo[], int hi[]) const
 void GlobalArray::zeroPatch (int64_t lo[], int64_t hi[]) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{lo}{patch of this GlobalArray}
-\inarg{}{hi}{patch of this GlobalArray}
+\inarg{int*}{lo}{patch of this GlobalArray}
+\inarg{int*}{hi}{patch of this GlobalArray}
 \end{funcargs}
 \end{cxxapi}
+
+\begin{pyapi}
+\begin{pycode}
+ga.zero(int g_a, lo=None, hi=None)
+\end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\inarg{1D array-like of ints}{lo}{lower bound patch coordinates, inclusive}
+\inarg{1D array-like of ints}{hi}{higher bound patch coordinates, exclusive}
+\end{funcargs}
+\end{pyapi}
 
 \gcoll
 
 \begin{desc}
 
-
 Set all the elements in the patch to zero.
 
 \end{desc}
+
+\seealso{ZERO}
+
 
 \apih{SCALE PATCH}{Scale elements in the patch of a global array}
 
@@ -6930,9 +6957,9 @@ Set all the elements in the patch to zero.
 void NGA_Scale_patch(int g_a, int lo[], int hi[], void *val)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a}{array handles}
-\inarg{}{lo[], hi[]}{patch of g_a}
-\inarg{}{val}{scale factor}
+\inarg{int}{g_a}{array handles}
+\inarg{int*}{lo[], hi[]}{patch of g_a}
+\inarg{void*}{val}{scale factor}
 \end{funcargs}
 \end{capi}
 
@@ -6965,11 +6992,23 @@ void GlobalArray::scalePatch (int lo[], int hi[], void *val) const;
 void GlobalArray::scalePatch (int64_t lo[], int64_t hi[], void *val) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{lo}{patch of this GlobalArray}
-\inarg{}{hi}{patch of this GlobalArray}
-\inarg{}{val}{scale factor}
+\inarg{int*}{lo}{patch of this GlobalArray}
+\inarg{int*}{hi}{patch of this GlobalArray}
+\inarg{void*}{val}{scale factor}
 \end{funcargs}
 \end{cxxapi}
+
+\begin{pyapi}
+\begin{pycode}
+ga.scale(int g_a, value, lo=None, hi=None)
+\end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\inarg{object}{value}{scale value; object of the appropriate type (double/double complex/long) that matches array type}
+\inarg{1D array-like of ints}{lo}{lower bound patch coordinates, inclusive}
+\inarg{1D array-like of ints}{hi}{higher bound patch coordinates, exclusive}
+\end{funcargs}
+\end{pyapi}
 
 \gcoll
 
@@ -6979,6 +7018,9 @@ Scale an array by the factor `val'
 
 \end{desc}
 
+\seealso{SCALE}
+
+
 \apih{BRDCST}{Broadcast elements among all processes}
 
 \begin{capi}
@@ -6986,9 +7028,9 @@ Scale an array by the factor `val'
 void GA_Brdcst(void *buf, int lenbuf, int root)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{lenbuf}{length of buffer (bytes)}
-\inoutarg{}{buf[lenbuf]}{data}
-\inarg{}{root}{root process}
+\inoutarg{void*}{buf[lenbuf]}{data}
+\inarg{int}{lenbuf}{length of buffer (bytes)}
+\inarg{int}{root}{root process}
 \end{funcargs}
 \end{capi}
 
@@ -7009,58 +7051,78 @@ subroutine ga_brdcst(type, buf, lenbuf, root)
 void GAServices::brdcst(void *buf, int lenbuf, int root)
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{lenbuf}{length of buffer}
-\inoutarg{}{buf[lenbuf]}{data}
-\inarg{}{root}{root process}
+\inoutarg{void*}{buf[lenbuf]}{data}
+\inarg{int}{lenbuf}{length of buffer}
+\inarg{int}{root}{root process}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-brdcst(buffer, int root)
-   buffer (1D array-like of objects) - the ndarray message
-                                       (converted to the appropriate type)
-   root (int)                        - the process which is sending
+ret = ga.brdcst(buffer, int root=0)
 \end{pycode}
+\begin{funcargs}
+\inarg{1D array-like of objects}{buffer}{the ndarray message (converted to the appropriate type)}
+\inarg{int}{root}{the process which is sending}
+\end{funcargs}
 \end{pyapi}
 
 \wcoll
 
 \begin{desc}
-
 Broadcast from process root to all other processes a message of length lenbuf.
 
 This is operation is provided only for convenience purposes: it is available
 regardless of the message-passing library that GA is running.
+\end{desc}
 
+\begin{pydesc}
 If the buffer is not contiguous, an error is raised. This operation is provided
 only for convenience purposes: it is available regardless of the
 message-passing library that GA is running with.
 
 Returns: The buffer in case a temporary was passed in.
+\end{pydesc}
 
-\end{desc}
 
-\apih{DGOP}{Global operation of double precision elements among all processes}
+\apih{GOP}{Global commutative vector operations of elements among all processes}
 
 \begin{capi}
 \begin{ccode}
+void GA_Fgop(float x[], int n, char *op)
 void GA_Dgop(double x[], int n, char *op)
+void GA_Igop(int x[], int n, char *op)
+void GA_Lgop(long x[], int n, char *op)
+void GA_Cgop(SingleComplex x[], int n, char *op)
+void GA_Zgop(DoubleComplex x[], int n, char *op)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{n}{number of elements}
-\inoutarg{}{x[n]}{array of elements}
-\inarg{}{op}{operator}
+\inoutarg{float*}{x[n]}{array of elements}
+\inoutarg{double*}{x[n]}{array of elements}
+\inoutarg{int*}{x[n]}{array of elements}
+\inoutarg{long*}{x[n]}{array of elements}
+\inoutarg{SingleComplex*}{x[n]}{array of elements}
+\inoutarg{DoubleComplex*}{x[n]}{array of elements}
+\inarg{int}{n}{number of elements}
+\inarg{char}{op}{operator}
 \end{funcargs}
 \end{capi}
 
 \begin{fapi}
 \begin{fcode}
+subroutine ga_igop(type, x, n, op)
+subroutine ga_sgop(type, x, n, op)
 subroutine ga_dgop(type, x, n, op)
+subroutine ga_cgop(type, x, n, op)
+subroutine ga_zgop(type, x, n, op)
 \end{fcode}
 \begin{funcargs}
-\inarg{integer}{type}{}
+\inarg{integer}{type}{this argument is deprecated}
+\inoutarg{integer}{x(n)}{TODO}
+\inoutarg{real}{x(n)}{TODO}
 \inoutarg{double precision}{x(n)}{TODO}
+\inoutarg{single complex}{x(n)}{TODO}
+\inoutarg{double complex}{x(n)}{TODO}
 \inarg{character*(*)}{op}{TODO}
 \end{funcargs}
 \end{fapi}
@@ -7068,113 +7130,59 @@ subroutine ga_dgop(type, x, n, op)
 \begin{cxxapi}
 \begin{cxxcode}
 void GAServices::dgop(double x[], int n, char *op);
+void GAServices::igop(int x[], int n, char *op);
+void GAServices::lgop(long x[], int n, char *op);
+void GAServices::gop(int x[], int n, char *op);
+void GAServices::gop(long x[], int n, char *op);
+void GAServices::gop(float x[], int n, char *op);
+void GAServices::gop(double x[], int n, char *op);
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{n}{number of elements}
-\inoutarg{}{x[n]}{array of elements}
-\inarg{}{op}{operator}
+\inoutarg{double}{x[n]}{array of elements}
+\inoutarg{int}{x[n]}{array of elements}
+\inoutarg{long}{x[n]}{array of elements}
+\inoutarg{ing}{x[n]}{array of elements}
+\inoutarg{long}{x[n]}{array of elements}
+\inoutarg{float}{x[n]}{array of elements}
+\inoutarg{double}{x[n]}{array of elements}
+\inarg{int}{n}{number of elements}
+\inarg{char}{op}{operator}
 \end{funcargs}
 \end{cxxapi}
 
+\begin{pyapi}
+\begin{pycode}
+ret = ga.gop(X, char *op)
+ret = ga.gop_add(X)
+ret = ga.gop_multiply(X)
+ret = ga.gop_max(X)
+ret = ga.gop_min(X)
+ret = ga.gop_absmax(X)
+ret = ga.gop_absmin(X)
+\end{pycode}
+\begin{funcargs}
+\inarg{1D array-like}{X}{elements}
+\inarg{char*}{op}{operator}
+\outarg{ndarray}{ret}{result after numpy.asarray(X) followed by the operation}
+\end{funcargs}
+\end{pyapi}
 
 \wcoll
 
 \begin{desc}
 
-Double Global OPeration.
+Global OPeration.
 
-$X(1:N)$ is a vector present on each process. DGOP `sums' elements of
-X accross all nodes using the commutative operator OP. The result is
-broadcast to all nodes. Supported operations include `+', `*', `max',
-`min', `absmax', `absmin'. The use of lowerecase for operators is necessary.
+$X(1:N)$ is a vector present on each process. GOP `sums' elements of X accross
+all nodes using the commutative operator OP. The result is broadcast to all
+nodes. Supported operations include `+', `*', `max', `min', `absmax', `absmin'.
+The use of lowerecase for operators is necessary.
 
-This is operation is provided only for convenience purposes: it is available
+This operation is provided only for convenience purposes: it is available
 regardless of the message-passing library that GA is running with.
 
 \end{desc}
 
-\apih{IGOP}{Inter global operation among all processes}
-
-\begin{capi}
-\begin{ccode}
-void GA_Igop(long x[], int n, char *op)
-\end{ccode}
-\begin{funcargs}
-\inarg{}{n}{number of elements}
-\inoutarg{}{x[n]}{array of elements}
-\inarg{}{op}{operator}
-\end{funcargs}
-\end{capi}
-
-\begin{fapi}
-\begin{fcode}
-subroutine ga_igop(type, x, n, op)
-\end{fcode}
-\begin{funcargs}
-\inarg{integer}{type}{}
-\inoutarg{integer}{x(n)}{TODO}
-\inarg{character*(*)}{op}{TODO}
-\end{funcargs}
-\end{fapi}
-
-\begin{cxxapi}
-\begin{cxxcode}
-void GAServices::igop(int x[], int n, char *op);
-\end{cxxcode}
-\begin{funcargs}
-\inarg{}{n}{number of elements}
-\inoutarg{}{x[n]}{array of elements}
-\inarg{}{op}{operator}
-\end{funcargs}
-\end{cxxapi}
-
-\wcoll
-
-\begin{desc}
-
-Integer Global OPeration. The integer (more precisely long) version
-of ga_dgop described above, also includes the bitwise OR operation.
-
-This is operation is provided only for convenience purposes: it is
-available regardless of the message-passing library that GA is running with.
-
-\end{desc}
-
-\apih{LGOP}{Long global operation among all processes}
-
-\begin{capi}
-\begin{ccode}
-void GA_Lgop(long x[], int n, char *op)
-\end{ccode}
-\begin{funcargs}
-\inarg{}{n}{number of elements}
-\inoutarg{}{x[n]}{array of elements}
-\inarg{}{op}{operator}
-\end{funcargs}
-\end{capi}
-
-\begin{cxxapi}
-\begin{cxxcode}
-void GAServices::lgop(long x[], int n, char *op);
-\end{cxxcode}
-\begin{funcargs}
-\inarg{}{n}{number of elements}
-\inoutarg{}{x[n]}{array of elements}
-\inarg{}{op}{operator}
-\end{funcargs}
-\end{cxxapi}
-
-\wcoll
-
-\begin{desc}
-
-Long Global OPeration. The long version of ga_dgop described above,
-also includes the bitwise OR operation.
-
-This is operation is provided only for convenience purposes: it is
-available regardless of the message-passing library that GA is running with.
-
-\end{desc}
 
 \apih{CLUSTER NNODES}{Total number of cluster (shared memory) nodes}
 
@@ -7198,14 +7206,13 @@ int GAServices::clusterNnodes()
 
 \begin{pyapi}
 \begin{pycode}
-cluster_nnodes()
+ret = ga.cluster_nnodes()
 \end{pycode}
 \end{pyapi}
 
 \local
 
 \begin{desc}
-
 
 This functions returns the total number of nodes that the program is running
 on. On SMP architectures, this will be less than or equal to the total number
@@ -7235,8 +7242,7 @@ int GAServices::clusterNodeid()
 
 \begin{pyapi}
 \begin{pycode}
-cluster_nodeid(int proc=-1)
-   proc (int)    - process ID to lookup
+ret = ga.cluster_nodeid()
 \end{pycode}
 \end{pyapi}
 
@@ -7244,8 +7250,9 @@ cluster_nodeid(int proc=-1)
 
 \begin{desc}
 
-This function returns the node ID of the process. On SMP architectures with more
-than one processor per node, several processes may return the same node id.
+This function returns the node ID of the process. On SMP architectures with
+more than one processor per node, several processes may return the same node
+id.
 
 \end{desc}
 
@@ -7256,7 +7263,7 @@ than one processor per node, several processes may return the same node id.
 int GA_Cluster_proc_nodeid(int proc)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{proc}{process id}
+\inarg{int}{proc}{process id}
 \end{funcargs}
 \end{capi}
 
@@ -7274,17 +7281,26 @@ integer function ga_cluster_proc_nodeid(proc)
 int GAServices::clusterProcNodeid(int iproc)
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{iproc}{process id}
+\inarg{int}{iproc}{process id}
 \end{funcargs}
 \end{cxxapi}
+
+\begin{pyapi}
+\begin{pycode}
+ret = ga.cluster_nodeid(int proc=-1)
+\end{pycode}
+\begin{funcargs}
+\inarg{int}{proc}{process id}
+\end{funcargs}
+\end{pyapi}
 
 \local
 
 \begin{desc}
 
-This function returns the node ID of the specified process proc.
-On SMP architectures with more than one processor per node, several
-processes may return the same node id.
+This function returns the node ID of the specified process proc.  On SMP
+architectures with more than one processor per node, several processes may
+return the same node id.
 
 \end{desc}
 
@@ -7295,7 +7311,7 @@ processes may return the same node id.
 int GA_Cluster_nprocs(int inode)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{inode}{node id}
+\inarg{int}{inode}{node id}
 \end{funcargs}
 \end{capi}
 
@@ -7313,14 +7329,17 @@ integer function ga_cluster_nprocs(inode)
 int GAServices::clusterNprocs(int inode)
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{inode}{node id}
+\inarg{int}{inode}{node id}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-cluster_nprocs(int inode)
+ret = ga.cluster_nprocs(int inode)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{inode}{node id}
+\end{funcargs}
 \end{pyapi}
 
 \local
@@ -7338,8 +7357,8 @@ This function returns the number of processors available on node inode.
 int GA_Cluster_procid(int inode, int iproc)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{inode}{node id}
-\inarg{}{iproc}{processor id}
+\inarg{int}{inode}{node id}
+\inarg{int}{iproc}{processor id}
 \end{funcargs}
 \end{capi}
 
@@ -7358,24 +7377,28 @@ integer function ga_cluster_procid(inode,iproc)
 int GAServices::clusterProcid(int inode, int iproc)
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{inode}{node id}
-\inarg{}{iproc}{processor id}
+\inarg{int}{inode}{node id}
+\inarg{int}{iproc}{processor id}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-cluster_procid(int inode, int iproc)
+ret = ga.cluster_procid(int inode, int iproc)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{inode}{node id}
+\inarg{int}{iproc}{processor id}
+\end{funcargs}
 \end{pyapi}
 
 \local
 
 \begin{desc}
 
-This function returns the processor id associated with node inode and
-the local processor ID iproc. If node inode has N processors, then the
-value of iproc lies between 0 and N-1.
+This function returns the processor id associated with node inode and the local
+processor ID iproc. If node inode has N processors, then the value of iproc
+lies between 0 and N-1.
 
 \end{desc}
 
@@ -7386,10 +7409,10 @@ value of iproc lies between 0 and N-1.
 void GA_Diag(int g_a, int g_s, int g_v, void *eval)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a}{Matrix to diagonalize}
-\inarg{}{g_s}{Metric}
-\outarg{}{g_v}{Global matrix to return evecs}
-\outarg{}{eval}{Local array to return evals}
+\inarg{int}{g_a}{Matrix to diagonalize}
+\inarg{int}{g_s}{Metric}
+\inarg{int}{g_v}{Global matrix to return evecs}
+\outarg{void*}{eval}{Local array to return evals}
 \end{funcargs}
 \end{capi}
 
@@ -7407,36 +7430,39 @@ subroutine ga_diag(g_a, g_s, g_v, eval)
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::diag(const GlobalArray *g_s, GlobalArray *g_v, void *eval)
+void GlobalArray::diag(const GlobalArray *g_s,
+                       GlobalArray *g_v, void *eval)
 const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{g_s}{Matrix to diagonalize}
-\outarg{}{g_v}{Global matrix to return evecs}
-\outarg{}{eval}{Local array to return evals}
+\inarg{int}{g_s}{Matrix to diagonalize}
+\inarg{int}{g_v}{Global matrix to return evecs}
+\inarg{void*}{eval}{Local array to return evals}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-diag(int g_a, int g_s, int g_v, evalues=None)
-   g_a (int)     - the array handle of the matrix to diagonalize
-   g_s (int)     - the array handle of the metric
-   g_v (int)     - the array handle to return evecs
+ret = ga.diag(int g_a, int g_s, int g_v, evalues=None)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{the array handle of the matrix to diagonalize}
+\inarg{int}{g_s}{the array handle of the metric}
+\inarg{int}{g_v}{the array handle to return evecs}
+\inarg{ndarray}{evalues}{local array of appropriate type to return evals}
+\outarg{ndarray}{ret}{evals as a local array of appropriate type}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
+Solve the generalized eigenvalue problem returning all eigenvectors and values
+in ascending order. The input matrices are not overwritten or destroyed.
 
-Solve the generalized eigenvalue problem returning all eigenvectors and
-values in ascending order. The input matrices are not overwritten or destroyed.
-
-Returns:
-All eigen-values as an ndarray in ascending order.
-
+All eigen-values as a vector in ascending order.
 \end{desc}
+
 
 \apih{DIAG REUSE}{Diagonalize a global array for repeated diagonalizations}
 
@@ -7445,11 +7471,11 @@ All eigen-values as an ndarray in ascending order.
 void GA_Diag_reuse(int control, int g_a, int g_s, int g_v, void *eval)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{control}{Control flag}
-\inarg{}{g_a}{Matrix to diagonalize}
-\inarg{}{g_s}{Metric}
-\outarg{}{g_v}{Global matrix to return evecs}
-\outarg{}{eval}{Local array to return evals}
+\inarg{int}{control}{Control flag}
+\inarg{int}{g_a}{Matrix to diagonalize}
+\inarg{int}{g_s}{Metric}
+\inarg{int}{g_v}{Global matrix to return evecs}
+\outarg{void*}{eval}{Local array to return evals}
 \end{funcargs}
 \end{capi}
 
@@ -7472,24 +7498,25 @@ void GlobalArray::diagReuse(int control, const GlobalArray *g_s,
                             GlobalArray *g_v, void *eval) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{control}{Control flag}
-\inarg{}{g_s}{Matrix to diagonalize}
-\outarg{}{g_v}{Global matrix to return evecs}
-\outarg{}{eval}{Local array to return evals}
+\inarg{int}{control}{Control flag}
+\inarg{int}{g_s}{Matrix to diagonalize}
+\inarg{int}{g_v}{Global matrix to return evecs}
+\outarg{void*}{eval}{Local array to return evals}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-diag_reuse(int control, int g_a, int g_s, int g_v, evalues=None)
-   control (int) - 0 indicates first call to the eigensolver; >0
-   consecutive calls (reuses factored g_s); <0 only erases factorized g_s;
-   g_v and eval unchanged (should be called after previous use if another
-   eigenproblem, i.e., different g_a and g_s, is to be solved)
-   g_a (int)     - the array handle of the matrix to diagonalize
-   g_s (int)     - the array handle of the metric
-   g_v (int)     - the array handle to return evecs
+ret = ga.diag_reuse(int control, int g_a, int g_s, int g_v, evalues=None)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{control}{0 indicates first call to the eigensolver; >0 consecutive calls (reuses factored g_s); <0 only erases factorized g_s; g_v and eval unchanged (should be called after previous use if another eigenproblem, i.e., different g_a and g_s, is to be solved)}
+\inarg{int}{g_a}{the array handle of the matrix to diagonalize}
+\inarg{int}{g_s}{the array handle of the metric}
+\inarg{int}{g_v}{the array handle to return evecs}
+\inarg{ndarray}{evalues}{local array of appropriate type to return evals}
+\outarg{ndarray}{ret}{evals as a local array of appropriate type}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
@@ -7511,8 +7538,7 @@ Values of the control flag:
 
 The input matrices are not destroyed.
 
-Returns:
-All eigen-values as an ndarray in ascending order.
+Returns: All eigen-values as a vector in ascending order.
 
 \end{desc}
 
@@ -7523,9 +7549,9 @@ All eigen-values as an ndarray in ascending order.
 void GA_Diag_std(int g_a, int g_v, void *eval)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a}{Matrix to diagonalize}
-\outarg{}{g_v}{Global matrix to return evecs}
-\outarg{}{eval}{Local array to return evals}
+\inarg{int}{g_a}{Matrix to diagonalize}
+\inarg{int}{g_v}{Global matrix to return evecs}
+\outarg{void*}{eval}{Local array to return evals}
 \end{funcargs}
 \end{capi}
 
@@ -7545,17 +7571,21 @@ subroutine ga_diag_std(g_a, g_v, eval)
 void GlobalArray::diagStd(GlobalArray *g_v, void *eval) const
 \end{cxxcode}
 \begin{funcargs}
-\outarg{}{g_v}{Global matrix to return evecs}
-\outarg{}{eval}{Local array to return evals}
+\outarg{int}{g_v}{Global matrix to return evecs}
+\outarg{void*}{eval}{Local array to return evals}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-diag_std(int g_a, int g_v, evalues=None)
-   g_a (int)     - the array handle of the matrix to diagonalize
-   g_v (int)     - the array handle to return evecs
+ret = ga.diag_std(int g_a, int g_v, evalues=None)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{the array handle of the matrix to diagonalize}
+\inarg{int}{g_v}{the array handle to return evecs}
+\inarg{ndarray}{evalues}{local array of appropriate type to return evals}
+\outarg{ndarray}{ret}{evals as a local array of appropriate type}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
@@ -7563,14 +7593,15 @@ diag_std(int g_a, int g_v, evalues=None)
 \begin{desc}
 
 Solve the standard (non-generalized) eigenvalue problem returning all
-eigenvectors and values in the ascending order. The input matrix is
-neither overwritten nor destroyed.
+eigenvectors and values in the ascending order. The input matrix is neither
+overwritten nor destroyed.
 
 Returns:
-all eigenvectors via the g_v global array, and eigenvalues as an
-ndarray in ascending order
+all eigenvectors via the g_v global array, and eigenvalues as an array in
+ascending order
 
 \end{desc}
+
 
 \apih{LLT SOLVE}{Cholesky factorization of a global array}
 
@@ -7579,8 +7610,8 @@ ndarray in ascending order
 int GA_Llt_solve(int g_a, int g_b)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a}{coefficient matrix}
-\outarg{}{g_b}{rhs/solution matrix}
+\inarg{int}{g_a}{coefficient matrix}
+\inarg{int}{g_b}{rhs/solution matrix}
 \end{funcargs}
 \end{capi}
 
@@ -7599,16 +7630,19 @@ integer function ga_llt_solve(g_a, g_b)
 int GlobalArray::lltSolve(const GlobalArray * g_a) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{g_a}{coefficient matrix}
+\inarg{int}{g_a}{coefficient matrix}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-llt_solve(int g_a, int g_b)
-   g_a (int)     - the coefficient matrix
-   g_b (int)     - the rhs/solution matrix
+ret = ga.llt_solve(int g_a, int g_b)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{coefficient matrix}
+\inarg{int}{g_b}{rhs/solution matrix}
+\outarg{int}{ret}{0 if successful}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
@@ -7619,10 +7653,9 @@ Solves a system of linear equations
 \begin{verbatim}
             A * X = B
 \end{verbatim}
-
-using the Cholesky factorization of an NxN double precision symmetric
-positive definite matrix A (represented by handle g_a). On successful
-exit B will contain the solution X.
+using the Cholesky factorization of an NxN double precision symmetric positive
+definite matrix A (represented by handle g_a). On successful exit B will
+contain the solution X.
 
 It returns:
 \begin{verbatim}
@@ -7641,9 +7674,9 @@ It returns:
 void GA_Lu_solve(char trans, int g_a, int g_b)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{trans}{transpose or not transpose}
-\inarg{}{g_a}{coefficient matrix}
-\outarg{}{g_b}{rhs/solution matrix}
+\inarg{char}{trans}{transpose or not transpose}
+\inarg{int}{g_a}{coefficient matrix}
+\inarg{int}{g_b}{rhs/solution matrix}
 \end{funcargs}
 \end{capi}
 
@@ -7656,9 +7689,6 @@ subroutine ga_lu_solve(trans, g_a, g_b)
 \inarg{integer}{g_a}{coefficient matrix}
 \inoutarg{integer}{g_b}{rhs/solution matrix}
 \end{funcargs}
-
-   trans = `N' or `n' means that the transpose operator should not be applied.
-   trans = `T' or `t' means that the transpose operator should be applied.
 \end{fapi}
 
 \begin{cxxapi}
@@ -7673,17 +7703,18 @@ void GlobalArray::luSolve(char trans, const GlobalArray * g_a) const
 
 \begin{pyapi}
 \begin{pycode}
-lu_solve(int g_a, int g_b, int trans=False)
-   g_a (int)     - the array handle for the coefficient matrix
-   g_b (int)     - the array handle for the solution matrix
-   trans (bool)  - transpose (True) or not transpose (False)
+ga.lu_solve(int g_a, int g_b, bint trans=False)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{the array handle for the coefficient matrix}
+\inarg{int}{g_b}{the array handle for the solution matrix}
+\inarg{bool}{trans}{transpose (True) or not transpose (False)}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
 
 Solve the system of linear equations op(A)X = B based on the LU factorization.
 
@@ -7693,10 +7724,12 @@ op(A) = A or A' depending on the parameter trans:
      trans = `T' or `t' means that the transpose operator should be applied.
 \end{verbatim}
 
-Matrix A is a general real matrix. Matrix B contains possibly multiple rhs vectors.
-The array associated with the handle g_b is overwritten by the solution matrix X.
+Matrix A is a general real matrix. Matrix B contains possibly multiple rhs
+vectors.  The array associated with the handle g_b is overwritten by the
+solution matrix X.
 
 \end{desc}
+
 
 \apih{SOLVE}{Solve a system of linear equations}
 
@@ -7705,8 +7738,8 @@ The array associated with the handle g_b is overwritten by the solution matrix X
 int GA_solve(int g_a, int g_b)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a}{coefficient matrix}
-\outarg{}{g_b}{rhs/solution matrix}
+\inarg{int}{g_a}{coefficient matrix}
+\inarg{int}{g_b}{rhs/solution matrix}
 \end{funcargs}
 \end{capi}
 
@@ -7716,7 +7749,7 @@ integer function ga_solve(g_a, g_b)
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{g_a}{coefficient matrix}
-\inoutarg{integer}{g_b}{rhs/solution matrix}
+\inarg{integer}{g_b}{rhs/solution matrix}
 \end{funcargs}
 \end{fapi}
 
@@ -7725,28 +7758,34 @@ integer function ga_solve(g_a, g_b)
 int GlobalArray::solve(const GlobalArray * g_a) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{g_a}{coefficient matrix}
+\inarg{const GlobalArray*}{g_a}{coefficient matrix}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-solve(int g_a, int g_b)
+ret = ga.solve(int g_a, int g_b)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{coefficient matrix}
+\inarg{int}{g_b}{rhs/solution matrix}
+\end{funcargs}
 \end{pyapi}
-
 
 \gcoll
 
 \begin{desc}
-
 
 Solves a system of linear equations
 \begin{verbatim}
             A * X = B
 \end{verbatim}
 
-It first will call the Cholesky factorization routine and, if sucessfully, will solve the system with the Cholesky solver. If Cholesky will be not be able to factorize A, then it will call the LU factorization routine and will solve the system with forward/backward substitution. On exit B will contain the solution X.
+It first will call the Cholesky factorization routine and, if sucessfully, will
+solve the system with the Cholesky solver. If Cholesky will be not be able to
+factorize A, then it will call the LU factorization routine and will solve the
+system with forward/backward substitution. On exit B will contain the solution
+X.
 
 It returns
 \begin{verbatim}
@@ -7758,6 +7797,7 @@ It returns
 
 \end{desc}
 
+
 \apih{SPD INVERT}{Invert a symmetric positive definite matrix a global array}
 
 \begin{capi}
@@ -7765,7 +7805,7 @@ It returns
 int GA_Spd_invert(int g_a)
 \end{ccode}
 \begin{funcargs}
-\inoutarg{}{g_a}{matrix}
+\inoutarg{int}{g_a}{matrix}
 \end{funcargs}
 \end{capi}
 
@@ -7783,26 +7823,27 @@ integer function ga_spd_invert(g_a)
 int GlobalArray::spdInvert() const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{g_a}{coefficient matrix}
+\inarg{int}{g_a}{coefficient matrix}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-spd_invert(int g_a)
+ret = ga.spd_invert(int g_a)
 \end{pycode}
+\begin{funcargs}
+\inoutarg{int}{g_a}{matrix}
+\end{funcargs}
 \end{pyapi}
-
 
 \gcoll
 
 \begin{desc}
 
-
-It computes the inverse of a double precision using the Cholesky
-factorization of a NxN double precision symmetric positive definite
-matrix A stored in the global array represented by g_a. On successful
-exit, A will contain the inverse.
+It computes the inverse of a double precision using the Cholesky factorization
+of a NxN double precision symmetric positive definite matrix A stored in the
+global array represented by g_a. On successful exit, A will contain the
+inverse.
 
 It returns
 \begin{verbatim}
@@ -7816,18 +7857,18 @@ It returns
 
 \end{desc}
 
+
 \apih{SELECT ELEM}{select an element in a global returned by the chosen operation (eg., min, max, etc.)}
 
 \begin{capi}
 \begin{ccode}
-
 void NGA_Select_elem(int g_a, char *op, void* val, int index[])
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a}{array handle Control}
-\inarg{}{op}{operator {`min',`max'}}
-\outarg{}{val}{address where value should be stored}
-\outarg{}{index[ndim]}{array index for the selected element}
+\inarg{int}{g_a}{array handle Control}
+\inarg{char*}{op}{operator {`min',`max'}}
+\outarg{void*}{val}{address where value should be stored}
+\outarg{int*}{index[ndim]}{array index for the selected element}
 \end{funcargs}
 \end{capi}
 
@@ -7839,7 +7880,7 @@ subroutine nga_select_elem(g_a, op, val, index)
 \inarg{integer}{g_a}{array handle Control}
 \inarg{character(*)*}{op}{operator {`min',`max'}}
 \outarg{}{val}{address where selected value should be stored}
-\outarg{}{index[ndim]}{array index for the selected element}
+\outarg{integer}{index(ndim)}{array index for the selected element}
 \end{funcargs}
 \end{fapi}
 
@@ -7849,25 +7890,32 @@ void GlobalArray::selectElem(char *op, void* val, int index[]) const
 void GlobalArray::selectElem(char *op, void* val, int64_t index[]) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{op}{operator (``min'',``max'')}
-\outarg{}{val}{address where value should be stored}
-\outarg{}{index[ndim]}{array index for the selected element}
+\inarg{char*}{op}{operator (``min'',``max'')}
+\outarg{void*}{val}{address where value should be stored}
+\outarg{int*}{index[ndim]}{array index for the selected element}
 \end{funcargs}
 \end{cxxapi}
 
-
 \begin{pyapi}
 \begin{pycode}
-select_elem(int g_a, char *op)
+value,index = select_elem(int g_a, char *op)
+value,index = select_elem_min(int g_a)
+value,index = select_elem_max(int g_a)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle Control}
+\inarg{char*}{op}{operator {`min',`max'}}
+\outarg{object}{val}{Python scalar value}
+\outarg{1D ndarray of ints}{index}{array index for the selected element}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
 
-Returns the value and index for an element that is selected by the
-specified operator in a global array corresponding to g_a handle.
+Returns the value and index for an element that is selected by the specified
+operator ("min" or "max") in a global array corresponding to g_a handle.
 
 \end{desc}
 
@@ -7878,7 +7926,7 @@ specified operator in a global array corresponding to g_a handle.
 void GA_Summarize(int verbose)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{verbose}{If true print distribution info}
+\inarg{int}{verbose}{If true print distribution info}
 \end{funcargs}
 \end{capi}
 
@@ -7896,22 +7944,25 @@ subroutine ga_summarize(verbose)
 void GlobalArray::summarize(int verbose) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{verbose}{If true print distribution info}
+\inarg{int}{verbose}{If true print distribution info}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-summarize(int verbose)
+ga.summarize(bint verbose)
 \end{pycode}
+\begin{funcargs}
+\inarg{bool}{verbose}{if True print distribution info}
+\end{funcargs}
 \end{pyapi}
 
 \local
 
 \begin{desc}
-
 Prints info about allocated arrays.
 \end{desc}
+
 
 \apih{SYMMETRIZE}{Symmetrize a global array}
 
@@ -7920,7 +7971,7 @@ Prints info about allocated arrays.
 void GA_Symmetrize(int g_a)
 \end{ccode}
 \begin{funcargs}
-\inarg{g_a}{}{}
+\inarg{int}{g_a}{array handle}
 \end{funcargs}
 \end{capi}
 
@@ -7941,17 +7992,19 @@ void GlobalArray::symmetrize() const
 
 \begin{pyapi}
 \begin{pycode}
-symmetrize(int g_a)
+ga.symmetrize(int g_a)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
 Symmetrizes matrix A represented with handle g_a: A:= .5 * (A+A').
-
 \end{desc}
+
 
 \apih{TRANSPOSE}{Transpose a global array}
 
@@ -7960,8 +8013,8 @@ Symmetrizes matrix A represented with handle g_a: A:= .5 * (A+A').
 void GA_Transpose(int g_a, int g_b)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a}{original matrix}
-\outarg{}{g_b}{solution matrix}
+\inarg{int}{g_a}{original matrix}
+\inarg{int}{g_b}{solution matrix}
 \end{funcargs}
 \end{capi}
 
@@ -7971,7 +8024,7 @@ subroutine ga_transpose(g_a, g_b)
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{g_a}{remains unchanged}
-\outarg{integer}{g_b}{}
+\inarg{integer}{g_b}{solution matrix}
 \end{funcargs}
 \end{fapi}
 
@@ -7980,24 +8033,27 @@ subroutine ga_transpose(g_a, g_b)
 void GlobalArray::transpose(const GlobalArray * g_a) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{g_a}{assign transpose to this GlobalArray}
+\inarg{int}{g_a}{assign transpose to this GlobalArray}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-transpose(int g_a, int g_b)
+ga.transpose(int g_a, int g_b)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{original matrix}
+\inarg{int}{g_b}{solution matrix}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
-
-Transposes a matrix: B = A', where A and B are represented by handles g_a and g_b.
-
+Transposes a matrix: B = A', where A and B are represented by handles g_a and
+g_b.
 \end{desc}
+
 
 \apih{ABS VALUE}{Convert a global array to contain absolute values of its elements}
 
@@ -8006,7 +8062,7 @@ Transposes a matrix: B = A', where A and B are represented by handles g_a and g_
 void GA_Abs_value(int g_a)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a}{array handle}
+\inarg{int}{g_a}{array handle}
 \end{funcargs}
 \end{capi}
 
@@ -8027,20 +8083,19 @@ void GlobalArray::absValue() const
 
 \begin{pyapi}
 \begin{pycode}
-abs_value(int g_a, lo=None, hi=None)
-   g_a (int) - the array handle
-   lo (1D array-like) - lower bound patch coordinates, inclusive
-   hi (1D array-like) - higher bound patch coordinates, exclusive
+ga.abs_value(int g_a)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
 Take the element-wise absolute value of the array.
-
 \end{desc}
+
 
 \apih{ABS VALUE PATCH}{Convert a patch of a global array to have absolute values of its elements}
 
@@ -8075,13 +8130,23 @@ void GlobalArray::absValuePatch(int64_t *lo, int64_t *hi) const
 \end{funcargs}
 \end{cxxapi}
 
+\begin{pyapi}
+\begin{pycode}
+ga.abs_value(int g_a, lo=None, hi=None)
+\end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\inarg{1D array-like}{lo}{lower bound patch coordinates, inclusive}
+\inarg{1D array-like}{hi}{higher bound patch coordinates, exclusive}
+\end{funcargs}
+\end{pyapi}
+
 \gcoll
 
 \begin{desc}
-
 Take the element-wise absolute value of the patch.
-
 \end{desc}
+
 
 \apih{ADD CONSTANT}{Add a constant to all elements in a global array}
 
@@ -8090,8 +8155,8 @@ Take the element-wise absolute value of the patch.
 void GA_Add_constant(int g_a, void *alpha)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a}{array handle}
-\inarg{double/complex/int/long/float*}{alpha}{added value}
+\inarg{int}{g_a}{array handle}
+\inarg{void*}{alpha}{double/complex/int/long/float* added value}
 \end{funcargs}
 \end{capi}
 
@@ -8110,28 +8175,26 @@ subroutine ga_add_constant(g_a,  alpha)
 void GlobalArray::addConstant(void* alpha) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{alpha}{double/complex/int/long/float constant to be added}
+\inarg{void*}{alpha}{double/complex/int/long/float* constant to be added}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-add_constant(int g_a, alpha, lo=None, hi=None)
-   g_a (int)                      - the array handle
-   alpha (object)                 - the constant to add (converted to
-                                    appropriate type)
-   lo (1D array-like of integers) - lower bound patch coordinates, inclusive
-   hi (1D array-like of integers) - higher bound patch coordinates, exclusive
+ga.add_constant(int g_a, alpha)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\inarg{object}{alpha}{constant to add (converted to appropriate type)}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
 Add the constant pointed by alpha to each element of the array.
-
 \end{desc}
+
 
 \apih{ADD CONSTANT PATCH}{Add a constant to all elements in a global array patch}
 
@@ -8140,9 +8203,9 @@ Add the constant pointed by alpha to each element of the array.
 void GA_Add_constant_patch(int g_a, int lo[], int hi[], void *alpha)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a}{array handle}
-\inarg{}{lo[], hi[]}{patch coordinates}
-\inarg{double/complex/int/long/float*}{alpha}{added value}
+\inarg{int}{g_a}{array handle}
+\inarg{int*}{lo[], hi[]}{patch coordinates}
+\inarg{void*}{alpha}{double/complex/int/long/float* added value}
 \end{funcargs}
 \end{capi}
 
@@ -8164,19 +8227,30 @@ void GlobalArray::addConstantPatch(int *lo, int *hi, void *alpha) const
 void GlobalArray::addConstantPatch(int64_t *lo, int64_t *hi, void *alpha) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{lo}{lower corner patch coordinates}
-\inarg{}{hi}{upper corner patch coordinates}
-\inarg{}{alpha}{double/complex/int/long/float constant to be added}
+\inarg{int*}{lo}{lower corner patch coordinates}
+\inarg{int*}{hi}{upper corner patch coordinates}
+\inarg{void*}{alpha}{double/complex/int/long/float constant to be added}
 \end{funcargs}
 \end{cxxapi}
+
+\begin{pyapi}
+\begin{pycode}
+ga.add_constant(int g_a, alpha, lo=None, hi=None)
+\end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\inarg{object}{alpha}{constant to add (converted to appropriate type)}
+\inarg{1D array-like of ints}{lo}{lower bound patch coordinates, inclusive}
+\inarg{1D array-like of ints}{hi}{higher bound patch coordinates, exclusive}
+\end{funcargs}
+\end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
 Add the constant pointed by alpha to each element of the patch.
-
 \end{desc}
+
 
 \apih{RECIP}{Translate a global array to contain reciprocal of its elements}
 
@@ -8185,7 +8259,7 @@ Add the constant pointed by alpha to each element of the patch.
 void GA_Recip(int g_a)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a}{array handle}
+\inarg{int}{g_a}{array handle}
 \end{funcargs}
 \end{capi}
 
@@ -8206,16 +8280,17 @@ void GlobalArray::recip() const
 
 \begin{pyapi}
 \begin{pycode}
-recip(int g_a, lo=None, hi=None)
+ga.recip(int g_a)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
 Take the element-wise reciprocal of the array.
-
 \end{desc}
 
 \apih{RECIP PATCH}{Translate a global array patch to contain reciprocal of its elements}
@@ -8225,8 +8300,8 @@ Take the element-wise reciprocal of the array.
 void GA_Recip_patch(int g_a, int lo[], int hi[])
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a}{array handle}
-\inarg{}{lo[], hi[]}{patch coordinates}
+\inarg{int}{g_a}{array handle}
+\inarg{int*}{lo[], hi[]}{patch coordinates}
 \end{funcargs}
 \end{capi}
 
@@ -8246,17 +8321,26 @@ subroutine ga_recip_patch(g_a, lo, hi)
 void GlobalArray::recipPatch(int *lo, int *hi) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{lo}{lower corner patch coordinates}
-\inarg{}{hi}{upper corner patch coordinates}
+\inarg{int*}{lo}{lower corner patch coordinates}
+\inarg{int*}{hi}{upper corner patch coordinates}
 \end{funcargs}
 \end{cxxapi}
+
+\begin{pyapi}
+\begin{pycode}
+ga.recip(int g_a, lo=None, hi=None)
+\end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\inarg{1D array-like of ints}{lo}{lower bound patch coordinates, inclusive}
+\inarg{1D array-like of ints}{hi}{higher bound patch coordinates, exclusive}
+\end{funcargs}
+\end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
 Take element-wise reciprocal of the patch.
-
 \end{desc}
 
 \apih{ELEM MULTIPLY}{Element-wise multiplication of global arrays}
@@ -8266,8 +8350,8 @@ Take element-wise reciprocal of the patch.
 void GA_Elem_multiply(int g_a, int g_b, int g_c)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a, g_b}{array handles}
-\outarg{}{g_c}{array handle}
+\inarg{int}{g_a, g_b}{input array handles}
+\inarg{int}{g_c}{output array handle}
 \end{funcargs}
 \end{capi}
 
@@ -8276,80 +8360,68 @@ void GA_Elem_multiply(int g_a, int g_b, int g_c)
 subroutine ga_elem_multiply(g_a, g_b, g_c)
 \end{fcode}
 \begin{funcargs}
-\inarg{integer}{g_a, g_b}{array handles}
-\outarg{integer}{g_c}{array handle}
+\inarg{integer}{g_a, g_b}{input array handles}
+\outarg{integer}{g_c}{output array handle}
 \end{funcargs}
 \end{fapi}
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::elemMultiply(const GlobalArray * g_a, const
-GlobalArray * g_b) const
+void GlobalArray::elemMultiply(const GlobalArray * g_a,
+                               const GlobalArray * g_b) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{g_a}{GlobalArray}
-\inarg{}{g_b}{GlobalArray}
+\inarg{const GlobalArray*}{g_a}{GlobalArray}
+\inarg{const GlobalArray*}{g_b}{GlobalArray}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-elem_multiply(int g_a, int g_b, int g_c, alo=None, ahi=None, blo=None,
-bhi=None, clo=None, chi=None)
-   g_a (int)                       - the array handle
-   g_b (int)                       - the array handle
-   g_c (int)                       - the array handle
-   alo (1D array-like of integers) - lower bound patch coordinates of g_a,
-                                     inclusive
-   ahi (1D array-like of integers) - higher bound patch coordinates of g_a,
-                                     exclusive
-   blo (1D array-like of integers) - lower bound patch coordinates of g_b,
-                                     inclusive
-   bhi (1D array-like of integers) - higher bound patch coordinates of g_b,
-                                     exclusive
-   clo (1D array-like of integers) - lower bound patch coordinates of g_c,
-                                     inclusive
-   chi (1D array-like of integers) - higher bound patch coordinates of g_c,
-                                     exclusive
+ga.elem_multiply(int g_a, int g_b, int g_c)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{the array handle}
+\inarg{int}{g_b}{the array handle}
+\inarg{int}{g_c}{the array handle}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
-Computes the element-wise product of the two arrays
-which must be of the same types and same number of
-elements. For two-dimensional arrays,
-
+Computes the element-wise product of the two arrays which must be of the same
+types and same number of elements. For two-dimensional arrays,
 \begin{verbatim}
         c(i, j)  = a(i,j)*b(i,j)
 \end{verbatim}
-
 The result (c) may replace one of the input arrays (a/b).
 
 \end{desc}
+
 
 \apih{ELEM MULTIPLY PATCH}{Element-wise multiplication of global array patches}
 
 \begin{capi}
 \begin{ccode}
-void GA_Elem_multiply_patch(int g_a, int alo[], int ahi[], int g_b, int blo[],
-                            int bhi[], int g_c, int clo[], int chi[])
+void GA_Elem_multiply_patch(int g_a, int alo[], int ahi[],
+                            int g_b, int blo[], int bhi[],
+                            int g_c, int clo[], int chi[])
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a, g_b}{array handles}
-\outarg{}{g_c}{array handle}
-\inarg{}{alo[], ahi[]}{g_a patch coordinates}
-\inarg{}{blo[], bhi[]}{g_b patch coordinates}
-\outarg{}{clo[], chi[]}{g_c patch coordinates}
+\inarg{int}{g_a, g_b}{input array handles}
+\inarg{int}{g_c}{output array handle}
+\inarg{int*}{alo[], ahi[]}{g_a patch coordinates}
+\inarg{int*}{blo[], bhi[]}{g_b patch coordinates}
+\inarg{int*}{clo[], chi[]}{g_c patch coordinates}
 \end{funcargs}
 \end{capi}
 
 \begin{fapi}
 \begin{fcode}
-subroutine ga_elem_multiply_patch(g_a, alo, ahi, g_b, blo, bhi, g_c, clo,
-chi)
+subroutine ga_elem_multiply_patch(g_a, alo, ahi,
+                                  g_b, blo, bhi,
+                                  g_c, clo, chi)
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{g_a, g_b}{array handles}
@@ -8363,41 +8435,58 @@ chi)
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::elemMultiplyPatch(const GlobalArray * g_a, int *alo,
-                                    int *ahi, const GlobalArray * g_b,
-                                    int *blo, int *bhi, int *clo,
-                                    int *chi) const
-void GlobalArray::elemMultiplyPatch(const GlobalArray * g_a, int64_t *alo,
-                                    int64_t *ahi, const GlobalArray * g_b,
-                                    int64_t *blo, int64_t *bhi,
-                                    int64_t *clo, int64_t *chi) const
+void GlobalArray::elemMultiplyPatch(
+        const GlobalArray * g_a, int *alo, int *ahi,
+        const GlobalArray * g_b, int *blo, int *bhi,
+        int *clo, int *chi) const
+void GlobalArray::elemMultiplyPatch(
+        const GlobalArray * g_a, int64_t *alo, int64_t *ahi,
+        const GlobalArray * g_b, int64_t *blo, int64_t *bhi,
+        int64_t *clo, int64_t *chi) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{g_a}{global array}
-\inarg{}{g_b}{global array}
-\inarg{}{alo}{g_a lower corner patch coordinates}
-\inarg{}{ahi}{g_a upper corner patch coordinates}
-\inarg{}{blo}{g_b lower corner patch coordinates}
-\inarg{}{bhi}{g_b upper corner patch coordinates}
-\inarg{}{clo}{g_c lower corner patch coordinates}
-\inarg{}{chi}{g_c upper corner patch coordinates}
+\inarg{int}{g_a}{global array}
+\inarg{int}{g_b}{global array}
+\inarg{int*}{alo}{g_a lower corner patch coordinates}
+\inarg{int*}{ahi}{g_a upper corner patch coordinates}
+\inarg{int*}{blo}{g_b lower corner patch coordinates}
+\inarg{int*}{bhi}{g_b upper corner patch coordinates}
+\inarg{int*}{clo}{g_c lower corner patch coordinates}
+\inarg{int*}{chi}{g_c upper corner patch coordinates}
 \end{funcargs}
 \end{cxxapi}
+
+\begin{pyapi}
+\begin{pycode}
+ga.elem_multiply(int g_a, int g_b, int g_c,
+                 alo=None, ahi=None,
+                 blo=None, bhi=None,
+                 clo=None, chi=None)
+\end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{the array handle}
+\inarg{int}{g_b}{the array handle}
+\inarg{int}{g_c}{the array handle}
+\inarg{1D array-like of integers}{alo}{lower bound patch coordinates of g_a, inclusive}
+\inarg{1D array-like of integers}{ahi}{higher bound patch coordinates of g_a, exclusive}
+\inarg{1D array-like of integers}{blo}{lower bound patch coordinates of g_b, inclusive}
+\inarg{1D array-like of integers}{bhi}{higher bound patch coordinates of g_b, exclusive}
+\inarg{1D array-like of integers}{clo}{lower bound patch coordinates of g_c, inclusive}
+\inarg{1D array-like of integers}{chi}{higher bound patch coordinates of g_c, exclusive}
+\end{funcargs}
+\end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
-Computes the element-wise product of the two patches
-which must be of the same types and same number of
-elements. For two-dimensional arrays,
+Computes the element-wise product of the two patches which must be of the same
+types and same number of elements. For two-dimensional arrays,
 \begin{verbatim}
         c(i,j)  = a(i,j)*b(i,j)
 \end{verbatim}
-
 The result (c) may replace one of the input arrays (a/b).
-
 \end{desc}
+
 
 \apih{ELEM DIVIDE}{Element-wise division of global arrays}
 
@@ -8406,8 +8495,8 @@ The result (c) may replace one of the input arrays (a/b).
 void GA_Elem_divide(int g_a, int g_b, int g_c)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a, g_b}{array handles}
-\outarg{}{g_c}{array handle}
+\inarg{int}{g_a, g_b}{array handles}
+\inarg{int}{g_c}{array handle}
 \end{funcargs}
 \end{capi}
 
@@ -8423,75 +8512,62 @@ subroutine ga_elem_divide(g_a, g_b, g_c)
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::elemDivide(const GlobalArray * g_a, const GlobalArray
-                             * g_b) const
+void GlobalArray::elemDivide(const GlobalArray * g_a,
+                             const GlobalArray * g_b) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{g_a}{GlobalArray}
-\inarg{}{g_b}{GlobalArray}
+\inarg{const GlobalArray*}{g_a}{GlobalArray}
+\inarg{const GlobalArray*}{g_b}{GlobalArray}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-elem_divide(int g_a, int g_b, int g_c, alo=None, ahi=None, blo=None,
-bhi=None, clo=None, chi=None)
-   g_a (int)                       - the array handle
-   g_b (int)                       - the array handle
-   g_c (int)                       - the array handle
-   alo (1D array-like of integers) - lower bound patch coordinates of g_a,
-                                     inclusive
-   ahi (1D array-like of integers) - higher bound patch coordinates of g_a,
-                                     exclusive
-   blo (1D array-like of integers) - lower bound patch coordinates of g_b,
-                                     inclusive
-   bhi (1D array-like of integers) - higher bound patch coordinates of g_b,
-                                     exclusive
-   clo (1D array-like of integers) - lower bound patch coordinates of g_c,
-                                     inclusive
-   chi (1D array-like of integers) - higher bound patch coordinates of g_c,
-                                     exclusive
+ga.elem_divide(int g_a, int g_b, int g_c)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{the array handle}
+\inarg{int}{g_b}{the array handle}
+\inarg{int}{g_c}{the array handle}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
-Computes the element-wise quotient of the two arrays
-which must be of the same types and same number of
-elements. For two-dimensional arrays,
+Computes the element-wise quotient of the two arrays which must be of the same
+types and same number of elements. For two-dimensional arrays,
 \begin{verbatim}
         c(i,j) = a(i,j)/b(i,j)
 \end{verbatim}
-
-The result (c) may replace one of the input arrays (a/b).
-If one of the elements of array g_b is zero, the quotient
-for the element of g_c will be set to GA_NEGATIVE_INFINITY.
-
+The result (c) may replace one of the input arrays (a/b).  If one of the
+elements of array g_b is zero, the quotient for the element of g_c will be set
+to GA_NEGATIVE_INFINITY.
 \end{desc}
+
 
 \apih{ELEM DIVIDE PATCH}{Element-wise division of global array patches}
 
 \begin{capi}
 \begin{ccode}
-void GA_Elem_divide_patch(int g_a, int alo[], int ahi[], int g_b,
-                          int blo[], int bhi[], int g_c, int clo[],
-                          int chi[])
+void GA_Elem_divide_patch(int g_a, int alo[], int ahi[],
+                          int g_b, int blo[], int bhi[],
+                          int g_c, int clo[], int chi[])
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a, g_b}{array handles}
-\outarg{}{g_c}{array handle}
-\inarg{}{alo[], ahi[]}{g_a patch coordinates}
-\inarg{}{blo[], bhi[]}{g_b patch coordinates}
-\outarg{}{clo[], chi[]}{g_c patch coordinates}
+\inarg{int}{g_a, g_b}{array handles}
+\inarg{int}{g_c}{array handle}
+\inarg{int*}{alo[], ahi[]}{g_a patch coordinates}
+\inarg{int*}{blo[], bhi[]}{g_b patch coordinates}
+\inarg{int*}{clo[], chi[]}{g_c patch coordinates}
 \end{funcargs}
 \end{capi}
 
 \begin{fapi}
 \begin{fcode}
-subroutine ga_elem_divide_patch(g_a, alo, ahi, g_b, blo, bhi, g_c,
-                                clo, chi)
+subroutine ga_elem_divide_patch(g_a, alo, ahi,
+                                g_b, blo, bhi,
+                                g_c, clo, chi)
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{g_a, g_b}{array handles}
@@ -8505,41 +8581,58 @@ subroutine ga_elem_divide_patch(g_a, alo, ahi, g_b, blo, bhi, g_c,
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::elemDividePatch(const GlobalArray * g_a, int *alo,
-                                  int *ahi, const GlobalArray * g_b,
-                                  int *blo, int *bhi, int *clo,
-                                  int *chi) const
-void GlobalArray::elemDividePatch(const GlobalArray * g_a, int64_t *alo,
-                                  int64_t *ahi, const GlobalArray * g_b,
-                                  int64_t *blo, int64_t *bhi,
-                                  int64_t *clo, int64_t *chi) const
+void GlobalArray::elemDividePatch(
+        const GlobalArray * g_a, int *alo, int *ahi,
+        const GlobalArray * g_b, int *blo, int *bhi,
+        int *clo, int *chi) const
+void GlobalArray::elemDividePatch(
+        const GlobalArray * g_a, int64_t *alo, int64_t *ahi,
+        const GlobalArray * g_b, int64_t *blo, int64_t *bhi,
+        int64_t *clo, int64_t *chi) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{g_a}{global array}
-\inarg{}{g_b}{global array}
-\inarg{}{alo}{g_a lower corner patch coordinates}
-\inarg{}{ahi}{g_a upper corner patch coordinates}
-\inarg{}{blo}{g_b lower corner patch coordinates}
-\inarg{}{bhi}{g_b upper corner patch coordinates}
-\inarg{}{clo}{g_c lower corner patch coordinates}
-\inarg{}{chi}{g_c upper corner patch coordinates}
+\inarg{int}{g_a}{global array}
+\inarg{int}{g_b}{global array}
+\inarg{int*}{alo}{g_a lower corner patch coordinates}
+\inarg{int*}{ahi}{g_a upper corner patch coordinates}
+\inarg{int*}{blo}{g_b lower corner patch coordinates}
+\inarg{int*}{bhi}{g_b upper corner patch coordinates}
+\inarg{int*}{clo}{g_c lower corner patch coordinates}
+\inarg{int*}{chi}{g_c upper corner patch coordinates}
 \end{funcargs}
 \end{cxxapi}
+
+\begin{pyapi}
+\begin{pycode}
+ga.elem_divide(int g_a, int g_b, int g_c,
+               alo=None, ahi=None,
+               blo=None, bhi=None,
+               clo=None, chi=None)
+\end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{the array handle}
+\inarg{int}{g_b}{the array handle}
+\inarg{int}{g_c}{the array handle}
+\inarg{1D array-like of integers}{alo}{lower bound patch coordinates of g_a, inclusive}
+\inarg{1D array-like of integers}{ahi}{higher bound patch coordinates of g_a, exclusive}
+\inarg{1D array-like of integers}{blo}{lower bound patch coordinates of g_b, inclusive}
+\inarg{1D array-like of integers}{bhi}{higher bound patch coordinates of g_b, exclusive}
+\inarg{1D array-like of integers}{clo}{lower bound patch coordinates of g_c, inclusive}
+\inarg{1D array-like of integers}{chi}{higher bound patch coordinates of g_c, exclusive}
+\end{funcargs}
+\end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
-Computes the element-wise quotient of the two patches
-which must be of the same types and same number of
-elements. For two-dimensional arrays,
+Computes the element-wise quotient of the two patches which must be of the same
+types and same number of elements. For two-dimensional arrays,
 \begin{verbatim}
         c(i,j)  = a(i,j)/b(i,j)
 \end{verbatim}
-
 The result (c) may replace one of the input arrays (a/b).
-
 \end{desc}
+
 
 \apih{ELEM MAXIMUM}{Element-wise maximum of global arrays}
 
@@ -8548,8 +8641,8 @@ The result (c) may replace one of the input arrays (a/b).
 void GA_Elem_maximum(int g_a, int g_b, int g_c)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a, g_b}{array handles}
-\outarg{}{g_c}{array handle}
+\inarg{int}{g_a, g_b}{array handles}
+\inarg{int}{g_c}{array handle}
 \end{funcargs}
 \end{capi}
 
@@ -8565,73 +8658,60 @@ subroutine ga_elem_maximum(g_a, g_b, g_c)
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::elemMaximum(const GlobalArray * g_a, const
-                              GlobalArray * g_b) const
+void GlobalArray::elemMaximum(const GlobalArray * g_a,
+                              const GlobalArray * g_b) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{g_a}{global array}
-\inarg{}{g_b}{global array}
+\inarg{const GlobalArray*}{g_a}{global array}
+\inarg{const GlobalArray*}{g_b}{global array}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-elem_maximum(int g_a, int g_b, int g_c, alo=None, ahi=None, blo=None,
-bhi=None, clo=None, chi=None)
-   g_a (int)                       - the array handle
-   g_b (int)                       - the array handle
-   g_c (int)                       - the array handle
-   alo (1D array-like of integers) - lower bound patch coordinates of g_a,
-                                     inclusive
-   ahi (1D array-like of integers) - higher bound patch coordinates of g_a,
-                                     exclusive
-   blo (1D array-like of integers) - lower bound patch coordinates of g_b,
-                                     inclusive
-   bhi (1D array-like of integers) - higher bound patch coordinates of g_b,
-                                     exclusive
-   clo (1D array-like of integers) - lower bound patch coordinates of g_c,
-                                     inclusive
-   chi (1D array-like of integers) - higher bound patch coordinates of g_c,
-                                     exclusive
+ga.elem_maximum(int g_a, int g_b, int g_c)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{the array handle}
+\inarg{int}{g_b}{the array handle}
+\inarg{int}{g_c}{the array handle}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
-Computes the element-wise maximum of the two arrays
-which must be of the same types and same number of
-elements. For two dimensional arrays,
+Computes the element-wise maximum of the two arrays which must be of the same
+types and same number of elements. For two dimensional arrays,
 \begin{verbatim}
     c(i,j)  = max{a(i,j), b(i,j)}
 \end{verbatim}
-
 The result (c) may replace one of the input arrays (a/b).
-
 \end{desc}
+
 
 \apih{ELEM MAXIMUM PATCH}{Element-wise maximum of global array patches}
 
 \begin{capi}
 \begin{ccode}
-void GA_Elem_maximum_patch(int g_a, int alo[], int ahi[], int g_b,
-                           int blo[], int bhi[], int g_c, int clo[],
-                           int chi[])
+void GA_Elem_maximum_patch(int g_a, int alo[], int ahi[],
+                           int g_b, int blo[], int bhi[],
+                           int g_c, int clo[], int chi[])
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a, g_b}{array handles}
-\outarg{}{g_c}{array handle}
-\inarg{}{alo[], ahi[]}{g_a patch coordinates}
-\inarg{}{blo[], bhi[]}{g_b patch coordinates}
-\outarg{}{clo[], chi[]}{g_c patch coordinates}
+\inarg{int}{g_a, g_b}{array handles}
+\inarg{int}{g_c}{array handle}
+\inarg{int*}{alo[], ahi[]}{g_a patch coordinates}
+\inarg{int*}{blo[], bhi[]}{g_b patch coordinates}
+\inarg{int*}{clo[], chi[]}{g_c patch coordinates}
 \end{funcargs}
 \end{capi}
 
 \begin{fapi}
 \begin{fcode}
-subroutine ga_elem_maximum_patch(g_a, alo, ahi, g_b, blo, bhi, g_c,
-                                 clo, chi)
+subroutine ga_elem_maximum_patch(g_a, alo, ahi,
+                                 g_b, blo, bhi,
+                                 g_c, clo, chi)
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{g_a, g_b}{array handles}
@@ -8645,45 +8725,62 @@ subroutine ga_elem_maximum_patch(g_a, alo, ahi, g_b, blo, bhi, g_c,
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::elemMaximumPatch(const GlobalArray * g_a, int *alo, int *ahi,
-                                   const GlobalArray * g_b, int *blo, int *bhi,
-                                   int *clo, int *chi) const
-void GlobalArray::elemMaximumPatch(const GlobalArray * g_a, int64_t *alo,
-                                   int64_t *ahi, const GlobalArray * g_b,
-                                   int64_t *blo, int64_t *bhi,
-                                   int64_t *clo, int64_t *chi) const
+void GlobalArray::elemMaximumPatch(
+        const GlobalArray * g_a, int *alo, int *ahi,
+        const GlobalArray * g_b, int *blo, int *bhi,
+        int *clo, int *chi) const
+void GlobalArray::elemMaximumPatch(
+        const GlobalArray * g_a, int64_t *alo, int64_t *ahi,
+        const GlobalArray * g_b, int64_t *blo, int64_t *bhi,
+        int64_t *clo, int64_t *chi) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{g_a}{global array}
-\inarg{}{g_b}{global array}
-\inarg{}{alo}{g_a lower corner patch coordinates}
-\inarg{}{ahi}{g_a upper corner patch coordinates}
-\inarg{}{blo}{g_b lower corner patch coordinates}
-\inarg{}{bhi}{g_b upper corner patch coordinates}
-\inarg{}{clo}{g_c lower corner patch coordinates}
-\inarg{}{chi}{g_c upper corner patch coordinates}
+\inarg{const GlobalArray*}{g_a}{global array}
+\inarg{const GlobalArray*}{g_b}{global array}
+\inarg{int*}{alo}{g_a lower corner patch coordinates}
+\inarg{int*}{ahi}{g_a upper corner patch coordinates}
+\inarg{int*}{blo}{g_b lower corner patch coordinates}
+\inarg{int*}{bhi}{g_b upper corner patch coordinates}
+\inarg{int*}{clo}{g_c lower corner patch coordinates}
+\inarg{int*}{chi}{g_c upper corner patch coordinates}
 \end{funcargs}
 \end{cxxapi}
+
+\begin{pyapi}
+\begin{pycode}
+ga.elem_maximum(int g_a, int g_b, int g_c,
+                alo=None, ahi=None,
+                blo=None, bhi=None,
+                clo=None, chi=None)
+\end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{the array handle}
+\inarg{int}{g_b}{the array handle}
+\inarg{int}{g_c}{the array handle}
+\inarg{1D array-like of integers}{alo}{lower bound patch coordinates of g_a, inclusive}
+\inarg{1D array-like of integers}{ahi}{higher bound patch coordinates of g_a, exclusive}
+\inarg{1D array-like of integers}{blo}{lower bound patch coordinates of g_b, inclusive}
+\inarg{1D array-like of integers}{bhi}{higher bound patch coordinates of g_b, exclusive}
+\inarg{1D array-like of integers}{clo}{lower bound patch coordinates of g_c, inclusive}
+\inarg{1D array-like of integers}{chi}{higher bound patch coordinates of g_c, exclusive}
+\end{funcargs}
+\end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
-Computes the element-wise maximum of the two patches
-which must be of the same types and same number of
-elements. For two-dimensional noncomplex arrays,
+Computes the element-wise maximum of the two patches which must be of the same
+types and same number of elements. For two-dimensional noncomplex arrays,
 \begin{verbatim}
         c(i,j)  = max{a(i,j), b(i,j)}
 \end{verbatim}
-
 If the data type is complex, then
 \begin{verbatim}
         c(i,j).real = max{ |a(i,j)|, |b(i,j)| } while c(i,j).image = 0.
 \end{verbatim}
-
 The result (c) may replace one of the input arrays (a/b).
-
 \end{desc}
+
 
 \apih{ELEM MINIMUM}{Element-wise minimum of global arrays}
 
@@ -8692,8 +8789,8 @@ The result (c) may replace one of the input arrays (a/b).
 void GA_Elem_minimum(int g_a, int g_b, int g_c)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a, g_b}{array handles}
-\outarg{}{g_c}{array handle}
+\inarg{int}{g_a, g_b}{array handles}
+\inarg{int}{g_c}{array handle}
 \end{funcargs}
 \end{capi}
 
@@ -8709,14 +8806,25 @@ subroutine ga_elem_minimum(g_a, g_b, g_c)
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::elemMinimum(const GlobalArray * g_a, const
-                              GlobalArray * g_b) const
+void GlobalArray::elemMinimum(const GlobalArray * g_a,
+                              const GlobalArray * g_b) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{g_a}{global array}
-\inarg{}{g_b}{global array}
+\inarg{const GlobalArray*}{g_a}{global array}
+\inarg{const GlobalArray*}{g_b}{global array}
 \end{funcargs}
 \end{cxxapi}
+
+\begin{pyapi}
+\begin{pycode}
+ga.elem_minimum(int g_a, int g_b, int g_c)
+\end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{the array handle}
+\inarg{int}{g_b}{the array handle}
+\inarg{int}{g_c}{the array handle}
+\end{funcargs}
+\end{pyapi}
 
 \gcoll
 
@@ -8737,23 +8845,24 @@ The result (c) may replace one of the input arrays (a/b).
 
 \begin{capi}
 \begin{ccode}
-void GA_Elem_minimum_patch(int g_a, int alo[], int ahi[], int g_b,
-                           int blo[], int bhi[], int g_c, int clo[],
-                           int chi[])
+void GA_Elem_minimum_patch(int g_a, int alo[], int ahi[],
+                           int g_b, int blo[], int bhi[],
+                           int g_c, int clo[], int chi[])
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a, g_b}{array handles}
-\outarg{}{g_c}{array handle}
-\inarg{}{alo[], ahi[]}{g_a patch coordinates}
-\inarg{}{blo[], bhi[]}{g_b patch coordinates}
-\outarg{}{clo[], chi[]}{g_c patch coordinates}
+\inarg{int}{g_a, g_b}{array handles}
+\inarg{int}{g_c}{array handle}
+\inarg{int*}{alo[], ahi[]}{g_a patch coordinates}
+\inarg{int*}{blo[], bhi[]}{g_b patch coordinates}
+\inarg{int*}{clo[], chi[]}{g_c patch coordinates}
 \end{funcargs}
 \end{capi}
 
 \begin{fapi}
 \begin{fcode}
-subroutine ga_elem_minimum_patch(g_a, alo, ahi, g_b, blo, bhi, g_c,
-                                 clo, chi)
+subroutine ga_elem_minimum_patch(g_a, alo, ahi,
+                                 g_b, blo, bhi,
+                                 g_c, clo, chi)
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{g_a,g_b}{array handles}
@@ -8767,45 +8876,62 @@ subroutine ga_elem_minimum_patch(g_a, alo, ahi, g_b, blo, bhi, g_c,
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::elemMinimumPatch(const GlobalArray * g_a, int *alo, int *ahi,
-                                   const GlobalArray * g_b, int *blo, int *bhi,
-                                   int *clo, int *chi) const
-void GlobalArray::elemMinimumPatch(const GlobalArray * g_a, int64_t *alo,
-                                   int64_t *ahi, const GlobalArray * g_b,
-                                   int64_t *blo, int64_t *bhi,
-                                   int64_t *clo, int64_t *chi) const
+void GlobalArray::elemMinimumPatch(
+        const GlobalArray * g_a, int *alo, int *ahi,
+        const GlobalArray * g_b, int *blo, int *bhi,
+        int *clo, int *chi) const
+void GlobalArray::elemMinimumPatch(
+        const GlobalArray * g_a, int64_t *alo, int64_t *ahi,
+        const GlobalArray * g_b, int64_t *blo, int64_t *bhi,
+        int64_t *clo, int64_t *chi) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{g_a}{global array}
-\inarg{}{g_b}{global array}
-\inarg{}{alo}{g_a lower corner patch coordinates}
-\inarg{}{ahi}{g_a upper corner patch coordinates}
-\inarg{}{blo}{g_b lower corner patch coordinates}
-\inarg{}{bhi}{g_b upper corner patch coordinates}
-\inarg{}{clo}{g_c lower corner patch coordinates}
-\inarg{}{chi}{g_c upper corner patch coordinates}
+\inarg{int}{g_a}{global array}
+\inarg{int}{g_b}{global array}
+\inarg{int*}{alo}{g_a lower corner patch coordinates}
+\inarg{int*}{ahi}{g_a upper corner patch coordinates}
+\inarg{int*}{blo}{g_b lower corner patch coordinates}
+\inarg{int*}{bhi}{g_b upper corner patch coordinates}
+\inarg{int*}{clo}{g_c lower corner patch coordinates}
+\inarg{int*}{chi}{g_c upper corner patch coordinates}
 \end{funcargs}
 \end{cxxapi}
+
+\begin{pyapi}
+\begin{pycode}
+ga.elem_minimum(int g_a, int g_b, int g_c,
+                alo=None, ahi=None,
+                blo=None, bhi=None,
+                clo=None, chi=None)
+\end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{the array handle}
+\inarg{int}{g_b}{the array handle}
+\inarg{int}{g_c}{the array handle}
+\inarg{1D array-like of integers}{alo}{lower bound patch coordinates of g_a, inclusive}
+\inarg{1D array-like of integers}{ahi}{higher bound patch coordinates of g_a, exclusive}
+\inarg{1D array-like of integers}{blo}{lower bound patch coordinates of g_b, inclusive}
+\inarg{1D array-like of integers}{bhi}{higher bound patch coordinates of g_b, exclusive}
+\inarg{1D array-like of integers}{clo}{lower bound patch coordinates of g_c, inclusive}
+\inarg{1D array-like of integers}{chi}{higher bound patch coordinates of g_c, exclusive}
+\end{funcargs}
+\end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
-Computes the element-wise minimum of the two patches
-which must be of the same types and same number of
-elements. For two-dimensional of noncomplex arrays,
+Computes the element-wise minimum of the two patches which must be of the same
+types and same number of elements. For two-dimensional of noncomplex arrays,
 \begin{verbatim}
         c(i,j)  = min{a(i,j), b(i,j)}
 \end{verbatim}
-
 If the data type is complex, then
 \begin{verbatim}
         c(i,j).real = min{ |a(i,j)|, |b(i,j)| } while c(i,j).image = 0.
 \end{verbatim}
-
 The result (c) may replace one of the input arrays (a/b).
-
 \end{desc}
+
 
 \apih{SHIFT DIAGONAL}{Add specified constant to diagonal elements of a global array}
 
@@ -8814,8 +8940,8 @@ The result (c) may replace one of the input arrays (a/b).
 void GA_Shift_diagonal(int g_a, void *c)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a}{array handle}
-\inarg{double/complex/int/long/float}{c}{shift value}
+\inarg{int}{g_a}{array handle}
+\inarg{void*}{c}{double/complex/int/long/float shift value}
 \end{funcargs}
 \end{capi}
 
@@ -8834,23 +8960,26 @@ subroutine ga_shift_diagonal(g_a, c)
 void GlobalArray::shiftDiagonal(void *c) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{c}{double/complex/int/long/float constant to add}
+\inarg{void*}{c}{double/complex/int/long/float constant to add}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-shift_diagoal(int g_a, value=None)
+ga.shift_diagoal(int g_a, value=None)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\inarg{object}{value}{double/complex/int/long/float shift value}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
 Adds this constant to the diagonal elements of the matrix.
-
 \end{desc}
+
 
 \apih{SET DIAGONAL}{Set the diagonal elements of a global array}
 
@@ -8859,7 +8988,8 @@ Adds this constant to the diagonal elements of the matrix.
 void GA_Set_diagonal(int g_a, int g_v)
 \end{ccode}
 \begin{funcargs}
-\inarg{g_a}{,g_v}{array handles}
+\inarg{int}{g_a}{array handle}
+\inarg{int}{g_v}{array handle}
 \end{funcargs}
 \end{capi}
 
@@ -8877,23 +9007,27 @@ subroutine ga_set_diagonal(g_a, g_v)
 void GlobalArray::setDiagonal(const GlobalArray * g_v) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{g_v}{global array containing diagonal values}
+\inarg{const GlobalArray*}{g_v}{global array containing diagonal values}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-set_diagonal(int g_a, int g_v)
+ga.set_diagonal(int g_a, int g_v)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\inarg{int}{g_v}{array handle}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
-Sets the diagonal elements of this matrix g_a with the elements of the vector g_v.
-
+Sets the diagonal elements of this matrix g_a with the elements of the vector
+g_v.
 \end{desc}
+
 
 \apih{ZERO DIAGONAL}{Zero the diagonal elements of a global array}
 
@@ -8902,7 +9036,7 @@ Sets the diagonal elements of this matrix g_a with the elements of the vector g_
 void GA_Zero_diagonal(int g_a)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a}{array handle}
+\inarg{int}{g_a}{array handle}
 \end{funcargs}
 \end{capi}
 
@@ -8923,17 +9057,19 @@ void GlobalArray::zeroDiagonal() const
 
 \begin{pyapi}
 \begin{pycode}
-zero_diagonal(int g_a)
+ga.zero_diagonal(int g_a)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
 Sets the diagonal elements of this matrix g_a with zeros.
-
 \end{desc}
+
 
 \apih{ADD DIAGONAL}{Add to the diagonal elements of a global array}
 
@@ -8942,7 +9078,8 @@ Sets the diagonal elements of this matrix g_a with zeros.
 void GA_Add_diagonal(int g_a, int g_v)
 \end{ccode}
 \begin{funcargs}
-\inarg{g_a}{,g_v}{array handles}
+\inarg{int}{g_a}{array handle}
+\inarg{int}{g_v}{array handle}
 \end{funcargs}
 \end{capi}
 
@@ -8960,25 +9097,26 @@ subroutine ga_add_diagonal(g_a, g_v)
 void GlobalArray::addDiagonal(const GlobalArray * g_v) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{g_v}{global array containing diagonal elements to be added}
+\inarg{const GlobalArray*}{g_v}{global array containing diagonal elements to be added}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-add_diagonal(int g_a, int g_v)
-   g_a (int)     - the array handle
-   g_v (int)     - the vector handle
+ga.add_diagonal(int g_a, int g_v)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\inarg{int}{g_v}{array handle}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
 Adds the elements of the vector g_v to the diagonal of this matrix g_a.
-
 \end{desc}
+
 
 \apih{GET DIAG}{Copy diagonal elements of a global array into another global array}
 
@@ -8987,7 +9125,8 @@ Adds the elements of the vector g_v to the diagonal of this matrix g_a.
 void GA_Get_diag(int g_a, int g_v)
 \end{ccode}
 \begin{funcargs}
-\inarg{g_a}{,g_v}{array handles}
+\inarg{int}{g_a}{array handle}
+\inarg{int}{g_v}{array handle}
 \end{funcargs}
 \end{capi}
 
@@ -9006,24 +9145,26 @@ subroutine ga_get_diag(g_a, g_v)
 void GlobalArray::getDiagonal(const GlobalArray * g_a) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{g_a}{global array containing diagonal elements}
+\inarg{const GlobalArray*}{g_a}{global array containing diagonal elements}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-get_diag(int g_a, int g_v)
-   g_a (int)        - the array handle
+ga.get_diag(int g_a, int g_v)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\inarg{int}{g_v}{array handle}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
 Inserts the diagonal elements of this matrix g_a into the vector g_v.
-
 \end{desc}
+
 
 \apih{SCALE ROWS}{Scale the rows of a global array with elements in another global array}
 
@@ -9032,7 +9173,8 @@ Inserts the diagonal elements of this matrix g_a into the vector g_v.
 void GA_Scale_rows(int g_a, int g_v)
 \end{ccode}
 \begin{funcargs}
-\inarg{g_a}{,g_v}{array handles}
+\inarg{int}{g_a}{array handle}
+\inarg{int}{g_v}{array handle}
 \end{funcargs}
 \end{capi}
 
@@ -9050,23 +9192,26 @@ subroutine ga_scale_rows(g_a, g_v)
 void GlobalArray::scaleRows(const GlobalArray * g_v) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{g_v}{global array containing scale factors}
+\inarg{const GlobalArray*}{g_v}{global array containing scale factors}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-g_a (int)                 - the array handle
+ga.scale_rows(int g_a, int g_v)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\inarg{int}{g_v}{array handle}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
 Scales the rows of this matrix g_a using the vector g_v.
-
 \end{desc}
+
 
 \apih{SCALE COLS}{Scale columns of a global array with elements in another gobal array}
 
@@ -9075,9 +9220,11 @@ Scales the rows of this matrix g_a using the vector g_v.
 void GA_Scale_cols(int g_a, int g_v)
 \end{ccode}
 \begin{funcargs}
-\inarg{g_a}{,g_v}{array handles}
+\inarg{int}{g_a}{array handle}
+\inarg{int}{g_v}{array handle}
 \end{funcargs}
 \end{capi}
+
 \begin{fapi}
 \begin{fcode}
 subroutine ga_scale_cols(g_a, g_v)
@@ -9092,23 +9239,26 @@ subroutine ga_scale_cols(g_a, g_v)
 void GlobalArray::scaleCols(const GlobalArray * g_v) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{g_v}{global array containing scale factors}
+\inarg{const GlobalArray*}{g_v}{global array containing scale factors}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-scale_cols(int g_a, int g_v)
+ga.scale_cols(int g_a, int g_v)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\inarg{int}{g_v}{array handle}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
 Scales the columns of this matrix g_a using the vector g_v.
-
 \end{desc}
+
 
 \apih{NORM1}{Compute a global array's 1-norm}
 
@@ -9117,8 +9267,8 @@ Scales the columns of this matrix g_a using the vector g_v.
 void GA_norm1(int g_a, double *nm)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a}{array handle}
-\outarg{}{nm}{matrix/vector 1-norm value}
+\inarg{int}{g_a}{array handle}
+\outarg{double*}{nm}{matrix/vector 1-norm value}
 \end{funcargs}
 \end{capi}
 
@@ -9137,24 +9287,26 @@ subroutine ga_norm1(g_a, nm)
 void GlobalArray::norm1(double *nm) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{nm}{matrix/vector 1-norm value}
+\outarg{double*}{nm}{matrix/vector 1-norm value}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-norm1(int g_a)
-   g_a (int)                   - the array handle
+ret = ga.norm1(int g_a)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\outarg{double}{ret}{matrix/vector 1-norm value}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
 Computes the 1-norm of the matrix or vector g_a.
-
 \end{desc}
+
 
 \apih{NORM INFINITY}{Compute a global array's infinite norm}
 
@@ -9163,8 +9315,8 @@ Computes the 1-norm of the matrix or vector g_a.
 void GA_Norm_infinity(int g_a, double *nm)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a}{array handle}
-\outarg{}{nm}{matrix/vector infinity-norm value}
+\inarg{int}{g_a}{array handle}
+\outarg{double*}{nm}{matrix/vector infinity-norm value}
 \end{funcargs}
 \end{capi}
 
@@ -9183,25 +9335,28 @@ subroutine ga_norm_infinity(g_a, nm)
 void GlobalArray::normInfinity(double *nm) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{nm}{matrix/vector infinity-norm value}
+\outarg{double*}{nm}{matrix/vector infinity-norm value}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-norm_infinity(int g_a)
-   g_a (int)           - the array handle
+ret = ga.norm_infinity(int g_a)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\outarg{double*}{ret}{matrix/vector infinity-norm value}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
 Computes the infinity-norm of the matrix or vector g_a.
-Returns: the 1-norm of the matrix or vector g_a.
 
+Returns: the 1-norm of the matrix or vector g_a.
 \end{desc}
+
 
 \apih{MEDIAN}{Compute a global arrays median}
 
@@ -9210,8 +9365,10 @@ Returns: the 1-norm of the matrix or vector g_a.
 void GA_Median(int g_a, int g_b, int g_c, int g_m)
 \end{ccode}
 \begin{funcargs}
-\inarg{g_a}{,g_b,g_c}{array handles}
-\outarg{}{g_m}{array handle}
+\inarg{int}{g_a}{input array handle}
+\inarg{int}{g_b}{input array handle}
+\inarg{int}{g_c}{input array handle}
+\inarg{int}{g_m}{output array handle}
 \end{funcargs}
 \end{capi}
 
@@ -9220,85 +9377,80 @@ void GA_Median(int g_a, int g_b, int g_c, int g_m)
 subroutine ga_median(g_a, g_b, g_c, g_m)
 \end{fcode}
 \begin{funcargs}
-\inarg{integer}{g_a,g_b,g_c}{array handles}
-\outarg{integer}{g_m}{array handle}
+\inarg{integer}{g_a}{input array handle}
+\inarg{integer}{g_b}{input array handle}
+\inarg{integer}{g_c}{input array handle}
+\inarg{integer}{g_m}{output array handle}
 \end{funcargs}
 \end{fapi}
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::median(const GlobalArray * g_a, const GlobalArray * g_b,
+void GlobalArray::median(const GlobalArray * g_a,
+                         const GlobalArray * g_b,
                          const GlobalArray * g_c) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{g_a}{global array}
-\inarg{}{g_b}{global array}
-\inarg{}{g_c}{global array}
+\inarg{const GlobalArray*}{g_a}{global array}
+\inarg{const GlobalArray*}{g_b}{global array}
+\inarg{const GlobalArray*}{g_c}{global array}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-median(int g_a, int g_b, int g_c, int g_m, alo=None, ahi=None, blo=None,
-bhi=None, clo=None, chi=None, mlo=None, mhi=None)
-   g_a (int)                       - the array handle
-   g_b (int)                       - the array handle
-   g_c (int)                       - the array handle
-   g_m (int)                       - the array handle for the result
-   alo (1D array-like of integers) - lower bound patch coordinates of g_a,
-                                     inclusive
-   ahi (1D array-like of integers) - higher bound patch coordinates of g_a,
-                                     exclusive
-   blo (1D array-like of integers) - lower bound patch coordinates of g_b,
-                                     inclusive
-   bhi (1D array-like of integers) - higher bound patch coordinates of g_b,
-                                     exclusive
-   clo (1D array-like of integers) - lower bound patch coordinates of g_c,
-                                     inclusive
-   chi (1D array-like of integers) - higher bound patch coordinates of g_c,
-                                     exclusive
-   mlo (1D array-like of integers) - lower bound patch coordinates of g_m,
-                                     inclusive
-   mhi (1D array-like of integers) - higher bound patch coordinates of g_m,
-                                     exclusive
+ga.median(int g_a, int g_b, int g_c, int g_m)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{the array handle}
+\inarg{int}{g_b}{the array handle}
+\inarg{int}{g_c}{the array handle}
+\inarg{int}{g_m}{the array handle for the result}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
-Computes the componentwise Median of three arrays g_a, g_b, and g_c, and
-stores the result in this array g_m.  The result (m) may replace one of
-the input arrays (a/b/c).
-
+Computes the componentwise Median of three arrays g_a, g_b, and g_c, and stores
+the result in this array g_m.  The result (m) may replace one of the input
+arrays (a/b/c).
 \end{desc}
+
 
 \apih{MEDIAN PATCH}{Compute a global array patch's median}
 
 \begin{capi}
 \begin{ccode}
-void GA_Median_patch(int g_a, int alo[], int ahi[], int g_b, int blo[],
-                     int bhi[], int g_c, int clo[], int chi[], int g_m,
-                     int mlo[], int mhi[])
+void GA_Median_patch(int g_a, int alo[], int ahi[],
+                     int g_b, int blo[], int bhi[],
+                     int g_c, int clo[], int chi[],
+                     int g_m, int mlo[], int mhi[])
 \end{ccode}
 \begin{funcargs}
-\inarg{g_a}{,g_b,g_c}{array handles}
-\outarg{}{g_m}{array handle}
-\inarg{}{alo[],ahi[]}{g_a patch coordinates}
-\inarg{}{blo[],bhi[]}{g_b patch coordinates}
-\inarg{}{clo[],chi[]}{g_c patch coordinates}
-\outarg{}{mlo[],mhi[]}{g_m patch coordinates}
+\inarg{int}{g_a}{input array handle}
+\inarg{int}{g_b}{input array handle}
+\inarg{int}{g_c}{input array handle}
+\inarg{int}{g_m}{output array handle}
+\inarg{int*}{alo[],ahi[]}{g_a patch coordinates}
+\inarg{int*}{blo[],bhi[]}{g_b patch coordinates}
+\inarg{int*}{clo[],chi[]}{g_c patch coordinates}
+\inarg{int*}{mlo[],mhi[]}{g_m patch coordinates}
 \end{funcargs}
 \end{capi}
 
 \begin{fapi}
 \begin{fcode}
-subroutine ga_median_patch(g_a, alo, ahi, g_b, blo, bhi, g_c, clo, chi, g_m, mlo, mhi)
+subroutine ga_median_patch(g_a, alo, ahi,
+                           g_b, blo, bhi,
+                           g_c, clo, chi,
+                           g_m, mlo, mhi)
 \end{fcode}
 \begin{funcargs}
-\inarg{integer}{g_a,g_b,g_c}{array handles}
-\outarg{integer}{g_m}{array handle}
+\inarg{integer}{g_a}{input array handle}
+\inarg{integer}{g_b}{input array handle}
+\inarg{integer}{g_c}{input array handle}
+\inarg{integer}{g_m}{output array handle}
 \inarg{integer}{ndim}{number of dimensions}
 \inarg{integer}{alo(ndim),ahi(ndim)}{g_a patch dimensions}
 \inarg{integer}{blo(ndim),bhi(ndim)}{g_b patch dimensions}
@@ -9309,51 +9461,73 @@ subroutine ga_median_patch(g_a, alo, ahi, g_b, blo, bhi, g_c, clo, chi, g_m, mlo
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::medianPatch(const GlobalArray *g_a, int *alo, int *ahi,
-                              const GlobalArray *g_b, int *blo, int *bhi,
-                              const GlobalArray *g_c, int *clo, int *chi,
-                              int *mlo, int *mhi) const;
-void GlobalArray::medianPatch(const GlobalArray *g_a, int64_t *alo,
-                              int64_t *ahi, const GlobalArray *g_b,
-                              int64_t *blo, int64_t *bhi, const
-                              GlobalArray *g_c, int64_t *clo,
-                              int64_t *chi, int64_t *mlo, int64_t *mhi)
-                              const
+void GlobalArray::medianPatch(
+        const GlobalArray *g_a, int *alo, int *ahi,
+        const GlobalArray *g_b, int *blo, int *bhi,
+        const GlobalArray *g_c, int *clo, int *chi,
+        int *mlo, int *mhi) const;
+void GlobalArray::medianPatch(
+        const GlobalArray *g_a, int64_t *alo, int64_t *ahi,
+        const GlobalArray *g_b, int64_t *blo, int64_t *bhi,
+        const GlobalArray *g_c, int64_t *clo, int64_t *chi,
+        int64_t *mlo, int64_t *mhi) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{g_a}{global array}
-\inarg{}{g_b}{global array}
-\inarg{}{g_c}{global array}
-\inarg{}{alo}{g_a lower corner patch coordinates}
-\inarg{}{ahi}{g_a upper corner patch coordinates}
-\inarg{}{blo}{g_b lower corner patch coordinates}
-\inarg{}{bhi}{g_b upper corner patch coordinates}
-\inarg{}{clo}{g_c lower corner patch coordinates}
-\inarg{}{chi}{g_c upper corner patch coordinates}
-\inarg{}{mlo}{g_m lower corner patch coordinates}
-\inarg{}{mhi}{g_m upper corner patch coordinates}
+\inarg{int}{g_a}{global array}
+\inarg{int}{g_b}{global array}
+\inarg{int}{g_c}{global array}
+\inarg{int*}{alo}{g_a lower corner patch coordinates}
+\inarg{int*}{ahi}{g_a upper corner patch coordinates}
+\inarg{int*}{blo}{g_b lower corner patch coordinates}
+\inarg{int*}{bhi}{g_b upper corner patch coordinates}
+\inarg{int*}{clo}{g_c lower corner patch coordinates}
+\inarg{int*}{chi}{g_c upper corner patch coordinates}
+\inarg{int*}{mlo}{g_m lower corner patch coordinates}
+\inarg{int*}{mhi}{g_m upper corner patch coordinates}
 \end{funcargs}
 \end{cxxapi}
+
+\begin{pyapi}
+\begin{pycode}
+ga.median(int g_a, int g_b, int g_c, int g_m,
+          alo=None, ahi=None, blo=None, bhi=None,
+          clo=None, chi=None, mlo=None, mhi=None)
+\end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{the array handle}
+\inarg{int}{g_b}{the array handle}
+\inarg{int}{g_c}{the array handle}
+\inarg{int}{g_m}{the array handle for the result}
+\inarg{1D array-like of integers}{alo}{lower bound patch coordinates of g_a, inclusive}
+\inarg{1D array-like of integers}{ahi}{higher bound patch coordinates of g_a, exclusive}
+\inarg{1D array-like of integers}{blo}{lower bound patch coordinates of g_b, inclusive}
+\inarg{1D array-like of integers}{bhi}{higher bound patch coordinates of g_b, exclusive}
+\inarg{1D array-like of integers}{clo}{lower bound patch coordinates of g_c, inclusive}
+\inarg{1D array-like of integers}{chi}{higher bound patch coordinates of g_c, exclusive}
+\inarg{1D array-like of integers}{mlo}{lower bound patch coordinates of g_m, inclusive}
+\inarg{1D array-like of integers}{mhi}{higher bound patch coordinates of g_m, exclusive}
+\end{funcargs}
+\end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
-Computes the componentwise Median of three patches g_a, g_b, and g_c,
-and stores the result in this patch g_m.  The result (m) may replace
-one of the input patches (a/b/c).
-
+Computes the componentwise Median of three patches g_a, g_b, and g_c, and
+stores the result in this patch g_m.  The result (m) may replace one of the
+input patches (a/b/c).
 \end{desc}
+
 
 \apih{STEP MAX}{Compute a global array's step max}
 
 \begin{capi}
 \begin{ccode}
-void GA_Step_max(int g_a, int g_b, double *step)
+void GA_Step_max(int g_a, int g_b, void *step)
 \end{ccode}
 \begin{funcargs}
-\inarg{g_a}{,g_b}{array handles where g_b is step direction}
-\outarg{}{step}{maximum step size}
+\inarg{int}{g_a}{array handle}
+\inarg{int}{g_b}{array handle; step direction}
+\outarg{void*}{step}{maximum step size}
 \end{funcargs}
 \end{capi}
 
@@ -9363,79 +9537,52 @@ subroutine ga_step_max(g_a, g_b, step)
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{g_a,g_b}{array handles}
-\outarg{double precision}{step}{the maximum step}
+\outarg{}{step}{double precision/integer; the maximum step}
 \end{funcargs}
 \end{fapi}
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::stepMax(const GlobalArray * g_b, double *step) const
+void GlobalArray::stepMax(const GlobalArray * g_b,
+                          void *step) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{g_b}{global array where g_b is the step direction}
-\outarg{}{step}{the maximum step}
+\inarg{const GlobalArray*}{g_b}{the step direction}
+\outarg{void*}{step}{the maximum step}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-step_max(int g_a, int g_b, alo=None, ahi=None, blo=None, bhi=None)
+ret = ga.step_max(int g_a, int g_b)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\inarg{int}{g_b}{array handle; step direction}
+\outarg{object}{ret}{scalar same type as array; maximum step size}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
-Calculates the largest multiple of a vector g_b that can be added to
-this vector g_a while keeping each element of this vector non-negative.
-
+Calculates the largest multiple of a vector g_b that can be added to this
+vector g_a while keeping each element of this vector non-negative.
 \end{desc}
 
-\apih{STEP MAX2}{Compute a global array's step max2}
-
-\begin{capi}
-\begin{ccode}
-void GA_Step_max2(int g_xx, int g_vv, int g_xxll, int g_xxuu, double * step2)
-\end{ccode}
-\begin{funcargs}
-\inarg{}{g_xx}{array handle}
-\inarg{}{g_vv}{step direction array handle}
-\inarg{}{g_xxll}{lower bounds array handle}
-\inarg{}{g_xxuu}{upper bounds array handle}
-\outarg{}{step2}{maximum step size}
-\end{funcargs}
-\end{capi}
-\begin{fapi}
-\begin{fcode}
-subroutine ga_step_max2(g_xx, g_vv, g_xxll, g_xxuu, step2)
-\end{fcode}
-\begin{funcargs}
-\inarg{integer}{g_xx,g_vv,g_xxll,g_xxuu}{array handles}
-\outarg{double precision}{step2}{the maximum step size}
-\inarg{}{g_vv}{the step direction}
-\inarg{}{g_xxll}{lower bounds}
-\inarg{}{g_xxuu}{upper bounds}
-\end{funcargs}
-\end{fapi}
-
-\gcoll
-
-\begin{desc}
-
-Calculates the largest step size that should be used in a projected bound line search.
-
-\end{desc}
 
 \apih{STEP MAX PATCH}{Compute a global array patch's step max}
 
 \begin{capi}
 \begin{ccode}
-void GA_Step_max_patch(int g_a, int alo[], int ahi[], int g_b, blo[], bhi[], double *step)
+void GA_Step_max_patch(int g_a, int alo[], int ahi[],
+                       int g_b, int blo[], int bhi[],
+                       void *step)
 \end{ccode}
 \begin{funcargs}
-\inarg{g_a}{,g_b}{array handles where g_b is step direction}
-\outarg{}{step}{the maximum step}
+\inarg{int}{g_a}{array handle}
+\inarg{int}{g_b}{array handle; step direction}
+\outarg{void*}{step}{the maximum step}
 \end{funcargs}
 \end{capi}
 
@@ -9452,28 +9599,44 @@ subroutine ga_step_max_patch(g_a, alo, ahi, g_b, blo, bhi, step)
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::stepMaxPatch(int *alo, int *ahi, const GlobalArray *g_b,
-                               int *blo, int *bhi, double *step) const
-void GlobalArray::stepMaxPatch(int64_t *alo, int64_t *ahi, const GlobalArray
-                               *g_b, int64_t *blo, int64_t *bhi,
-                               double *step) const
+void GlobalArray::stepMaxPatch(int *alo, int *ahi,
+        const GlobalArray *g_b, int *blo, int *bhi,
+        double *step) const
+void GlobalArray::stepMaxPatch(
+        int64_t *alo, int64_t *ahi,
+        const GlobalArray *g_b, int64_t *blo, int64_t *bhi,
+        double *step) const
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{g_b}{global array representing step direction}
-\inarg{}{alo}{g_a lower corner patch coordinates}
-\inarg{}{ahi}{g_a upper corner patch coordinates}
-\inarg{}{blo}{g_b lower corner patch coordinates}
-\inarg{}{bhi}{g_b upper corner patch coordinates}
+\inarg{const GlobalArray*}{g_b}{global array representing step direction}
+\inarg{int*}{alo}{g_a lower corner patch coordinates}
+\inarg{int*}{ahi}{g_a upper corner patch coordinates}
+\inarg{int*}{blo}{g_b lower corner patch coordinates}
+\inarg{int*}{bhi}{g_b upper corner patch coordinates}
 \end{funcargs}
 \end{cxxapi}
+
+\begin{pyapi}
+\begin{pycode}
+ga.step_max(int g_a, int g_b, alo=None, ahi=None, blo=None, bhi=None)
+\end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\inarg{int}{g_b}{array handle; step direction}
+\inarg{1D array-like of integers}{alo}{lower bound patch coordinates of g_a, inclusive}
+\inarg{1D array-like of integers}{ahi}{higher bound patch coordinates of g_a, exclusive}
+\inarg{1D array-like of integers}{blo}{lower bound patch coordinates of g_b, inclusive}
+\inarg{1D array-like of integers}{bhi}{higher bound patch coordinates of g_b, exclusive}
+\end{funcargs}
+\end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
-Calculates the largest multiple of a vector g_b that can be added to this vector g_a while keeping each element of this vector non-negative.
-
+Calculates the largest multiple of a vector g_b that can be added to this
+vector g_a while keeping each element of this vector non-negative.
 \end{desc}
+
 
 \apih{PGROUP GET DEFAULT}{Set default GA processor group}
 
@@ -9497,17 +9660,18 @@ static PGroup* PGroup::getDefault()
 
 \begin{pyapi}
 \begin{pycode}
-pgroup_get_default()
+ret = ga.pgroup_get_default()
 \end{pycode}
 \end{pyapi}
 
 \local
 
 \begin{desc}
-
-This function will return a handle to the default processor group, which can then be used to create a global array using one of the NGA_create_*_config or GA_Set_pgroup calls.
-
+This function will return a handle to the default processor group, which can
+then be used to create a global array using one of the NGA_create_*_config or
+GA_Set_pgroup calls.
 \end{desc}
+
 
 \apih{PGROUP GET MIRROR}{Get the mirrored processor group}
 
@@ -9531,17 +9695,18 @@ static PGroup * PGroup::getMirror()
 
 \begin{pyapi}
 \begin{pycode}
-pgroup_get_mirror()
+ret = ga.pgroup_get_mirror()
 \end{pycode}
 \end{pyapi}
 
 \local
 
 \begin{desc}
-
-This function will return a handle to the mirrored processor group, which can then be used to create a global array using one of the NGA_create_*_config or GA_Set_pgroup calls.
-
+This function will return a handle to the mirrored processor group, which can
+then be used to create a global array using one of the NGA_create_*_config or
+GA_Set_pgroup calls.
 \end{desc}
+
 
 \apih{PGROUP GET WORLD}{Get the world processor group}
 
@@ -9565,17 +9730,18 @@ static PGroup * PGroup::getWorld()
 
 \begin{pyapi}
 \begin{pycode}
-pgroup_get_world()
+ret = ga.pgroup_get_world()
 \end{pycode}
 \end{pyapi}
 
 \local
 
 \begin{desc}
-
-This function will return a handle to the world processor group, which can then be used to create a global array using one of the NGA_create_*_config or GA_Set_pgroup calls.
-
+This function will return a handle to the world processor group, which can then
+be used to create a global array using one of the NGA_create_*_config or
+GA_Set_pgroup calls.
 \end{desc}
+
 
 \apih{PGROUP SYNC}{Synchronize processes in a processor group}
 
@@ -9584,7 +9750,7 @@ This function will return a handle to the world processor group, which can then 
 void GA_Pgroup_sync(int p_handle)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{p_handle}{processor group handle}
+\inarg{int}{p_handle}{processor group handle}
 \end{funcargs}
 \end{capi}
 
@@ -9605,17 +9771,20 @@ void PGroup::sync()
 
 \begin{pyapi}
 \begin{pycode}
-pgroup_sync(int pgroup)
+ga.pgroup_sync(int pgroup)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{p_handle}{processor group handle}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
-This operation executes a synchronization group across the processors in the processor group specified by p_handle. Nodes outside this group are unaffected.
-
+This operation executes a synchronization group across the processors in the
+processor group specified by p_handle. Nodes outside this group are unaffected.
 \end{desc}
+
 
 \apih{PGROUP BRDCST}{Broadcast elements among processes in a processor group}
 
@@ -9624,10 +9793,10 @@ This operation executes a synchronization group across the processors in the pro
 void GA_Pgroup_brdcst(int p_handle, void* buf, int lenbuf, int root)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{p_handle}{processor group handle}
-\inoutarg{}{buf}{pointer to buffer containing data}
-\inarg{}{lenbuf}{length of data (in bytes)}
-\inarg{}{root}{processor sending message}
+\inarg{int}{p_handle}{processor group handle}
+\inoutarg{void*}{buf}{pointer to buffer containing data}
+\inarg{int}{lenbuf}{length of data (in bytes)}
+\inarg{int}{root}{processor sending message}
 \end{funcargs}
 \end{capi}
 
@@ -9649,25 +9818,26 @@ subroutine ga_pgroup_brdcst(p_handle, type, buf, lenbuf, root)
 void PGroup::brdcst(void* buf, int lenbuf, int root)
 \end{cxxcode}
 \begin{funcargs}
-\inoutarg{}{buf}{pointer to buffer containing data}
-\inarg{}{lenbuf}{length of data (in bytes)}
-\inarg{}{root}{processor sending message}
+\inoutarg{void*}{buf}{pointer to buffer containing data}
+\inarg{int}{lenbuf}{length of data (in bytes)}
+\inarg{int}{root}{processor sending message}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-pgroup_brdcst(int pgroup, ndarray buffer, int root)
-   pgroup (int)        - processor group handle
-   buffer (array-like) - the message
-   root (int)          - the process which is sending
+ret = ga.pgroup_brdcst(int pgroup, buffer, int root=0)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{pgroup}{processor group handle}
+\inarg{1D array-like of objects}{buffer}{the ndarray message (converted to the appropriate type)}
+\inarg{int}{root}{the process which is sending}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
 Broadcast data from processor specified by root to all other processors in the
 processor group specified by p_handle. The length of the message in bytes is
 specified by lenbuf. The initial and broadcasted data can be found in the
@@ -9678,156 +9848,51 @@ only for convenience purposes: it is available regardless of the
 message-passing library that GA is running with.
 
 Returns: The buffer in case a temporary was passed in.
-
 \end{desc}
 
-\apih{PGROUP DGOP}{Double global operation with a processor group}
+
+\apih{PGROUP GOP}{Global operation with a processor group}
 
 \begin{capi}
 \begin{ccode}
+void GA_Pgroup_fgop(int p_handle, float buf*, int n, char* op)
 void GA_Pgroup_dgop(int p_handle, double buf*, int n, char* op)
+void GA_Pgroup_igop(int p_handle, int buf*, int n, char* op)
+void GA_Pgroup_lgop(int p_handle, long buf*, int n, char* op)
+void GA_Pgroup_llgop(int p_handle, long long buf*, int n, char* op)
+void GA_Pgroup_cgop(int p_handle, SingleComplex buf*, int n, char* op)
+void GA_Pgroup_zgop(int p_handle, DoubleComplex buf*, int n, char* op)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{p_handle}{processor group handle}
-\inoutarg{}{buf}{buffer containing data}
-\inarg{}{n}{number of elements in x}
-\inarg{}{op}{operation to be performed}
-\end{funcargs}
-\end{capi}
-
-\begin{fapi}
-\begin{fcode}
-subroutine ga_pgroup_dgop(p_handle, type, buf, n, op)
-\end{fcode}
-\begin{funcargs}
-\inarg{integer}{p_handle}{processor group handle}
-\inarg{integer}{type}{message index}
-\inoutarg{double precision}{buf(n)}{double precision array}
-\inarg{integer}{n}{number elements in array}
-\inarg{character*(*)}{op}{operation on data}
-\end{funcargs}
-\end{fapi}
-
-\begin{cxxapi}
-\begin{cxxcode}
-void PGroup::gop(double *buf, int n, char* op)
-\end{cxxcode}
-\begin{funcargs}
-\inarg{}{n}{number of elements}
-\inoutarg{}{x[n]}{array of elements}
-\inarg{}{op}{operator}
-\end{funcargs}
-\end{cxxapi}
-
-\gcoll
-
-\begin{desc}
-
-The buf[n] is a double precision array present on each processor in the processor group p_handle. The GA_Pgroup_dgop `sums' all elements in buf[n] across all processors in the group specified by p_handle using the commutative operation specified by the character string op.  The result is broadcast to all processor in p_handle. Allowed strings are `+', `*', `max', `min', `absmax', `absmin'. The use of lowerecase for operators is necessary.
-
-\end{desc}
-
-\apih{PGROUP IGOP}{Integer global operation within a processor group}
-
-\begin{capi}
-\begin{ccode}
-void GA_Pgroup_igop(int p_handle, double buf*, int n, char* op)
-\end{ccode}
-\begin{funcargs}
-\inarg{}{p_handle}{processor group handle}
-\inoutarg{}{buf}{buffer containing data}
-\inarg{}{n}{number of elements in x}
-\inarg{}{op}{operation to be performed}
+\inarg{int}{p_handle}{processor group handle}
+\inoutarg{float*}{buf}{buffer containing data}
+\inoutarg{double*}{buf}{buffer containing data}
+\inoutarg{int*}{buf}{buffer containing data}
+\inoutarg{long*}{buf}{buffer containing data}
+\inoutarg{long long*}{buf}{buffer containing data}
+\inoutarg{SingleComplex*}{buf}{buffer containing data}
+\inoutarg{DoubleComplex*}{buf}{buffer containing data}
+\inarg{int}{n}{number of elements in x}
+\inarg{char*}{op}{operation to be performed}
 \end{funcargs}
 \end{capi}
 
 \begin{fapi}
 \begin{fcode}
 subroutine ga_pgroup_igop(p_handle, type, buf, n, op)
-\end{fcode}
-\begin{funcargs}
-\inarg{integer}{p_handle}{processor group handle}
-\inarg{integer}{type}{message index}
-\inoutarg{integer}{buf(n)}{integer array}
-\inarg{integer}{n}{number elements in array}
-\inarg{character*(*)}{op}{operation on data}
-\end{funcargs}
-\end{fapi}
-
-\begin{cxxapi}
-\begin{cxxcode}
-void PGroup::gop(int *buf, int n, char* op)
-\end{cxxcode}
-\begin{funcargs}
-\inarg{}{n}{number of elements}
-\inoutarg{}{x[n]}{array of elements}
-\inarg{}{op}{operator}
-\end{funcargs}
-\end{cxxapi}
-
-\gcoll
-
-\begin{desc}
-
-The buf[n] is an integer array present on each processor in the processor group p_handle. The GA_Pgroup_igop `sums' all elements in buf[n] across all processors in the group specified by p_handle using the commutative operation specified by the character string op.  The result is broadcast to all processors in p_handle. Allowed strings are `+', `*', `max', `min', `absmax', `absmin'. The use of lowerecase for operators is necessary.
-
-\end{desc}
-
-\apih{PGROUP LGOP}{Long global operation in a processor group}
-
-\begin{capi}
-\begin{ccode}
-void GA_Pgroup_lgop(int p_handle, double buf*, int n, char* op)
-\end{ccode}
-\begin{funcargs}
-\inarg{}{p_handle}{processor group handle}
-\inoutarg{}{buf}{buffer containing data}
-\inarg{}{n}{number of elements in x}
-\inarg{}{op}{operation to be performed}
-\end{funcargs}
-\end{capi}
-
-\begin{cxxapi}
-\begin{cxxcode}
-void PGroup::gop(long *buf, int n, char* op)
-\end{cxxcode}
-\begin{funcargs}
-\inarg{}{n}{number of elements}
-\inoutarg{}{x[n]}{array of elements}
-\inarg{}{op}{operator}
-\end{funcargs}
-\end{cxxapi}
-
-\gcoll
-
-\begin{desc}
-
-The buf[n] is a long integer array present on each processor in the processor group p_handle. The GA_Pgroup_lgop `sums' all elements in buf[n] across all processors in the group specified by p_handle using the commutative operation specified by the character string op.  The result is broadcast to all processors in p_handle. Allowed strings are `+', `*', `max', `min', `absmax', `absmin'. The use of lowerecase for operators is necessary.
-
-\end{desc}
-
-\apih{PGROUP FGOP}{Floating point global operation in a processor group}
-
-\begin{capi}
-\begin{ccode}
-void GA_Pgroup_lgop(int p_handle, double buf*, int n, char* op)
-\end{ccode}
-\begin{funcargs}
-\inarg{}{p_handle}{processor group handle}
-\inoutarg{}{buf}{buffer containing data}
-\inarg{}{n}{number of elements in x}
-\inarg{}{op}{operation to be performed}
-\end{funcargs}
-\end{capi}
-
-\begin{fapi}
-\begin{fcode}
 subroutine ga_pgroup_sgop(p_handle, type, buf, n, op)
+subroutine ga_pgroup_dgop(p_handle, type, buf, n, op)
+subroutine ga_pgroup_cgop(p_handle, type, buf, n, op)
+subroutine ga_pgroup_zgop(p_handle, type, buf, n, op)
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{p_handle}{processor group handle}
-\inarg{integer}{type}{message index}
-\inoutarg{real}{buf(n)}{single precision array}
+\inarg{integer}{type}{message index (deprecated)}
+\inoutarg{integer}{buf(n)}{array}
+\inoutarg{real}{buf(n)}{array}
+\inoutarg{double precision}{buf(n)}{array}
+\inoutarg{single complex}{buf(n)}{array}
+\inoutarg{double complex}{buf(n)}{array}
 \inarg{integer}{n}{number elements in array}
 \inarg{character*(*)}{op}{operation on data}
 \end{funcargs}
@@ -9836,21 +9901,50 @@ subroutine ga_pgroup_sgop(p_handle, type, buf, n, op)
 \begin{cxxapi}
 \begin{cxxcode}
 void PGroup::gop(float *buf, int n, char* op)
+void PGroup::gop(double *buf, int n, char* op)
+void PGroup::gop(int *buf, int n, char* op)
+void PGroup::gop(long *buf, int n, char* op)
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{n}{number of elements}
-\inoutarg{}{x[n]}{array of elements}
-\inarg{}{op}{operator}
+\inarg{int}{n}{number of elements}
+\inoutarg{float*}{x[n]}{array of elements}
+\inoutarg{double*}{x[n]}{array of elements}
+\inoutarg{int*}{x[n]}{array of elements}
+\inoutarg{long*}{x[n]}{array of elements}
+\inarg{char*}{op}{operator}
 \end{funcargs}
 \end{cxxapi}
+
+\begin{pyapi}
+\begin{pycode}
+ret = ga.pgroup_gop(int pgroup, X, char *op)
+ret = ga.pgroup_gop_add(int pgroup, X)
+ret = ga.pgroup_gop_multiply(int pgroup, X)
+ret = ga.pgroup_gop_max(int pgroup, X)
+ret = ga.pgroup_gop_min(int pgroup, X)
+ret = ga.pgroup_gop_absmax(int pgroup, X)
+ret = ga.pgroup_gop_absmin(int pgroup, X)
+\end{pycode}
+\begin{funcargs}
+\inarg{1D array-like}{X}{elements}
+\inarg{char*}{op}{operator}
+\outarg{ndarray}{ret}{result after numpy.asarray(X) followed by the operation}
+\end{funcargs}
+\end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
-The buf[n] is a single precision array present on each processor in the processor group p_handle. The GA_Pgroup_fgop `sums' all elements in buf[n] across all processors in the group specified by p_handle using the commutative operation specified by the character string op.  The result is broadcast to all processors in p_handle. Allowed strings are `+', `*', `max', `min', `absmax', `absmin'. The use of lowerecase for operators is necessary.
-
+The buf[n] is an array present on each processor in the processor group
+p_handle. The GA_Pgroup_dgop `sums' all elements in buf[n] across all
+processors in the group specified by p_handle using the commutative operation
+specified by the character string op.  The result is broadcast to all processor
+in p_handle. Allowed strings are `+', `*', `max', `min', `absmax', `absmin'.
+The use of lowerecase for operators is necessary.
 \end{desc}
+
+\seealso{GOP}
+
 
 \apih{PGROUP NNODES}{Number of GA ranks in a processor group}
 
@@ -9859,7 +9953,7 @@ The buf[n] is a single precision array present on each processor in the processo
 int GA_Pgroup_nnodes(int p_handle)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{p_handle}{processor group handle}
+\inarg{int}{p_handle}{processor group handle}
 \end{funcargs}
 \end{capi}
 
@@ -9880,21 +9974,23 @@ int PGroup::nodes()
 
 \begin{pyapi}
 \begin{pycode}
-pgroup_nnodes(int pgroup)
-   pgroup (int)                  - the group handle
+ret = ga.pgroup_nnodes(int pgroup)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{pgroup}{processor group handle}
+\end{funcargs}
 \end{pyapi}
 
 \local
 
 \begin{desc}
-
-This function returns the number of processors contained in the group specified by p_handle.
+This function returns the number of processors contained in the group specified
+by p_handle.
 
 Returns the number of processors contained in the group specified by
 pgroup.
-
 \end{desc}
+
 
 \apih{PGROUP NODEID}{GA rank of invoking process in a processor group}
 
@@ -9903,7 +9999,7 @@ pgroup.
 int GA_Pgroup_nodeid(int p_handle)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{p_handle}{processor group handle}
+\inarg{int}{p_handle}{processor group handle}
 \end{funcargs}
 \end{capi}
 
@@ -9924,21 +10020,25 @@ int PGroup::nodeid()
 
 \begin{pyapi}
 \begin{pycode}
-pgroup_nodeid(int pgroup)
-   pgroup (int)                  - the group handle
+ret = ga.pgroup_nodeid(int pgroup)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{p_handle}{processor group handle}
+\end{funcargs}
 \end{pyapi}
 
 \local
 
 \begin{desc}
-
-This function returns the relative index of the processor in the processor group specified by p_handle. This index will generally differ from the absolute processor index returned by GA_Nodeid if the processor group is not the world group.
+This function returns the relative index of the processor in the processor
+group specified by p_handle. This index will generally differ from the absolute
+processor index returned by GA_Nodeid if the processor group is not the world
+group.
 
 Returns the relative index of the processor in the processor group
 specified by pgroup.
-
 \end{desc}
+
 
 \apih{MERGE MIRRORED}{Merge a mirrored global array}
 
@@ -9947,7 +10047,7 @@ specified by pgroup.
 int GA_Merge_mirrored(int g_a)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a}{array handles}
+\inarg{int}{g_a}{array handles}
 \end{funcargs}
 \end{capi}
 
@@ -9968,18 +10068,22 @@ void GlobalArray::mergeMirrored()
 
 \begin{pyapi}
 \begin{pycode}
-merge_mirrored(int g_a)
-   g_a (int)                     - array handle
+ga.merge_mirrored(int g_a)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handles}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
-This subroutine merges mirrored arrays by adding the contents of each array across nodes. The result is that each mirrored copy of the array represented by g_a is the sum of the individual arrays before the merge operation. After the merge, all mirrored arrays are equal.
-
+This subroutine merges mirrored arrays by adding the contents of each array
+across nodes. The result is that each mirrored copy of the array represented by
+g_a is the sum of the individual arrays before the merge operation. After the
+merge, all mirrored arrays are equal.
 \end{desc}
+
 
 \apih{IS MIRRORED}{Check whether a global array is mirrored}
 
@@ -9988,7 +10092,7 @@ This subroutine merges mirrored arrays by adding the contents of each array acro
 int GA_Is_mirrored(int g_a)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a}{array handle}
+\inarg{int}{g_a}{array handle}
 \end{funcargs}
 \end{capi}
 
@@ -10009,28 +10113,34 @@ int GlobalArray::isMirrored()
 
 \begin{pyapi}
 \begin{pycode}
-is_mirrored(int g_a)
+ret = ga.is_mirrored(int g_a)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\outarg{bool}{ret}{True/False}
+\end{funcargs}
 \end{pyapi}
 
 \local
 
 \begin{desc}
-
-This subroutine checks if the array is a mirrored array or not. Returns 1 if it is a mirrored array, else it returns 0.
-
+This subroutine checks if the array is a mirrored array or not. Returns 1 if it
+is a mirrored array, else it returns 0.
 \end{desc}
+
 
 \apih{MERGE DISTR PATCH}{Merge a patched of a mirrored global array}
 
 \begin{capi}
 \begin{ccode}
-int NGA_Merge_distr_patch(int g_a, int alo[], int ahi[], int g_b, int blo[], int bhi[])
+int NGA_Merge_distr_patch(int g_a, int alo[], int ahi[],
+                          int g_b, int blo[], int bhi[])
 \end{ccode}
 \begin{funcargs}
-\inarg{g_a}{,g_b}{array handles}
-\inarg{}{alo[],ahi[]}{g_a patch coordinates}
-\inarg{}{blo[],bhi[]}{g_b patch coordinates}
+\inarg{int}{g_a}{array handle}
+\inarg{int}{g_b}{array handle}
+\inarg{int*}{alo[],ahi[]}{g_a patch coordinates}
+\inarg{int*}{blo[],bhi[]}{g_b patch coordinates}
 \end{funcargs}
 \end{capi}
 
@@ -10048,53 +10158,58 @@ integer nga_merge_distr_patch(g_a, alo, ahi, g_b, blo, bhi)
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::mergeDistrPatch(int alo[], int ahi[], GlobalArray *g_a,
-                                  int blo[], int bhi[])
-void GlobalArray::mergeDistrPatch(int64_t alo[], int64_t ahi[], GlobalArray *g_a,
-                                  int64_t blo[], int64_t bhi[])
+void GlobalArray::mergeDistrPatch(
+        int alo[], int ahi[], GlobalArray *g_a,
+        int blo[], int bhi[])
+void GlobalArray::mergeDistrPatch(
+        int64_t alo[], int64_t ahi[], GlobalArray *g_a,
+        int64_t blo[], int64_t bhi[])
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{alo[ndim]}{patch indices of mirrored array}
-\inarg{}{ahi[ndim]}{patch indices of mirrored array}
-\inarg{}{blo[ndim]}{patch indices of result array}
-\inarg{}{bhi[ndim]}{patch indices of result array}
-\outarg{}{g_a}{global array containing result}
+\inarg{int*}{alo[ndim]}{patch indices of mirrored array}
+\inarg{int*}{ahi[ndim]}{patch indices of mirrored array}
+\inarg{int*}{blo[ndim]}{patch indices of result array}
+\inarg{int*}{bhi[ndim]}{patch indices of result array}
+\inarg{GlobalArray*}{g_a}{global array containing result}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-merge_distr_patch(int g_a, alo, ahi, int g_b, blo, bhi)
-   g_a (int)                       - array handle
-   alo (1D array-like of integers) - g_a patch coordinate
-   ahi (1D array-like of integers) - g_a patch coordinate
-   g_b (int)                       - array handle
-   blo (1D array-like of integers) - g_b patch coordinate
-   bhi (1D array-like of integers) - g_b patch coordinate
+ga.merge_distr_patch(int g_a, alo, ahi, int g_b, blo, bhi)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\inarg{1D array-like of integers}{alo}{g_a patch coordinate}
+\inarg{1D array-like of integers}{ahi}{g_a patch coordinate}
+\inarg{int}{g_b}{array handle}
+\inarg{1D array-like of integers}{blo}{g_b patch coordinate}
+\inarg{1D array-like of integers}{bhi}{g_b patch coordinate}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
-This function merges all copies of a patch of a mirrored array (g_a) into a patch in a distributed array (g_b).
-
+This function merges all copies of a patch of a mirrored array (g_a) into a
+patch in a distributed array (g_b).
 \end{desc}
+
 
 \apih{NBGET}{Non-blocking get from a global array}
 
 \begin{capi}
 \begin{ccode}
-void NGA_NbGet(int g_a, int lo[], int hi[], void* buf, int ld[], ga_nbhdl_t* nbhandle)
+void NGA_NbGet(int g_a, int lo[], int hi[],
+               void* buf, int ld[], ga_nbhdl_t* nbhandle)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a}{global array handle}
-\inarg{}{lo[ndim]}{array of starting indices for global array section}
-\inarg{}{hi[ndim]}{array of ending indices for global array section}
-\outarg{}{buf}{pointer to the local buffer array where the data goes}
-\inarg{ld}{[ndim-1]}{array specifying leading dimensions/strides/extents for buffer array}
-\inarg{}{nbhandle}{pointer to the non-blocking request handle}
+\inarg{int}{g_a}{global array handle}
+\inarg{int*}{lo[ndim]}{array of starting indices for global array section}
+\inarg{int*}{hi[ndim]}{array of ending indices for global array section}
+\outarg{void*}{buf}{pointer to the local buffer array where the data goes}
+\inarg{int*}{ld[ndim-1]}{array specifying leading dimensions/strides/extents for buffer array}
+\inarg{ga_nbhdl_t*}{nbhandle}{pointer to the non-blocking request handle}
 \end{funcargs}
 \end{capi}
 
@@ -10128,60 +10243,64 @@ subroutine nga_nbget(g_a, lo, hi, buf, ld, nbhandle)
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::nbGet(int lo[], int hi[], void *buf, int ld[],
-                        GANbhdl *nbhandle)
-void GlobalArray::nbGet(int64_t lo[], int64_t hi[], void *buf, int64_t ld[],
-                        GANbhdl *nbhandle)
+void GlobalArray::nbGet(int lo[], int hi[],
+                        void *buf, int ld[], GANbhdl *nbhandle)
+void GlobalArray::nbGet(int64_t lo[], int64_t hi[],
+                        void *buf, int64_t ld[], GANbhdl *nbhandle)
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{lo[ndim]}{patch coordinates of block}
-\inarg{}{hi[ndim]}{patch coordinates of block}
-\inarg{}{buf}{local buffer to receive data}
-\inarg{}{ld[ndim-1]}{array of strides for local data}
-\outarg{}{nbhandle}{nonblocking handle}
+\inarg{int*}{lo[ndim]}{patch coordinates of block}
+\inarg{int*}{hi[ndim]}{patch coordinates of block}
+\inarg{void*}{buf}{local buffer to receive data}
+\inarg{int*}{ld[ndim-1]}{array of strides for local data}
+\outarg{GANbhdl*}{nbhandle}{nonblocking handle}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-nbget(int g_a, lo=None, hi=None, ndarray buffer=None)
-   g_a (int)                      - the array handle
-   lo (1D array-like of integers) - lower bound patch coordinates, inclusive
-   hi (1D array-like of integers) - higher bound patch coordinates, exclusive
-   buffer (ndarray)               - Fill this buffer instead of allocating a
-                                    new one internally. Must be contiguous and
-                                    have same number of elements as patch.
+ret,nbhandle = ga.nbget(int g_a, lo=None, hi=None, ndarray buffer=None)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{the array handle}
+\inarg{1D array-like of ints}{lo}{lower bound patch coordinates, inclusive}
+\inarg{1D array-like of ints}{hi}{higher bound patch coordinates, exclusive}
+\inarg{ndarray}{buffer}{an ndarray of the appropriate type, large enough to hold lo,hi}
+\outarg{ndarray}{ret}{local buffer array where the data goes to}
+\outarg{ga_nbhdl_t}{nbhandle}{non-blocking handle}
+\end{funcargs}
 \end{pyapi}
 
 \ncoll
 
 \begin{desc}
-
-A non-blocking version of the blocking get operation. The get operation can be completed locally by making a call to the wait (e.g., NGA_NbWait) routine.
+A non-blocking version of the blocking get operation. The get operation can be
+completed locally by making a call to the wait (e.g., NGA_NbWait) routine.
 
 Copies data from global array section to the local array buffer.
 
-The local array is assumed to be have the same number of dimensions as the global array. Any detected inconsitencies/errors in the input arguments are fatal.
+The local array is assumed to be have the same number of dimensions as the
+global array. Any detected inconsitencies/errors in the input arguments are
+fatal.
 
 Returns: The local array buffer.
-
 \end{desc}
+
 
 \apih{NBPUT}{Non-blocking put into a global array}
 
 \begin{capi}
 \begin{ccode}
-void NGA_NbPut(int g_a, int lo[], int hi[], void* buf, int ld[],
-ga_nbhdl_t* nbhandle)
+void NGA_NbPut(int g_a, int lo[], int hi[],
+               void* buf, int ld[], ga_nbhdl_t* nbhandle)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a}{global array handle}
-\inarg{}{lo[ndim]}{array of starting indices for global array section}
-\inarg{}{hi[ndim]}{array of ending indices for global array section}
-\inarg{}{buf}{pointer to the local buffer array where the data is}
-\inarg{ld}{[ndim-1]}{array specifying leading dimensions/strides/extents for buffer array}
-\inarg{}{nbhandle}{pointer to the non-blocking request handle}
+\inarg{int}{g_a}{global array handle}
+\inarg{int*}{lo[ndim]}{array of starting indices for global array section}
+\inarg{int*}{hi[ndim]}{array of ending indices for global array section}
+\inarg{void*}{buf}{pointer to the local buffer array where the data is}
+\inarg{int*}{ld[ndim-1]}{array specifying leading dimensions/strides/extents for buffer array}
+\inarg{ga_nbhdl_t*}{nbhandle}{pointer to the non-blocking request handle}
 \end{funcargs}
 \end{capi}
 
@@ -10215,59 +10334,61 @@ subroutine nga_nbput(g_a, lo, hi, buf, ld, nbhandle)
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::nbPut(int lo[], int hi[], void *buf, int ld[],
-                        GANbhdl *nbhandle)
-void GlobalArray::nbPut(int64_t lo[], int64_t hi[], void *buf, int64_t ld[],
-                        GANbhdl *nbhandle)
+void GlobalArray::nbPut(int lo[], int hi[],
+                        void *buf, int ld[], GANbhdl *nbhandle)
+void GlobalArray::nbPut(int64_t lo[], int64_t hi[],
+                        void *buf, int64_t ld[], GANbhdl *nbhandle)
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{lo[ndim]}{patch coordinates of block}
-\inarg{}{hi[ndim]}{patch coordinates of block}
-\inarg{}{buf}{local buffer to receive data}
-\inarg{}{ld[ndim-1]}{array of strides for local data}
-\outarg{}{nbhandle}{nonblocking handle}
+\inarg{int*}{lo[ndim]}{patch coordinates of block}
+\inarg{int*}{hi[ndim]}{patch coordinates of block}
+\inarg{void*}{buf}{local buffer to receive data}
+\inarg{int*}{ld[ndim-1]}{array of strides for local data}
+\outarg{GANbhdl*}{nbhandle}{nonblocking handle}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-nbput(int g_a, buffer, lo=None, hi=None)
-   g_a (int)                      - the array handle
-   buffer (array-like)            - the data to put
-   lo (1D array-like of integers) - lower bound patch coordinates,
-                                    inclusive
-   hi (1D array-like of integers) - higher bound patch coordinates,
-                                    exclusive
+nbhandle = ga.nbput(int g_a, buffer, lo=None, hi=None)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{the array handle}
+\inarg{array-like}{buffer}{the data to put}
+\inarg{1D array-like of ints}{lo}{lower bound patch coordinates, inclusive}
+\inarg{1D array-like of ints}{hi}{higher bound patch coordinates, exclusive}
+\outarg{ga_nbhdl_t}{nbhandle}{non-blocking handle}
+\end{funcargs}
 \end{pyapi}
 
 \ncoll
 
 \begin{desc}
-
-A non-blocking version of the blocking put operation. The put operation can be completed locally by making a call to the wait (e.g., NGA_NbWait) routine.
+A non-blocking version of the blocking put operation. The put operation can be
+completed locally by making a call to the wait (e.g., NGA_NbWait) routine.
 
 Copies data from local array buffer to the global array section.
 
-The local array is assumed to be have the same number of dimensions as the global array. Any detected inconsitencies/errors in input arguments are fatal.
-
+The local array is assumed to be have the same number of dimensions as the
+global array. Any detected inconsitencies/errors in input arguments are fatal.
 \end{desc}
+
 
 \apih{NBACC}{Non-blocking accumulate into a global array}
 
 \begin{capi}
 \begin{ccode}
-void NGA_NbAcc(int g_a, int lo[], int hi[], void* buf, int ld[], void *alpha,
-               ga_nbhdl_t* nbhandle)
+void NGA_NbAcc(int g_a, int lo[], int hi[], void* buf, int ld[],
+               void *alpha, ga_nbhdl_t* nbhandle)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a}{global array handle}
-\inarg{}{lo[ndim]}{array of starting indices for global array section}
-\inarg{}{hi[ndim]}{array of ending indices for global array section}
-\inarg{}{buf}{pointer to the local buffer array where the data is}
-\inarg{ld}{[ndim-1]}{array specifying leading dimensions/strides/extents for buffer array}
-\inarg{double/double complex/long*}{alpha}{scale factor}
-\inarg{}{nbhandle}{pointer to the non-blocking request handle}
+\inarg{int}{g_a}{global array handle}
+\inarg{int*}{lo[ndim]}{array of starting indices for global array section}
+\inarg{int*}{hi[ndim]}{array of ending indices for global array section}
+\inarg{void*}{buf}{pointer to the local buffer array where the data is}
+\inarg{int}{ld[ndim-1]}{array specifying leading dimensions/strides/extents for buffer array}
+\inarg{void*}{alpha}{double/double complex/long* scale factor}
+\outarg{}{nbhandle}{pointer to the non-blocking request handle}
 \end{funcargs}
 \end{capi}
 
@@ -10279,10 +10400,10 @@ subroutine ga_nbacc(g_a, ilo, ihi, jlo, jhi, buf, ld, alpha, nbhandle)
 \inarg{integer}{g_a}{global array handle}
 \inarg{integer}{ilo,ihi}{starting indices for global array section}
 \inarg{integer}{jlo,jhi}{ending indices for global array section}
-\inarg{}{typebuf}{local buffer array where the data is}
+\inarg{}{buf}{local buffer array where the data is}
 \inarg{integer}{ld}{leading dimension/stride/extent for buffer array}
 \inarg{double precision/complex}{alpha}{scale factor}
-\inarg{integer}{nbhandle}{non-blocking request handle}
+\outarg{integer}{nbhandle}{non-blocking request handle}
 \end{funcargs}
 \end{f2dapi}
 
@@ -10295,59 +10416,63 @@ subroutine nga_nbacc(g_a, lo, hi, buf, ld, alpha, nbhandle)
 \inarg{integer}{ndim}{number of dimensions of the global array}
 \inarg{integer}{lo[ndim]}{array of starting indices for global array section}
 \inarg{integer}{hi[ndim]}{array of ending indices for global array section}
-\inarg{}{typebuf}{local buffer array where the data is}
+\inarg{}{buf}{local buffer array where the data is}
 \inarg{integer}{ld[ndim-1]}{array specifying leading dimensions/strides/extents for buffer array}
 \inarg{double precision/complex}{alpha}{scale factor}
-\inarg{integer}{nbhandle}{non-blocking request handle}
+\outarg{integer}{nbhandle}{non-blocking request handle}
 \end{funcargs}
 \end{fapi}
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::nbAcc(int lo[], int hi[], void *buf, int ld[], void *alpha,
-                        GANbhdl *nbhandle)
-void GlobalArray::nbAcc(int64_t lo[], int64_t hi[], void *buf, int64_t ld[],
-                        void *alpha, GANbhdl *nbhandle)
+void GlobalArray::nbAcc(int lo[], int hi[],
+        void *buf, int ld[], void *alpha, GANbhdl *nbhandle)
+void GlobalArray::nbAcc(int64_t lo[], int64_t hi[],
+        void *buf, int64_t ld[], void *alpha, GANbhdl *nbhandle)
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{lo[ndim]}{patch coordinates of block}
-\inarg{}{hi[ndim]}{patch coordinates of block}
-\inarg{}{buf}{local buffer to receive data}
-\inarg{}{ld[ndim-1]}{array of strides for local data}
-\inarg{alpha}{}{multiplier for data before adding to existing results}
-\outarg{}{nbhandle}{nonblocking handle}
+\inarg{int*}{lo[ndim]}{patch coordinates of block}
+\inarg{int*}{hi[ndim]}{patch coordinates of block}
+\inarg{void*}{buf}{local buffer to receive data}
+\inarg{int*}{ld[ndim-1]}{array of strides for local data}
+\inarg{void*}{alpha}{multiplier for data before adding to existing results}
+\outarg{GANbhdl*}{nbhandle}{nonblocking handle}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-nbacc(int g_a, buffer, lo=None, hi=None, alpha=None)
-   g_a (int)                      - the array handle
-   buffer (array-like)            - must be contiguous and have same number
-                                    of elements as patch
-   lo (1D array-like of integers) - lower bound patch coordinates, inclusive
-   hi (1D array-like of integers) - higher bound patch coordinates, exclusive
-   alpha (object)                 - multiplier (converted to the appropriate type)
+nbhandle = ga.acc(int g_a, buffer, lo=None, hi=None, alpha=None)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{the array handle}
+\inarg{array-like}{buffer}{the data to put}
+\inarg{1D array-like of ints}{lo}{lower bound patch coordinates, inclusive}
+\inarg{1D array-like of ints}{hi}{higher bound patch coordinates, exclusive}
+\inarg{object}{alpha}{scale factor, cast to the appropriate type}
+\outarg{ga_nbhdl_t}{nbhandle}{nonblocking handle}
+\end{funcargs}
 \end{pyapi}
 
 \ncoll
 
 \begin{desc}
-
-A non-blocking version of the blocking accumulate operation. The accumulate operation can be completed locally by making a call to the wait (e.g., NGA_NbWait) routine.
+A non-blocking version of the blocking accumulate operation. The accumulate
+operation can be completed locally by making a call to the wait (e.g.,
+NGA_NbWait) routine.
 
 Non-blocking version of ga.acc.
 
-The accumulate operation can be completed locally by making a call to the ga.nbwait() routine.
+The accumulate operation can be completed locally by making a call to the
+ga.nbwait() routine.
 
 Combines data from buffer with data in the global array patch.
 
 The buffer array is assumed to be have the same number of dimensions as the global array. If the buffer is not contiguous, a contiguous copy will be made.
 
 global array section (lo[],hi[]) += alpha * buffer
-
 \end{desc}
+
 
 \apih{NBWAIT}{Wait for a non-blocking GA operation}
 
@@ -10356,7 +10481,7 @@ global array section (lo[],hi[]) += alpha * buffer
 void NGA_NbWait(ga_nbhdl_t* nbhandle)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{nbhandle}{pointer to the non-blocking request handle}
+\inarg{ga_nbhdl_t*}{nbhandle}{pointer to the non-blocking request handle}
 \end{funcargs}
 \end{capi}
 
@@ -10383,24 +10508,34 @@ subroutine nga_nbwait(nbhandle)
 void GlobalArray::nbWait(GANbhdl *nbhandle)
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{nbhandle}{nonblocking handle}
+\inarg{GANbhdl*}{nbhandle}{nonblocking handle}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-nbwait(ga_nbhdl_t nbhandle)
+ga.nbwait(ga_nbhdl_t nbhandle)
 \end{pycode}
 \end{pyapi}
 
 \ncoll
 
 \begin{desc}
+This function completes a non-blocking one-sided operation locally. Waiting on
+a nonblocking put or an accumulate operation assures that data was injected
+into the network and the user buffer can now be reused. Completing a get
+operation assures data has arrived into the user memory and is ready for use.
+The wait operation ensures only local completion.
 
-This function completes a non-blocking one-sided operation locally. Waiting on a nonblocking put or an accumulate operation assures that data was injected into the network and the user buffer can now be reused. Completing a get operation assures data has arrived into the user memory and is ready for use. The wait operation ensures only local completion.
-
-Unlike their blocking counterparts, the nonblocking operations are not ordered with respect to the destination. Performance being one reason, the other reason is that by ensuring ordering we incur additional and possibly unnecessary overhead on applications that do not require their operations to be ordered. For cases where ordering is necessary, it can be done by calling a fence operation. The fence operation is provided to the user to confirm remote completion if needed.
+Unlike their blocking counterparts, the nonblocking operations are not ordered
+with respect to the destination. Performance being one reason, the other reason
+is that by ensuring ordering we incur additional and possibly unnecessary
+overhead on applications that do not require their operations to be ordered.
+For cases where ordering is necessary, it can be done by calling a fence
+operation. The fence operation is provided to the user to confirm remote
+completion if needed.
 \end{desc}
+
 
 \apih{WTIME}{Return time in seconds}
 
@@ -10424,18 +10559,16 @@ double GlobalArray::wtime()
 
 \begin{pyapi}
 \begin{pycode}
-wtime()
+ret = ga.wtime()
 \end{pycode}
 \end{pyapi}
 
 \local
 
 \begin{desc}
-
 This function returns a wall (or elapsed) time on the calling processor.
 Returns time in seconds representing elapsed wall-clock time since an arbitrary
 time in the past. Example:
-
 \begin{verbatim}
 double starttime, endtime;
 starttime = GA_Wtime();
@@ -10443,10 +10576,9 @@ starttime = GA_Wtime();
 endtime   = GA_Wtime();
 printf(\"Time taken = \%lf secondsn\", endtime-starttime);
 \end{verbatim}
-
 This function is only available in release 4.1 or greater.
-
 \end{desc}
+
 
 \apih{SET DEBUG}{Set GA debug flag}
 
@@ -10455,7 +10587,7 @@ This function is only available in release 4.1 or greater.
 void GA_Set_debug(int dbg)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{dbg}{value to set internal flag}
+\inarg{int}{dbg}{value to set internal flag}
 \end{funcargs}
 \end{capi}
 
@@ -10479,17 +10611,20 @@ void GAServices::setDebug(int dbg);
 
 \begin{pyapi}
 \begin{pycode}
-set_debug(int debug)
+ga.set_debug(int debug)
 \end{pycode}
 \end{pyapi}
 
 \local
 
 \begin{desc}
-
-This function sets an internal flag in the GA library to either true or false. The value of this flag can be recovered at any time using the GA_Get_debug function. The flag is set to false when the the GA library is initialized. This can be useful in a number of debugging situations, especially when examining the behavior of routines that are called in multiple locations in a code.
-
+This function sets an internal flag in the GA library to either true or false.
+The value of this flag can be recovered at any time using the GA_Get_debug
+function. The flag is set to false when the the GA library is initialized. This
+can be useful in a number of debugging situations, especially when examining
+the behavior of routines that are called in multiple locations in a code.
 \end{desc}
+
 
 \apih{GET DEBUG}{Retrieve value of GA debug flag}
 
@@ -10513,17 +10648,17 @@ int GlobalArray::getDebug()
 
 \begin{pyapi}
 \begin{pycode}
-get_debug()
+ret = ga.get_debug()
 \end{pycode}
 \end{pyapi}
 
 \local
 
 \begin{desc}
-
-This function returns the value of an internal flag in the GA library whose value can be set using the GA_Set_debug subroutine.
-
+This function returns the value of an internal flag in the GA library whose
+value can be set using the GA_Set_debug subroutine.
 \end{desc}
+
 
 \apih{PATCH ENUM}{Enumerate a global array patch}
 
@@ -10532,10 +10667,10 @@ This function returns the value of an internal flag in the GA library whose valu
 void GA_Patch_enum(int g_a, int lo, int hi, void *start, void *inc)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_a}{array handle}
-\inarg{lo}{,hi}{patch coordinates}
-\inarg{}{start}{starting value of enumeration}
-\inarg{}{inc}{increment value}
+\inarg{int}{g_a}{array handle}
+\inarg{int}{lo,hi}{patch coordinates}
+\inarg{void*}{start}{starting value of enumeration}
+\inarg{void*}{inc}{increment value}
 \end{funcargs}
 \end{capi}
 
@@ -10546,8 +10681,8 @@ subroutine ga_patch_enum(g_a, lo, hi, start, inc)
 \begin{funcargs}
 \inarg{integer}{g_a}{array handle}
 \inarg{integer}{lo,hi}{low and high values of array patch}
-\inarg{integer/double precision/complex}{start}{starting value of enumeration}
-\inarg{integer/double precision/complex}{inc}{increment value}
+\inarg{}{start}{integer/double precision/complex starting value of enumeration}
+\inarg{}{inc}{integer/double precision/complex increment value}
 \end{funcargs}
 \end{fapi}
 
@@ -10557,26 +10692,27 @@ void GlobalArray::patchEnum(int lo, int hi, void *istart, void *inc)
 void GlobalArray::patchEnum(int64_t lo, int64_t hi, void *start, void *inc)
 \end{cxxcode}
 \begin{funcargs}
-\inarg{}{lo}{coordinate interval to enumerate}
-\inarg{}{hi}{coordinate interval to enumerate}
-\inarg{}{istart}{starting value of enumeration}
-\inarg{}{inc}{increment value}
+\inarg{int}{lo}{coordinate interval to enumerate}
+\inarg{int}{hi}{coordinate interval to enumerate}
+\inarg{void*}{istart}{starting value of enumeration}
+\inarg{void*}{inc}{increment value}
 \end{funcargs}
 \end{cxxapi}
 
 \gcoll
 
 \begin{desc}
-
-This subroutine enumerates the values of an array between elements lo and hi starting with the value start and incrementing each subsequent value by inc. This operation is only applicable to 1-dimensional arrays. An example of its use is shown below:
-
+This subroutine enumerates the values of an array between elements lo and hi
+starting with the value start and incrementing each subsequent value by inc.
+This operation is only applicable to 1-dimensional arrays. An example of its
+use is shown below:
 \begin{verbatim}
 GA_Patch_enum(g_a, 1, n, 7, 2);
 
 g_a:  7  9 11 13 15 17 19 21 23 ...
 \end{verbatim}
-
 \end{desc}
+
 
 \apih{SCAN ADD}{Scan add (fixme)}
 
@@ -10585,11 +10721,11 @@ g_a:  7  9 11 13 15 17 19 21 23 ...
 void GA_Scan_add(int g_src, int g_dest, int g_mask, int lo, int hi, int excl)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_src}{handle for source array}
-\outarg{}{g_dest}{handle for destination array}
-\inarg{}{g_mask}{handle for integer array representing mask}
-\inarg{lo}{,hi}{low and high values of range on which operation is performed}
-\inarg{}{excl}{value to signify if masked values are included in in add}
+\inarg{int}{g_src}{handle for source array}
+\inarg{int}{g_dest}{handle for destination array}
+\inarg{int}{g_mask}{handle for integer array representing mask}
+\inarg{int}{lo,hi}{low and high values of range on which operation is performed}
+\inarg{int}{excl}{value to signify if masked values are included in add}
 \end{funcargs}
 \end{capi}
 
@@ -10614,34 +10750,39 @@ void GlobalArray::scanAdd(const GlobalArray *g_dest, const GlobalArray *g_mask,
                           int64_t lo, int64_t hi, int excl) const
 \end{cxxcode}
 \begin{funcargs}
-\outarg{}{g_dest}{handle for destination array}
-\inarg{}{g_mask}{handle for integer array representing mask}
-\inarg{}{lo}{low and high values of range on which operation is performed}
-\inarg{}{hi}{low and high values of range on which operation is performed}
-\inarg{}{excl}{value to signify if masked values are included in in add}
+\inarg{const GlobalArray*}{g_dest}{handle for destination array}
+\inarg{int}{g_mask}{handle for integer array representing mask}
+\inarg{int}{lo}{low and high values of range on which operation is performed}
+\inarg{int}{hi}{low and high values of range on which operation is performed}
+\inarg{int}{excl}{value to signify if masked values are included in in add}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-scan_add(int g_src, int g_dst, int g_msk, lo=None, hi=None, int excl=False)
-   g_src (int)                    - handle for source arrray
-   g_dst (int)                    - handle for destination array
-   g_msk (int)                    - handle for integer array representing mask
-   lo (1D array-like of integers) - low value of range on which operation is
-                                    performed
-   hi (1D array-like of integers) - hi value of range on which operation is
-                                    performed
-   excl (bool)                    - whether the first value is set to 0 (see above)
+ga.scan_add(int g_src, int g_dst, int g_msk, lo=None, hi=None, int excl=False)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_src}{handle for source arrray}
+\inarg{int}{g_dst}{handle for destination array}
+\inarg{int}{g_msk}{handle for integer array representing mask}
+\inarg{1D array-like of ints}{lo}{low value of range on which operation is performed}
+\inarg{1D array-like of ints}{hi}{hi value of range on which operation is performed}
+\inarg{bool}{excl}{whether the first value is set to 0 (see above)}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
-This operation will add successive elements in a source vector g_src and put the results in a destination vector g_dest. The addition will restart based on the values of the integer mask vector g_mask. The scan is performed within the range specified by the integer values lo and hi. Note that this operation can only be applied to 1-dimensional arrays. The excl flag determines whether the sum starts with the value in the source vector corresponding to the location of a 1 in the mask vector (excl=0) or whether the first value is set equal to 0 (excl=1). Some examples of this operation are given below.
-
+This operation will add successive elements in a source vector g_src and put
+the results in a destination vector g_dest. The addition will restart based on
+the values of the integer mask vector g_mask. The scan is performed within the
+range specified by the integer values lo and hi. Note that this operation can
+only be applied to 1-dimensional arrays. The excl flag determines whether the
+sum starts with the value in the source vector corresponding to the location of
+a 1 in the mask vector (excl=0) or whether the first value is set equal to 0
+(excl=1). Some examples of this operation are given below.
 \begin{verbatim}
 GA_Scan_add(g_src, g_dest, g_mask, 1, n, 0);
 
@@ -10655,8 +10796,8 @@ g_mask:   1  0  0  0  0  0  1  0  1  0  0  1  0  0  1  1  0
 g_src:    1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17
 g_dest:   0  1  3  6 10 15  0  7  0  9 19  0 12 25  0  0 16
 \end{verbatim}
-
 \end{desc}
+
 
 \apih{SCAN COPY}{Scan copy (fixme)}
 
@@ -10665,10 +10806,10 @@ g_dest:   0  1  3  6 10 15  0  7  0  9 19  0 12 25  0  0 16
 void GA_Scan_copy(int g_src, int g_dest, int g_mask, int lo, int hi)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_src}{handle for source array}
-\outarg{}{g_dest}{handle for destination array}
-\inarg{}{g_mask}{handle for integer array representing mask}
-\inarg{lo}{,hi}{low and high values of range on which operation is performed}
+\inarg{int}{g_src}{handle for source array}
+\inarg{int}{g_dest}{handle for destination array}
+\inarg{int}{g_mask}{handle for integer array representing mask}
+\inarg{int}{lo,hi}{low and high values of range on which operation is performed}
 \end{funcargs}
 \end{capi}
 
@@ -10686,31 +10827,41 @@ subroutine ga_scan_copy(g_src, g_dest, g_mask, lo, hi)
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::scanCopy(const GlobalArray *g_dest, const GlobalArray *g_mask,
-                           int lo, int hi) const
-void GlobalArray::scanCopy(const GlobalArray *g_dest, const GlobalArray *g_mask,
-                           int64_t lo, int64_t hi) const
+void GlobalArray::scanCopy(const GlobalArray *g_dest,
+        const GlobalArray *g_mask, int lo, int hi) const
+void GlobalArray::scanCopy(const GlobalArray *g_dest,
+        const GlobalArray *g_mask, int64_t lo, int64_t hi) const
 \end{cxxcode}
 \begin{funcargs}
-\outarg{}{g_dest}{handle for destination array}
-\inarg{}{g_mask}{handle for integer array representing mask}
-\inarg{}{lo}{low values of range on which operation is performed}
-\inarg{}{hi}{high values of range on which operation is performed}
+\inarg{const GlobalArray*}{g_dest}{handle for destination array}
+\inarg{const GlobalArray*}{g_mask}{handle for integer array representing mask}
+\inarg{int}{lo}{low values of range on which operation is performed}
+\inarg{int}{hi}{high values of range on which operation is performed}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-scan_copy(int g_src, int g_dst, int g_msk, lo=None, hi=None)
+ga.scan_copy(int g_src, int g_dst, int g_msk, lo=None, hi=None)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_src}{handle for source arrray}
+\inarg{int}{g_dst}{handle for destination array}
+\inarg{int}{g_msk}{handle for integer array representing mask}
+\inarg{1D array-like of ints}{lo}{low value of range on which operation is performed}
+\inarg{1D array-like of ints}{hi}{hi value of range on which operation is performed}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
-This subroutine does a segmented scan-copy of values in the source array g_src into a destination array g_dest with segments defined by values in the integer mask array g_mask. The scan-copy operation is only applied to the range between the lo and hi indices. This operation is restriced to 1-dimensional arrays. The resulting destination array will consist of segments of consecutive elements with the same value. An example is shown below.
-
+This subroutine does a segmented scan-copy of values in the source array g_src
+into a destination array g_dest with segments defined by values in the integer
+mask array g_mask. The scan-copy operation is only applied to the range between
+the lo and hi indices. This operation is restriced to 1-dimensional arrays. The
+resulting destination array will consist of segments of consecutive elements
+with the same value. An example is shown below.
 \begin{verbatim}
 GA_Scan_copy(g_src, g_dest, g_mask, 1, n);
 
@@ -10719,22 +10870,22 @@ g_src:    1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17
 g_dest:   1  1  1  1  1  1  7  7  9  9  9 12 12 12 15 16 16
 
 \end{verbatim}
-
 \end{desc}
+
 
 \apih{PACK}{Pack (fixme)}
 
 \begin{capi}
 \begin{ccode}
-void GA_Pack(int g_src, int g_dest, int g_mask, int lo, int hi,
-             int *icount)
+void GA_Pack(int g_src, int g_dest, int g_mask,
+             int lo, int hi, int *icount)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_src}{handle for source array}
-\outarg{}{g_dest}{handle for destination array}
-\inarg{}{g_mask}{handle for integer array representing mask}
-\inarg{lo}{,hi}{low and high values of range on which operation is performed}
-\outarg{}{icount}{number of values in compressed array}
+\inarg{int}{g_src}{handle for source array}
+\inarg{int}{g_dest}{handle for destination array}
+\inarg{int}{g_mask}{handle for integer array representing mask}
+\inarg{int}{lo,hi}{low and high values of range on which operation is performed}
+\outarg{int*}{icount}{number of values in compressed array}
 \end{funcargs}
 \end{capi}
 
@@ -10753,39 +10904,44 @@ subroutine ga_pack(g_src, g_dest, g_mask, lo, hi, icount)
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::pack(const GlobalArray *g_dest, const GlobalArray *g_mask,
-                       int lo, int hi, int *icount) const
-void GlobalArray::pack(const GlobalArray *g_dest, const GlobalArray *g_mask,
-                       int64_t lo, int64_t hi, int64_t *icount) const
+void GlobalArray::pack(const GlobalArray *g_dest,
+        const GlobalArray *g_mask, int lo, int hi,
+        int *icount) const
+void GlobalArray::pack(const GlobalArray *g_dest,
+        const GlobalArray *g_mask, int64_t lo, int64_t hi,
+        int64_t *icount) const
 \end{cxxcode}
 \begin{funcargs}
-\outarg{}{g_dest}{destination array}
-\inarg{}{g_mask}{mask array}
-\inarg{}{lo}{coordinate interval to pack}
-\inarg{}{hi}{coordinate interval to pack}
-\outarg{}{icount}{number of packed elements}
+\inarg{const GlobalArray*}{g_dest}{destination array}
+\inarg{const GlobalArray*}{g_mask}{mask array}
+\inarg{int}{lo}{coordinate interval to pack}
+\inarg{int}{hi}{coordinate interval to pack}
+\outarg{int*}{icount}{number of packed elements}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-pack(int g_src, int g_dst, int g_msk, lo=None, hi=None)
-   g_src (int)                    - handle for source arrray
-   g_dst (int)                    - handle for destination array
-   g_msk (int)                    - handle for integer array representing mask
-   lo (1D array-like of integers) - low value of range on which operation
-                                    is performed
-   hi (1D array-like of integers) - hi value of range on which operation
-                                    is performed
+ga.pack(int g_src, int g_dst, int g_msk, lo=None, hi=None)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_src}{handle for source arrray}
+\inarg{int}{g_dst}{handle for destination array}
+\inarg{int}{g_msk}{handle for integer array representing mask}
+\inarg{1D array-like of ints}{lo}{low value of range on which operation is performed}
+\inarg{1D array-like of ints}{hi}{hi value of range on which operation is performed}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
-The pack subroutine is designed to compress the values in the source vector g_src into a smaller destination array g_dest based on the values in an integer mask array g_mask. The values lo and hi denote the range of elements that should be compressed and icount is a variable that on output lists the number of values placed in the compressed array. This operation is the complement of the GA_Unpack operation. An example is shown below
-
+The pack subroutine is designed to compress the values in the source vector
+g_src into a smaller destination array g_dest based on the values in an integer
+mask array g_mask. The values lo and hi denote the range of elements that
+should be compressed and icount is a variable that on output lists the number
+of values placed in the compressed array. This operation is the complement of
+the GA_Unpack operation. An example is shown below
 \begin{verbatim}
 GA_Pack(g_src, g_dest, g_mask, 1, n, \&icount);
 
@@ -10794,22 +10950,22 @@ g_src:    1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17
 g_dest:   1  7  9 12 15 16
 icount:   6
 \end{verbatim}
-
 \end{desc}
+
 
 \apih{UNPACK}{Unpack (fixme)}
 
 \begin{capi}
 \begin{ccode}
-void GA_Unpack(int g_src, int g_dest, int g_mask, int lo, int hi,
-               int *icount)
+void GA_Unpack(int g_src, int g_dest, int g_mask,
+               int lo, int hi, int *icount)
 \end{ccode}
 \begin{funcargs}
-\inarg{}{g_src}{handle for source array}
-\outarg{}{g_dest}{handle for destination array}
-\inarg{}{g_mask}{handle for integer array representing mask}
-\inarg{lo}{,hi}{low and high values of range on which operation is performed}
-\outarg{}{icount}{number of values in uncompressed array}
+\inarg{int}{g_src}{handle for source array}
+\inarg{int}{g_dest}{handle for destination array}
+\inarg{int}{g_mask}{handle for integer array representing mask}
+\inarg{int}{lo,hi}{low and high values of range on which operation is performed}
+\outarg{int*}{icount}{number of values in uncompressed array}
 \end{funcargs}
 \end{capi}
 
@@ -10834,33 +10990,36 @@ void GlobalArray::unpack(GlobalArray *g_dest, GlobalArray *g_mask,
                          int64_t lo, int64_t hi, int64_t *icount) const
 \end{cxxcode}
 \begin{funcargs}
-\outarg{}{g_dest}{handle for destination array}
-\inarg{}{g_mask}{handle for integer array representing mask}
-\inarg{}{lo}{low value of range on which operation is performed}
-\inarg{}{hi}{high value of range on which operation is performed}
-\outarg{}{icount}{number of values in uncompressed array}
+\inarg{const GlobalArray*}{g_dest}{handle for destination array}
+\inarg{const GlobalArray*}{g_mask}{handle for integer array representing mask}
+\inarg{int}{lo}{low value of range on which operation is performed}
+\inarg{int}{hi}{high value of range on which operation is performed}
+\outarg{int*}{icount}{number of values in uncompressed array}
 \end{funcargs}
 \end{cxxapi}
 
 \begin{pyapi}
 \begin{pycode}
-unpack(int g_src, int g_dst, int g_msk, lo=None, hi=None)
-   g_src (int)                    - handle for source arrray
-   g_dst (int)                    - handle for destination array
-   g_msk (int)                    - handle for integer array representing mask
-   lo (1D array-like of integers) - low value of range on which operation
-                                    is performed
-   hi (1D array-like of integers) - hi value of range on which operation
-                                    is performed
+ga.unpack(int g_src, int g_dst, int g_msk, lo=None, hi=None)
 \end{pycode}
+\begin{funcargs}
+\inarg{int}{g_src}{handle for source arrray}
+\inarg{int}{g_dst}{handle for destination array}
+\inarg{int}{g_msk}{handle for integer array representing mask}
+\inarg{1D array-like of ints}{lo}{low value of range on which operation is performed}
+\inarg{1D array-like of ints}{hi}{hi value of range on which operation is performed}
+\end{funcargs}
 \end{pyapi}
 
 \gcoll
 
 \begin{desc}
-
-The unpack subroutine is designed to expand the values in the source vector g_src into a larger destination array g_dest based on the values in an integer mask array g_mask. The values lo and hi denote the range of elements that should be compressed and icount is a variable that on output lists the number of values placed in the uncompressed array. This operation is the complement of the GA_Pack operation. An example is shown below.
-
+The unpack subroutine is designed to expand the values in the source vector
+g_src into a larger destination array g_dest based on the values in an integer
+mask array g_mask. The values lo and hi denote the range of elements that
+should be compressed and icount is a variable that on output lists the number
+of values placed in the uncompressed array. This operation is the complement of
+the GA_Pack operation. An example is shown below.
 \begin{verbatim}
  GA_Unpack(g_src, g_dest, g_mask, 1, n, \&icount);
 
@@ -10868,8 +11027,8 @@ g_src:    1  7  9 12 15 16
 g_mask:   1  0  0  0  0  0  1  0  1  0  0  1  0  0  1  1  0
 g_dest:   1  0  0  0  0  0  7  0  9  0  0 12  0  0 15 16  0
 icount:   6
-\end{verbatim}
 
+\end{verbatim}
 \end{desc}
 
 \end{document}
