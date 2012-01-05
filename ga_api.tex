@@ -4669,13 +4669,14 @@ Atomically read and increment an element in an integer array.
 \begin{capi}
 \begin{ccode}
 void NGA_Scatter(int g_a, void *v, int* subsArray[], int n)
+void NGA_Scatter_flat(int g_a, void *v, int* subsArray, int n)
 \end{ccode}
 \begin{funcargs}
 \inarg{int}{g_a}{global array handle}
-\inarg{int}{n}{number of elements}
 \inarg{void*}{v[n]}{array containing values}
-\inarg{int}{ndim}{number of array dimensions}
 \inarg{int**}{subsArray[n][ndim]}{array of subscripts for each element}
+\inarg{int*}{subsArray[n*ndim]}{(flat) array of subscripts for each element}
+\inarg{int}{n}{number of elements}
 \end{funcargs}
 \end{capi}
 
@@ -4758,21 +4759,20 @@ for k in range(n):
 
 \end{pydesc}
 
-\seealso{SCATTER FLAT}
-
 
 \apih{GATHER}{Gather elements from a global array}
 
 \begin{capi}
 \begin{ccode}
 void NGA_Gather(int g_a, void *v, int* subsArray[], int n)
+void NGA_Gather_flat(int g_a, void *v, int* subsArray, int n)
 \end{ccode}
 \begin{funcargs}
 \inarg{int}{g_a}{global array handle}
-\inarg{int}{n}{number of elements}
 \inarg{void*}{v[n]}{array containing values}
-\inarg{int}{ndim}{number of array dimensions}
 \inarg{int**}{subsArray[n][ndim]}{array of subscripts for each element}
+\inarg{int*}{subsArray[n*ndim]}{(flat) array of subscripts for each element}
+\inarg{int}{n}{number of elements}
 \end{funcargs}
 \end{capi}
 
@@ -4861,14 +4861,15 @@ for k in range(n):
 \begin{capi}
 \begin{ccode}
 void NGA_Scatter_acc(int g_a, void *v, int* subsArray[], int n, void *alpha)
+void NGA_Scatter_acc_flat(int g_a, void *v, int* subsArray, int n, void *alpha)
 \end{ccode}
 \begin{funcargs}
 \inarg{int}{g_a}{global array handle}
-\inarg{int}{n}{number of elements}
 \inarg{void*}{v[n]}{array containing values}
-\inarg{int}{ndim}{number of array dimensions}
 \inarg{int**}{subsArray[n][ndim]}{array of subscripts for each element}
+\inarg{int*}{subsArray[n*ndim]}{(flat) array of subscripts for each element}
 \inarg{void*}{alpha}{multiplicative factor}
+\inarg{int}{n}{number of elements}
 \end{funcargs}
 \end{capi}
 
