@@ -50,6 +50,8 @@ Allocate and initialize internal data structures in Global Arrays.
 
 \end{desc}
 
+\seealso{INITIALIZE LTD}
+
 \apih{INITIALIZE LTD}{Initialize GA with memory limit}
 
 \begin{capi}
@@ -370,6 +372,8 @@ Return value: a non-zero array handle means the call was succesful.
 
 \end{desc}
 
+\seealso{CREATE HANDLE}
+
 \apih{CREATE CONFIG}{Create a GA with a specific configuration}
 
 \begin{capi}
@@ -452,6 +456,8 @@ processor list handle p_handle. It can be used to create mirrored arrays.
 Return value: a non-zero array handle means the call was succesful.
 
 \end{desc}
+
+\seealso{CREATE,SET PGROUP}
 
 \apih{CREATE GHOSTS}{Create a GA with ghost cells}
 
@@ -549,6 +555,8 @@ Return value: a non-zero array handle means the call was successful.
 
 \end{desc}
 
+\seealso{CREATE,SET GHOSTS}
+
 \apih{CREATE GHOSTS CONFIG}{Create a GA with ghost cells and specific configuration}
 
 \begin{capi}
@@ -639,6 +647,8 @@ processor list handle p_handle. It can be used to create mirrored arrays.
 Return value: a non-zero array handle means the call was successful.
 
 \end{desc}
+
+\seealso{CREATE,SET GHOSTS, SET PGROUP}
 
 \apih{CREATE IRREG}{Create an irregular-distributed GA}
 
@@ -755,6 +765,8 @@ Return value: a non-zero array handle means the call was succesful.
 
 \end{desc}
 
+\seealso{CREATE,SET IRREG DISTR}
+
 
 \apih{CREATE IRREG CONFIG}{Create an irregular-distributed GA with a specific configuration}
 
@@ -844,6 +856,8 @@ processor list handle p_handle. It can be used to create mirrored arrays.
 Return value: a non-zero array handle means the call was succesful.
 
 \end{desc}
+
+\seealso{CREATE,SET IRREG DISTR, SET PGROUP}
 
 \apih{CREATE GHOST IRREG}{Create an irregular-distributed GA with ghost cells}
 
@@ -951,6 +965,7 @@ Return value: a non-zero array handle means the call was succesful.
 
 \end{desc}
 
+\seealso{CREATE,SET GHOSTS,SET IRREG DISTR}
 
 \apih{CREATE GHOSTS IRREG CONFIG}{Create an irregular-distributed GA with ghost cells and a specific configuration}
 
@@ -1047,6 +1062,7 @@ Return value: a non-zero array handle means the call was succesful.
 
 \end{desc}
 
+\seealso{CREATE,SET GHOSTS,SET IRREG DISTR,SET PGROUP}
 
 \apih{CREATE HANDLE}{Create a handle to a global array}
 
@@ -1995,6 +2011,8 @@ You can only access local data.
 
 \end{desc}
 
+\seealso{ACCESS,RELEASE GHOSTS,RELEASE UPDATE GHOSTS}
+
 \apih{ACCESS GHOST ELEMENT}{Access a specific ghost element locally allocated on a GA}
 
 \begin{capi}
@@ -2060,6 +2078,8 @@ relative to the origin of the local patch (which is assumed to be indexed by
 
 \end{desc}
 
+\seealso{ACCESS,RELEASE GHOST ELEMENT,RELEASE UPDATE GHOST ELEMENT}
+
 \apih{TOTAL BLOCKS}{Number of blocks allocated when using block-cyclic distribution}
 
 \begin{capi}
@@ -2109,6 +2129,8 @@ This function returns the total number of blocks contained in a global array
 with a block-cyclic data distribution.
 
 \end{desc}
+
+\seealso{SET BLOCK CYCLIC,SET BLOCK CYCLIC PROC GRID}
 
 \apih{GET BLOCK INFO}{Information on block-cyclic information for a GA}
 
@@ -2168,6 +2190,8 @@ subroutines, are returned in block_dims.
 This is a local function.
 
 \end{desc}
+
+\seealso{SET BLOCK CYCLIC,SET BLOCK CYCLIC PROC GRID}
 
 \apih{DUPLICATE}{Duplicate a GA}
 
@@ -2404,6 +2428,8 @@ applicable to all collective operations.  It most be invoked before each
 collective operation.
 
 \end{desc}
+
+\seealso{SYNC}
 
 \apih{ZERO}{Zero a global array}
 
@@ -2938,6 +2964,8 @@ Returns: The local Array buffer.
 
 \end{desc}
 
+\seealso{GET}
+
 \apih{STRIDED GET}{Get strided data from a global array }
 
 \begin{capi}
@@ -3015,6 +3043,8 @@ fatal.
 Returns: The local array buffer.
 
 \end{desc}
+
+\seealso{GET}
 
 \apih{PUT}{Put data into a global array}
 
@@ -3162,6 +3192,8 @@ global array. Any detected inconsitencies/errors in input arguments are fatal.
 
 \end{desc}
 
+\seealso{PUT}
+
 \apih{STRIDED PUT}{Put strided data into a global array}
 
 \begin{capi}
@@ -3239,6 +3271,8 @@ global array.
 Any detected inconsitencies/errors in input arguments are fatal.
 
 \end{desc}
+
+\seealso{PUT}
 
 \apih{ACC}{Accumulate data into a global array}
 
@@ -3406,6 +3440,8 @@ global array section (lo[],hi[]) += alpha * buffer
 
 \end{desc}
 
+\seealso{ACC}
+
 \apih{STRIDED ACC}{Accumulate strided data into a global array}
 
 \begin{capi}
@@ -3488,6 +3524,8 @@ global array.
 global array section (lo[],hi[]) += alpha * buffer
 
 \end{desc}
+
+\seealso{ACC}
 
 \apih{DISTRIBUTION}{Inquire data range on a specified processor}
 
@@ -3813,7 +3851,7 @@ NGA_Release_block_segment or NGA_Release_update_block_segment.
 
 \end{desc}
 
-\seealso{ACCESS,ACCESS BLOCK,RELEASE BLOCK SEGMENT,RELEASE UPDATE BLOCK SEGMENT}
+\seealso{ACCESS,RELEASE BLOCK SEGMENT,RELEASE UPDATE BLOCK SEGMENT}
 
 \apih{ACCESS BLOCK}{Access a block in a block-cyclic distributed global array}
 
@@ -3882,6 +3920,8 @@ should be followed by a call to either NGA_Release_block or
 NGA_Release_update_block.
 
 \end{desc}
+
+\seealso{ACCESS,RELEASE BLOCK,RELEASE UPDATE BLOCK}
 
 \apih{ACCESS BLOCK GRID}{Access data block in a block-cyclic distributed global array}
 
@@ -3952,6 +3992,8 @@ either NGA_Release_block_grid or NGA_Release_update_block_grid.
 Returns: ndarray representing local block
 
 \end{desc}
+
+\seealso{ACCESS,RELEASE BLOCK GRID,RELEASE UPDATE BLOCK GRID}
 
 \apih{RELEASE}{Release access to a global array}
 
@@ -4028,6 +4070,8 @@ NOTE: see restrictions specified for ga_access.
 
 \end{desc}
 
+\seealso{ACCESS}
+
 \apih{RELEASE UPDATE}{Release access to a global array after an update}
 
 \begin{capi}
@@ -4096,6 +4140,8 @@ NOTE: see restrictions specified for ga_access.
 
 \end{desc}
 
+\seealso{ACCESS}
+
 \apih{RELEASE BLOCK}{Release access to a block of a global array}
 
 \begin{capi}
@@ -4147,6 +4193,8 @@ distributions created using the simple block-cyclic distribution.
 
 \end{desc}
 
+\seealso{ACCESS BLOCK}
+
 \apih{RELEASE UPDATE BLOCK}{Release after update access to a block in a global array}
 
 \begin{capi}
@@ -4197,6 +4245,8 @@ was accessed in read-write mode. This is only applicable to block-cyclic data
 distributions created using the simple block-cyclic distribution.
 
 \end{desc}
+
+\seealso{ACCESS BLOCK}
 
 \apih{RELEASE BLOCK GRID}{Release access to a block-cyclic distributed global array}
 
@@ -4250,6 +4300,8 @@ distributions created using the SCALAPACK data distribution.
 
 \end{desc}
 
+\seealso{ACCESS BLOCK GRID}
+
 \apih{RELEASE UPDATE BLOCK GRID}{Release after update access to a block in a block-cyclic distributed global array}
 
 \begin{capi}
@@ -4302,6 +4354,8 @@ distributions created using the SCALAPACK data distribution.
 
 \end{desc}
 
+\seealso{ACCESS BLOCK GRID}
+
 \apih{RELEASE BLOCK SEGMENT}{Release access to a block in a GA}
 
 \begin{capi}
@@ -4352,6 +4406,8 @@ when data was accessed as read-only.
 
 \end{desc}
 
+\seealso{ACCESS BLOCK SEGMENT}
+
 \apih{RELEASE UPDATE BLOCK SEGMENT}{Release access to a block of a GA}
 
 \begin{capi}
@@ -4401,6 +4457,8 @@ Releases access to the block of locally held data for a block-cyclic array,
 when data was accessed as read-only.
 
 \end{desc}
+
+\seealso{ACCESS BLOCK SEGMENT}
 
 \apih{RELEASE GHOST ELEMENT}{Release access to ghost cells in a GA}
 
@@ -4453,6 +4511,8 @@ data was accessed as read-only.
 
 \end{desc}
 
+\seealso{ACCESS GHOST ELEMENT}
+
 \apih{RELEASE UPDATE GHOST ELEMENT}{Release after update access to ghost cells in a GA}
 
 \begin{capi}
@@ -4504,6 +4564,8 @@ data was accessed in read-write mode.
 
 \end{desc}
 
+\seealso{ACCESS GHOST ELEMENT}
+
 \apih{RELEASE GHOSTS}{Release access to ghost cells}
 
 \begin{capi}
@@ -4548,6 +4610,8 @@ when data was accessed as read-only.
 
 \end{desc}
 
+\seealso{ACCESS GHOSTS}
+
 \apih{RELEASE UPDATE GHOSTS}{Release after access to ghosts}
 
 \begin{capi}
@@ -4591,6 +4655,8 @@ Releases access to the locally held block of data containing ghost elements,
 when data was accessed in read-write mode.
 
 \end{desc}
+
+\seealso{ACCESS GHOSTS}
 
 \apih{READ INC}{Atomically read and increment an element in a global array}
 
@@ -4759,6 +4825,8 @@ for k in range(n):
 
 \end{pydesc}
 
+\seealso{PUT}
+
 
 \apih{GATHER}{Gather elements from a global array}
 
@@ -4855,6 +4923,8 @@ for k in range(n):
     v[k] = g_a[subsarray[base+0],subsarray[base+1],subsarray[base+2]...]
 
 \end{pydesc}
+
+\seealso{GET}
 
 \apih{SCATTER ACC}{Scatter accumulate elements into a global array}
 
@@ -4960,6 +5030,8 @@ for k in range(n):
     v[k] = g_a[subsarray[base+0],subsarray[base+1],subsarray[base+2]...]
 
 \end{pydesc}
+
+\seealso{ACC}
 
 \apih{ERROR}{Abort with an error}
 
@@ -5165,6 +5237,8 @@ number of processes that hold the data.
 \end{verbatim}
 
 \end{desc}
+
+\seealso{LOCATE}
 
 \apih{INQUIRE}{Inquire the type and size of a global array}
 
@@ -5580,6 +5654,8 @@ The values of -1 means that the processor doesn't ``own'' any section of the
 array represented by g_a.
 
 \end{desc}
+
+\seealso{SET BLOCK CYCLIC PROC GRID}
 
 \apih{PRINT FILE}{Print the contents of a global array to a file}
 
@@ -6055,6 +6131,8 @@ operation succeeded or 1 when failed.
 
 \end{desc}
 
+\seealso{SET MUTEXES}
+
 \apih{LOCK}{Lock a specific mutex}
 
 \begin{capi}
@@ -6099,6 +6177,8 @@ process to attempt to lock a mutex which was already locked by this process.
 
 \end{desc}
 
+\seealso{SET MUTEXES}
+
 \apih{UNLOCK}{Unlock a mutex}
 
 \begin{capi}
@@ -6137,6 +6217,8 @@ a process to attempt to unlock a mutex which has not been locked by this
 process.
 
 \end{desc}
+
+\seealso{LOCK}
 
 \apih{NODEID}{The GA rank of the invoking process}
 
@@ -6721,6 +6803,8 @@ the 2-D interface:
 
 \end{desc}
 
+\seealso{MATMUL}
+
 \apih{ADD PATCH}{Add patches of global arrays}
 
 \begin{capi}
@@ -6823,6 +6907,8 @@ c[ ][ ] = alpha * a[ ][ ] + beta * b[ ][ ]
 \end{verbatim}
 
 \end{desc}
+
+\seealso{ADD}
 
 \apih{FILL PATCH}{Fill a patch of a global array with a specified value}
 
@@ -8148,6 +8234,8 @@ ga.abs_value(int g_a, lo=None, hi=None)
 Take the element-wise absolute value of the patch.
 \end{desc}
 
+\seealso{ABS VALUE}
+
 
 \apih{ADD CONSTANT}{Add a constant to all elements in a global array}
 
@@ -8252,6 +8340,7 @@ ga.add_constant(int g_a, alpha, lo=None, hi=None)
 Add the constant pointed by alpha to each element of the patch.
 \end{desc}
 
+\seealso{ADD CONSTANT}
 
 \apih{RECIP}{Translate a global array to contain reciprocal of its elements}
 
@@ -8343,6 +8432,8 @@ ga.recip(int g_a, lo=None, hi=None)
 \begin{desc}
 Take element-wise reciprocal of the patch.
 \end{desc}
+
+\seealso{RECIP}
 
 \apih{ELEM MULTIPLY}{Element-wise multiplication of global arrays}
 
@@ -8488,6 +8579,7 @@ types and same number of elements. For two-dimensional arrays,
 The result (c) may replace one of the input arrays (a/b).
 \end{desc}
 
+\seealso{ELEM MULTIPLY}
 
 \apih{ELEM DIVIDE}{Element-wise division of global arrays}
 
@@ -8634,6 +8726,7 @@ types and same number of elements. For two-dimensional arrays,
 The result (c) may replace one of the input arrays (a/b).
 \end{desc}
 
+\seealso{ELEM DIVIDE}
 
 \apih{ELEM MAXIMUM}{Element-wise maximum of global arrays}
 
@@ -8933,6 +9026,7 @@ If the data type is complex, then
 The result (c) may replace one of the input arrays (a/b).
 \end{desc}
 
+\seealso{ELEM MINIMUM}
 
 \apih{SHIFT DIAGONAL}{Add specified constant to diagonal elements of a global array}
 
@@ -9518,6 +9612,8 @@ stores the result in this patch g_m.  The result (m) may replace one of the
 input patches (a/b/c).
 \end{desc}
 
+\seealso{MEDIAN}
+
 
 \apih{STEP MAX}{Compute a global array's step max}
 
@@ -9673,7 +9769,6 @@ then be used to create a global array using one of the NGA_create_*_config or
 GA_Set_pgroup calls.
 \end{desc}
 
-
 \apih{PGROUP GET MIRROR}{Get the mirrored processor group}
 
 \begin{capi}
@@ -9786,6 +9881,7 @@ This operation executes a synchronization group across the processors in the
 processor group specified by p_handle. Nodes outside this group are unaffected.
 \end{desc}
 
+\seealso{SYNC}
 
 \apih{PGROUP BRDCST}{Broadcast elements among processes in a processor group}
 
@@ -9851,6 +9947,7 @@ message-passing library that GA is running with.
 Returns: The buffer in case a temporary was passed in.
 \end{desc}
 
+\seealso{BRDCST}
 
 \apih{PGROUP GOP}{Global operation with a processor group}
 
@@ -9946,6 +10043,7 @@ The use of lowerecase for operators is necessary.
 
 \seealso{GOP}
 
+\seealso{GOP}
 
 \apih{PGROUP NNODES}{Number of GA ranks in a processor group}
 
@@ -9992,6 +10090,7 @@ Returns the number of processors contained in the group specified by
 pgroup.
 \end{desc}
 
+\seealso{NNODES}
 
 \apih{PGROUP NODEID}{GA rank of invoking process in a processor group}
 
@@ -10040,6 +10139,7 @@ Returns the relative index of the processor in the processor group
 specified by pgroup.
 \end{desc}
 
+\seealso{NODEID}
 
 \apih{MERGE MIRRORED}{Merge a mirrored global array}
 
@@ -10196,6 +10296,7 @@ This function merges all copies of a patch of a mirrored array (g_a) into a
 patch in a distributed array (g_b).
 \end{desc}
 
+\seealso{MERGE MIRRORED}
 
 \apih{NBGET}{Non-blocking get from a global array}
 
@@ -10287,6 +10388,7 @@ fatal.
 Returns: The local array buffer.
 \end{desc}
 
+\seealso{GET}
 
 \apih{NBPUT}{Non-blocking put into a global array}
 
@@ -10374,6 +10476,7 @@ The local array is assumed to be have the same number of dimensions as the
 global array. Any detected inconsitencies/errors in input arguments are fatal.
 \end{desc}
 
+\seealso{PUT}
 
 \apih{NBACC}{Non-blocking accumulate into a global array}
 
@@ -10474,6 +10577,7 @@ The buffer array is assumed to be have the same number of dimensions as the glob
 global array section (lo[],hi[]) += alpha * buffer
 \end{desc}
 
+\seealso{ACC}
 
 \apih{NBWAIT}{Wait for a non-blocking GA operation}
 
@@ -10537,6 +10641,7 @@ operation. The fence operation is provided to the user to confirm remote
 completion if needed.
 \end{desc}
 
+\seealso{NBGET,NBPUT,NBACC}
 
 \apih{WTIME}{Return time in seconds}
 
