@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
 $GA_DOC_DIR = "./";
-$GA_API_DOC = "ga_api_FR.tex";
+$GA_API_DOC = "ga_api.tex";
 
 $API_DECS = "\\documentclass\[12pt\]\{article\}\n";
 $API_DECS .= "\\usepackage\{fullpage\}\n";
@@ -23,15 +23,16 @@ $begin = 0;
 
 while(<INFILE>) {
   $line = $_;
-  if ($line =~ /\\apih\{(.*)\}/) {
+  if ($line =~ /\\apih\{([^\}]*)\}/) {
     $tkey = $1;
     if ($begin == 1) {
       $apis{$key} = $entry;
-      $tmp = $key;
-      $tmp =~ s/\_/ /g;
-      $labels{$tmp} = $key;
+      $tmp = $tkey;
+      $tmp =~ s/ /\_/g;
+      $labels{$tkey} = $tmp;
+      print "tmp: $tmp tkey: $tkey\n";
     }
-    $key = $tkey;
+    $key = $tmp;
     $entry = "";
     $entry = $line;
     $begin = 1;
@@ -68,10 +69,10 @@ for ($i=1; $i<$length; $i++) {
   print "$api_doc\n";
 }
 
-#@keys2 = sort{ $labels{$a} cmp $labels{$b} } keys %labels;
-#$length = @keys2;
-#for ($i=1; $i<$length; $i++) {
-#  $tmp = $keys2[$i];
-#  $tmp =~ s/ /\_/g;
+@keys2 = sort{ $labels{$a} cmp $labels{$b} } keys %labels;
+$length = @keys2;
+for ($i=1; $i<$length; $i++) {
+  $tmp = $keys2[$i];
+  $tmp =~ s/ /\_/g;
 #  print "$tmp\n";
-#}
+}
