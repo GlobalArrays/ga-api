@@ -17,16 +17,21 @@ open(INFILE, "$GA_DOC_DIR/$GA_API_DOC");
 
 $begin = 0;
 %apis = {};
+%labels = {};
 
 # Parse infile and divide API documentation into individual entries
 
 while(<INFILE>) {
   $line = $_;
   if ($line =~ /\\apih\{(.*)\}/) {
+    $tkey = $1;
     if ($begin == 1) {
       $apis{$key} = $entry;
+      $tmp = $key;
+      $tmp =~ s/\_/ /g;
+      $labels{$tmp} = $key;
     }
-    $key = $1;
+    $key = $tkey;
     $entry = "";
     $entry = $line;
     $begin = 1;
@@ -61,5 +66,12 @@ for ($i=1; $i<$length; $i++) {
   $api_file = "$keys[$i].tex";
   print "$api_file\n\n";
   print "$api_doc\n";
-  
 }
+
+#@keys2 = sort{ $labels{$a} cmp $labels{$b} } keys %labels;
+#$length = @keys2;
+#for ($i=1; $i<$length; $i++) {
+#  $tmp = $keys2[$i];
+#  $tmp =~ s/ /\_/g;
+#  print "$tmp\n";
+#}
