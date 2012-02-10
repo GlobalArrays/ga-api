@@ -2,6 +2,7 @@
 
 $GA_DOC_DIR = "./";
 $GA_API_DOC = "ga_api.tex";
+$GA_API_DIR = "./tmp/";
 
 $API_DECS = "\\documentclass\[12pt\]\{article\}\n";
 $API_DECS .= "\\usepackage\{fullpage\}\n";
@@ -30,7 +31,6 @@ while(<INFILE>) {
       $tmp = $tkey;
       $tmp =~ s/ /\_/g;
       $labels{$tkey} = $tmp;
-      print "tmp: $tmp tkey: $tkey\n";
     }
     $key = $tmp;
     $entry = "";
@@ -65,8 +65,10 @@ for ($i=1; $i<$length; $i++) {
   $api_doc .= "\\end\{document\}\n";
  
   $api_file = "$keys[$i].tex";
-  print "$api_file\n\n";
-  print "$api_doc\n";
+#  print "$api_file\n\n";
+  open(OUTFILE, ">$GA_API_DIR$api_file");
+  print OUTFILE "$api_doc";
+  close(OUTFILE);
 }
 
 @keys2 = sort{ $labels{$a} cmp $labels{$b} } keys %labels;
