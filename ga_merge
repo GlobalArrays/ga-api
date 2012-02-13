@@ -1,0 +1,59 @@
+#!/usr/bin/env perl
+
+$GA_DOC_DIR = "./";
+$GA_API_DOC = "ga_api_tmp.tex";
+$GA_API_DIR = "./tmp/";
+
+opendir(APIDIR,"$GA_API_DIR");
+@files = readdir(APIDIR);
+closedir(APIDIR);
+
+$api_text = "";
+foreach $file (sort @files) {
+  if ($file =~/\.tex\s*$/) {
+    $file_txt = "";
+    $begin = 0;
+    open(INFILE, "$GA_API_DIR/$file");
+    while (<INFILE>) {
+      $line = $_;
+      if ($begin == 0) {
+        if ($line =~ /begin\{document\}/) {
+          $begin = 1;
+          $frag = "";
+        }
+      } else {
+        if ($line =~ /end\{document\}/) {
+          $begin = 0;
+        } else {
+          $frag .= $line;
+          if ($line =~/\S/) {
+            $api_text .= $frag;
+            $frag = "";
+          }
+        }
+      }
+    }
+    close(INFILE);
+  }
+}
+
+$API_DECS = "\\documentclass\[12pt\]\{article\}\n";
+$API_DECS .= "\\usepackage\{fullpage\}\n";
+$API_DECS .= "\\usepackage\{color\}\n";
+$API_DECS .= "\\usepackage\{alltt\}\n";
+$API_DECS .= "\\usepackage\{underscore\}\n";
+$API_DECS .= "\\usepackage\{environ\}\n";
+$API_DECS .= "\\usepackage\{graphicx\}\n";
+$API_DECS .= "\\include\{preamble\}\n";
+$API_DECS .= "\\include\{otype\}\n\n";
+
+open(OUTFILE, ">$GA_DOC_DIR/$GA_API_DOC");
+
+$api_doc = "";
+$api_doc = $API_DECS;
+$api_doc .= "\\begin\{document\}\n\n";
+$api_doc .= $api_text;
+$api_doc .= "\\end\{document\}\n";
+ 
+print OUTFILE "$api_doc";
+close(OUTFILE);

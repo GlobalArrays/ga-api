@@ -66,13 +66,13 @@ for ($i=1; $i<$length; $i++) {
  
   $api_file = "$keys[$i]";
  
-  @name = split(/\_/,$api_file);
-  $api_file = "";
-  $names = @name;
-  for ($idx=0; $idx<$names; $idx++) {
-    $api_file .= (ucfirst(lc($name[$idx])));
+#  @name = split(/\_/,$api_file);
+#  $api_file = "";
+#  $names = @name;
+#  for ($idx=0; $idx<$names; $idx++) {
+#    $api_file .= (ucfirst(lc($name[$idx])));
 #  print "$api_file\n\n";
-  }
+#  }
   $api_file .= ".tex";
   open(OUTFILE, ">$GA_API_DIR$api_file");
   print OUTFILE "$api_doc";
