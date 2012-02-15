@@ -3,7 +3,6 @@ use strict;
 use warnings;
 use File::Path qw(mkpath);
 
-print "nargs = $#ARGV\n";
 my $GA_DOC_DIR = "./";
 my $GA_API_DOC = "ga_api.tex";
 my $GA_API_DIR = "./tmp/";
