@@ -17,32 +17,12 @@ default: allpdf
 
 allpdf: allpreamble ga_api.pdf
 
-cpdf: cpreamble ga_api.pdf
-
-cxxpdf: cxxpreamble ga_api.pdf
-
-fpdf: fpreamble ga_api.pdf
-
-pypdf: pypreamble ga_api.pdf
-
 ga_api.pdf: $(API_DEPENDENCIES)
 	pdflatex --shell-escape ga_api.tex
 	pdflatex --shell-escape ga_api.tex
 
 allpreamble:
-	cp preamble/allpreamble.tex preamble/preamble.tex
-
-cpreamble:
-	cp preamble/cpreamble.tex preamble/preamble.tex
-
-cxxpreamble:
-	cp preamble/cxxpreamble.tex preamble/preamble.tex
-
-fpreamble:
-	cp preamble/fpreamble.tex preamble/preamble.tex
-
-pypreamble:
-	cp preamble/pypreamble.tex preamble/preamble.tex
+#	cp preamble/allpreamble.tex preamble/preamble.tex
 
 clean:
 	rm -f *.log *.aux *.pdf *.dvi
