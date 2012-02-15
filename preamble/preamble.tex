@@ -8,6 +8,14 @@
 \usepackage[hidelinks]{hyperref} % for hyperref
 \usepackage{xstring}
 \usepackage{adjustbox}
+\usepackage{etoolbox}
+
+\newbool{CapiInclude}
+\newbool{FapiInclude}
+\newbool{CxxapiInclude}
+\newbool{PyapiInclude}
+
+\input{preamble/settings}
 
 %\IfFileExists{minted.sty}{
 %\usepackage{minted}
@@ -20,6 +28,7 @@
 %\newmint[ffuncsig]{fortran}{}
 %\newmint[pyfuncsig]{python}{}
 %}{
+\newcommand{\commentOut}[1]{}
 \usepackage{listings}
 \lstnewenvironment{ccode}
     {\lstset{language=C, breaklines=true, breakautoindent=true}}
@@ -90,19 +99,22 @@
 \noindent
 \textcolor{blue}{C++ API description:}\par}{}
 
+
+\ifbool{FapiInclude}{
 \newenvironment{fapi}{
 \noindent
 \textcolor{blue}{Fortran Interface}
 \small
-}{
-}
+}{}
+}{\NewEnviron{fapi}{}}
 
+\ifbool{CapiInclude}{
 \newenvironment{f2dapi}{
 \noindent
 \textcolor{blue}{Fortran 2D Interface}
 \small
-}{
-}
+}{}
+}{\NewEnviron{f2dapi}{}}
 
 \newenvironment{pydesc}{
 \noindent
@@ -110,26 +122,29 @@
 
 }{}
 
+\ifbool{CapiInclude}{
 \newenvironment{capi}{
 \noindent
 \textcolor{blue}{C Interface}
 \small
-}{
-}
+}{}
+}{\NewEnviron{capi}{}}
 
+\ifbool{CxxapiInclude}{
 \newenvironment{cxxapi}{
 \noindent
 \textcolor{blue}{C++ Interface}
 \small
-}{
-}
+}{}
+}{\NewEnviron{cxxapi}{}}
 
+\ifbool{PyapiInclude}{
 \newenvironment{pyapi}{
 \noindent
 \textcolor{blue}{Python Interface}
 \small
-}{
-}
+}{}
+}{\NewEnviron{pyapi}{}}
 
 \newenvironment{funcargs}{\noindent\begin{tabular}{@{}p{0.16\textwidth}@{}p{0.14\textwidth}@{}p{0.58\textwidth}@{}p{0.08\textwidth}@{}}}{\end{tabular}}
 
