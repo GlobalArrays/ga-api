@@ -1,10 +1,18 @@
 #!/usr/bin/env perl
+use strict;
+use warnings;
+use File::Path qw(mkpath);
 
-$GA_DOC_DIR = "./";
-$GA_API_DOC = "ga_api.tex";
-$GA_API_DIR = "./tmp/";
+print "nargs = $#ARGV\n";
+my $GA_DOC_DIR = "./";
+my $GA_API_DOC = "ga_api.tex";
+my $GA_API_DIR = "./tmp/";
+if ($#ARGV == 0) {
+    $GA_API_DIR = "$ARGV[0]/";
+}
+mkpath $GA_API_DIR;
 
-$API_DECS = "\\documentclass\[12pt\]\{article\}\n";
+my $API_DECS = "\\documentclass\[12pt\]\{article\}\n";
 $API_DECS .= "\\usepackage\{fullpage\}\n";
 $API_DECS .= "\\usepackage\{color\}\n";
 $API_DECS .= "\\usepackage\{alltt\}\n";
@@ -14,75 +22,46 @@ $API_DECS .= "\\usepackage\{graphicx\}\n";
 $API_DECS .= "\\include\{preamble\}\n";
 $API_DECS .= "\\include\{otype\}\n\n";
 
-open(INFILE, "$GA_DOC_DIR/$GA_API_DOC");
-
-$begin = 0;
-%apis = {};
-%labels = {};
+my %apis = ();
+my $key = "";
+my $entry = "";
+my $begin = 0;
 
 # Parse infile and divide API documentation into individual entries
-
+open(INFILE, "$GA_DOC_DIR/$GA_API_DOC") or die "couldn't open infile";
 while(<INFILE>) {
-  $line = $_;
+  my $line = $_;
   if ($line =~ /\\apih\{([^\}]*)\}/) {
-    $tkey = $1;
-    if ($begin == 1) {
-      $apis{$key} = $entry;
-      $tmp = $tkey;
-      $tmp =~ s/ /\_/g;
-      $labels{$tkey} = $tmp;
-    }
-    $key = $tmp;
-    $entry = "";
-    $entry = $line;
     $begin = 1;
-  } else {
-    if ($begin == 1) {
-      if (!($line =~ /\\end\{document\}/)) { 
-        $entry .= $line;
-      } else {
-        $begin = 0;
-      }
+    if ($entry) {
+      $apis{$key} = $entry;
     }
+    # make api name lowercase and spaces replaced with dashes
+    $key = $1;
+    unless($key) {
+      die "key was empty for line '$line'";
+    }
+    $key =~ s/ /\-/g;
+    $key = lc($key);
+    $entry = $line;
+  } elsif ($line =~ /\\end\{document\}/) {
+    if ($entry) {
+      $apis{$key} = $entry;
+    }
+  } elsif ($begin == 1) {
+    $entry .= $line;
   }
 }
-
 close(INFILE);
 
-# Create a sorted list of keys
-
-@keys = sort{ $apis{$a} cmp $apis{$b} } keys %apis;
-
-$length = @keys;
-
-# It looks like first entry in @keys is bogus, so start at 1
-
-for ($i=1; $i<$length; $i++) {
-  $api_doc = "";
-  $api_doc = $API_DECS;
+foreach my $key (keys %apis)
+{
+  my $api_doc = $API_DECS;
   $api_doc .= "\\begin\{document\}\n\n";
-  $api_doc .= $apis{$keys[$i]};
+  $api_doc .= $apis{$key};
   $api_doc .= "\\end\{document\}\n";
- 
-  $api_file = "$keys[$i]";
- 
-#  @name = split(/\_/,$api_file);
-#  $api_file = "";
-#  $names = @name;
-#  for ($idx=0; $idx<$names; $idx++) {
-#    $api_file .= (ucfirst(lc($name[$idx])));
-#  print "$api_file\n\n";
-#  }
-  $api_file .= ".tex";
-  open(OUTFILE, ">$GA_API_DIR$api_file");
+  my $api_file = "$key.tex";
+  open(OUTFILE, ">$GA_API_DIR$api_file") or die "couldn't open outfile";
   print OUTFILE "$api_doc";
   close(OUTFILE);
-}
-
-@keys2 = sort{ $labels{$a} cmp $labels{$b} } keys %labels;
-$length = @keys2;
-for ($i=1; $i<$length; $i++) {
-  $tmp = $keys2[$i];
-  $tmp =~ s/ /\_/g;
-#  print "$tmp\n";
 }
