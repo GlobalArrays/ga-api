@@ -1,15 +1,17 @@
 #!/usr/bin/env perl
+use strict;
+use warnings;
 
-$GA_DOC_DIR = "./";
-$GA_API_DOC = "ga_api_tmp.tex";
-$GA_API_DIR = "./tmp/";
+my $GA_DOC_DIR = "./";
+my $GA_API_DOC = "ga_api_tmp.tex";
+my $GA_API_DIR = "./tmp/";
 
 opendir(APIDIR,"$GA_API_DIR");
-@files = readdir(APIDIR);
+my @files = readdir(APIDIR);
 closedir(APIDIR);
 
-@files2 = ();
-foreach $file (@files) {
+my @files2 = ();
+foreach my $file (@files) {
   # Skip any non-.tex file.
   if ($file =~ m/\.tex/) {
     # strip of .tex from filenames
@@ -21,13 +23,15 @@ foreach $file (@files) {
   }
 }
 
-$api_text = "";
-foreach $file (sort @files2) {
+my $api_text = "";
+my $begin = 0;
+my $frag = "";
+foreach my $file (sort @files2) {
   # add .tex back on
   $file = "$file.tex";
   open(INFILE, "$GA_API_DIR/$file");
   while (<INFILE>) {
-    $line = $_;
+    my $line = $_;
     if ($begin == 0) {
       if ($line =~ /begin\{document\}/) {
         $begin = 1;
@@ -48,7 +52,7 @@ foreach $file (sort @files2) {
   close(INFILE);
 }
 
-$API_DECS = "\\documentclass\[12pt\]\{article\}\n";
+my $API_DECS = "\\documentclass\[12pt\]\{article\}\n";
 $API_DECS .= "\\usepackage\{fullpage\}\n";
 $API_DECS .= "\\usepackage\{color\}\n";
 $API_DECS .= "\\usepackage\{alltt\}\n";
@@ -60,7 +64,7 @@ $API_DECS .= "\\include\{otype\}\n\n";
 
 open(OUTFILE, ">$GA_DOC_DIR/$GA_API_DOC");
 
-$api_doc = "";
+my $api_doc = "";
 $api_doc = $API_DECS;
 $api_doc .= "\\begin\{document\}\n\n";
 $api_doc .= $api_text;
