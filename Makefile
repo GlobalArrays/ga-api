@@ -1,5 +1,5 @@
 API_DEPENDENCIES =
-API_DEPENDENCIES += preamble.tex
+API_DEPENDENCIES += preamble/preamble.tex
 API_DEPENDENCIES += figures/create-irreg.png
 API_DEPENDENCIES += figures/create-ghosts-irreg.png
 API_DEPENDENCIES += figures/set-irreg-dist.png
