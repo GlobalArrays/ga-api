@@ -8,33 +8,44 @@ opendir(APIDIR,"$GA_API_DIR");
 @files = readdir(APIDIR);
 closedir(APIDIR);
 
+@files2 = ();
+foreach $file (@files) {
+  # Skip any non-.tex file.
+  if ($file =~ m/\.tex/) {
+    # strip of .tex from filenames
+    my $shorter = substr $file,0,-4;
+    push (@files2, $shorter);
+  }
+  else {
+    print "skipping file: $file\n";
+  }
+}
+
 $api_text = "";
-foreach $file (sort @files) {
-  if ($file =~/\.tex\s*$/) {
-    $file_txt = "";
-    $begin = 0;
-    open(INFILE, "$GA_API_DIR/$file");
-    while (<INFILE>) {
-      $line = $_;
-      if ($begin == 0) {
-        if ($line =~ /begin\{document\}/) {
-          $begin = 1;
-          $frag = "";
-        }
+foreach $file (sort @files2) {
+  # add .tex back on
+  $file = "$file.tex";
+  open(INFILE, "$GA_API_DIR/$file");
+  while (<INFILE>) {
+    $line = $_;
+    if ($begin == 0) {
+      if ($line =~ /begin\{document\}/) {
+        $begin = 1;
+        $frag = "";
+      }
+    } else {
+      if ($line =~ /end\{document\}/) {
+        $begin = 0;
       } else {
-        if ($line =~ /end\{document\}/) {
-          $begin = 0;
-        } else {
-          $frag .= $line;
-          if ($line =~/\S/) {
-            $api_text .= $frag;
-            $frag = "";
-          }
+        $frag .= $line;
+        if ($line =~/\S/) {
+          $api_text .= $frag;
+          $frag = "";
         }
       }
     }
-    close(INFILE);
   }
+  close(INFILE);
 }
 
 $API_DECS = "\\documentclass\[12pt\]\{article\}\n";
