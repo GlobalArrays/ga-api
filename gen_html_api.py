@@ -29,10 +29,11 @@ except ImportError,e:
     extra_header = ""
     raise
 
-apih = re.compile(r'''^\\apih{(.*)}{(.*)}$''')
-inarg = re.compile(r'''^\\inarg{(.*)}{(.*)}{(.*)}$''')
-outarg = re.compile(r'''^\\outarg{(.*)}{(.*)}{(.*)}$''')
-inoutarg = re.compile(r'''^\\inoutarg{(.*)}{(.*)}{(.*)}$''')
+apih            = re.compile(r'''^\\apih{(.*)}{(.*)}$''')
+inarg           = re.compile(r'''^\\inarg{(.*)}{(.*)}{(.*)}$''')
+outarg          = re.compile(r'''^\\outarg{(.*)}{(.*)}{(.*)}$''')
+inoutarg        = re.compile(r'''^\\inoutarg{(.*)}{(.*)}{(.*)}$''')
+includegraphics = re.compile(r'''^\\includegraphics{(.*)}$''')
 
 lang_to_pretty = {
         "c": "C",
@@ -90,6 +91,7 @@ def main():
     in_api = False
     in_desc = False
     in_verb = False
+    in_figure = False
     # sort filenames but ignore the .tex extension
     for file in sorted(files, key=lambda x: x[:-4]):
         if file[-4:] != '.tex' or file[0] == '.':
@@ -196,13 +198,28 @@ def main():
                     out.write("</pre>\n<p>\n")
                 elif in_verb:
                     out.write(line)
+                elif "begin{figure}" in line:
+                    in_figure = True
+                elif "end{figure}" in line:
+                    in_figure = False
+                elif in_figure:
+                    if "includegraphics" in line:
+                        match = includegraphics.match(line.strip())
+                        if not match:
+                            print "in %s\nline: %s" % (path+file,line)
+                            assert(False)
+                        graphics_file = match.group(1)
+                        graphics_file += ".png"
+                        out.write('<img src="figures/%s" />\n' % graphics_file)
                 else:
                     line = line.strip()
                     if not line: # empty line, begin new paragraph
                         out.write("</p>\n<p>\n")
+                    if r'\ref' in line:
+                        line = line.replace(r'\ref{', '"')
+                        line = line.replace(r'}', '" below ')
+                        #line = re.sub(r'\ref{.*}', "below", line)
                     out.write(line)
-
-                
     out.write(post)
     out.close()
 
