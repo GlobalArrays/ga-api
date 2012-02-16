@@ -1,0 +1,22 @@
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+    <head>
+        <title>Global Arrays Toolkit: C API Operations</title>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+        <meta  name="description" content="The Global Arrays (GA) toolkit
+        provides an efficient and portable &quot;shared-memory&quot;
+        programming interface for distributed-memory computers." />
+        <meta name="keywords" content="PNNL, Global Arrays, EMSL" />
+    </head>
+    <frameset style="border: 1px" cols="*,80%">
+        <frame src="c_op_index.html" name="index" />
+        <frame src="c_op_api.html" name="api" marginwidth=10 marginheight=10 />
+        <noframes>
+            <body>
+                <p>Sorry, browser supporting frames required!</p>
+            </body>
+        </noframes>
+    </frameset>
+</html>

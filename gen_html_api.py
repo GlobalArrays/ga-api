@@ -147,21 +147,21 @@ def main():
                         print "in %s\nline: %s" % (path+file,line)
                         assert(False)
                     type,name,desc = match.groups()
-                    out.write("<tr><td>%s</td><td>%s</td><td>%s</td>\n" % (type,name,desc))
+                    out.write('<tr><td>%s</td><td>%s</td><td>%s</td><td><span style="color: rgb(0,102,0)">[input/output]</span></td>\n' % (type,name,desc))
                 elif 'inarg' in line:
                     match = inarg.match(line.strip())
                     if not match:
                         print "in %s\nline: %s" % (path+file,line)
                         assert(False)
                     type,name,desc = match.groups()
-                    out.write("<tr><td>%s</td><td>%s</td><td>%s</td>\n" % (type,name,desc))
+                    out.write('<tr><td>%s</td><td>%s</td><td>%s</td><td><span style="color: rgb(0,102,0)">[input]</span></td>\n' % (type,name,desc))
                 elif 'outarg' in line:
                     match = outarg.match(line.strip())
                     if not match:
                         print "in %s\nline: %s" % (path+file,line)
                         assert(False)
                     type,name,desc = match.groups()
-                    out.write("<tr><td>%s</td><td>%s</td><td>%s</td>\n" % (type,name,desc))
+                    out.write('<tr><td>%s</td><td>%s</td><td>%s</td><td><span style="color: rgb(0,102,0)">[output]</span></td>\n' % (type,name,desc))
                 else:
                     print "in %s\nline: %s" % (path+file,line)
                     assert(False)
