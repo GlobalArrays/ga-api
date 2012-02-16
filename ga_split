@@ -6,8 +6,11 @@ use File::Path qw(mkpath);
 my $GA_DOC_DIR = "./";
 my $GA_API_DOC = "ga_api.tex";
 my $GA_API_DIR = "./tmp/";
-if ($#ARGV == 0) {
+if ($#ARGV >= 0) {
     $GA_API_DIR = "$ARGV[0]/";
+}
+if ($#ARGV >= 1) {
+    $GA_API_DOC = "$ARGV[1]";
 }
 mkpath $GA_API_DIR;
 

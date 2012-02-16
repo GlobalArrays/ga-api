@@ -229,8 +229,7 @@ def main():
                 buf = ""
                 for name in names:
                     link = name.replace(" ", "_")
-                    buf += '<a target="api" href="c_op_api.html#%s">%s</a>'%(
-                            link, name)
+                    buf += '<a target="api" href="#%s">%s</a>'%(link, name)
                     buf += ', '
                 out.write(buf[:-2] + '\n')
     out.write(post)
