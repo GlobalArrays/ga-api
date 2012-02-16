@@ -29,11 +29,12 @@ except ImportError,e:
     extra_header = ""
     raise
 
-apih            = re.compile(r'''^\\apih{(.*)}{(.*)}$''')
-inarg           = re.compile(r'''^\\inarg{(.*)}{(.*)}{(.*)}$''')
-outarg          = re.compile(r'''^\\outarg{(.*)}{(.*)}{(.*)}$''')
-inoutarg        = re.compile(r'''^\\inoutarg{(.*)}{(.*)}{(.*)}$''')
-includegraphics = re.compile(r'''^\\includegraphics{(.*)}$''')
+apih            = re.compile(r'^\\apih{(.*)}{(.*)}$')
+inarg           = re.compile(r'^\\inarg{(.*)}{(.*)}{(.*)}$')
+outarg          = re.compile(r'^\\outarg{(.*)}{(.*)}{(.*)}$')
+inoutarg        = re.compile(r'^\\inoutarg{(.*)}{(.*)}{(.*)}$')
+includegraphics = re.compile(r'^\\includegraphics{(.*)}$')
+seealso         = re.compile(r'^\\seealso{(.*)}$')
 
 lang_to_pretty = {
         "c": "C",
@@ -220,6 +221,18 @@ def main():
                         line = line.replace(r'}', '" below ')
                         #line = re.sub(r'\ref{.*}', "below", line)
                     out.write(line)
+            elif "seealso" in line:
+                match = seealso.match(line.strip())
+                arg = match.group(1)
+                names = arg.split(',')
+                out.write('<h4>See Also:</h4>\n')
+                buf = ""
+                for name in names:
+                    link = name.replace(" ", "_")
+                    buf += '<a target="api" href="c_op_api.html#%s">%s</a>'%(
+                            link, name)
+                    buf += ', '
+                out.write(buf[:-2] + '\n')
     out.write(post)
     out.close()
 
