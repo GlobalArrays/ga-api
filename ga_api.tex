@@ -1984,8 +1984,7 @@ ret = ga.access_ghosts(int g_a)
 \end{pycode}
 \begin{funcargs}
 \inarg{int}{g_a}{the array handle}
-\outarg{ndarray}{ret}{appropriately shaped, possibly non-contiguous ndarray
-corresponding to global array patch held locally on the processor}
+\outarg{ndarray}{ret}{appropriately shaped, possibly non-contiguous ndarray corresponding to global array patch held locally on the processor}
 \end{funcargs}
 \end{pyapi}
 
@@ -2055,8 +2054,7 @@ ret = ga.access_ghost_element(int g_a, subscript)
 \begin{funcargs}
 \inarg{int}{g_a}{the array handle}
 \inarg{1D array-like of ints}{subscript}{index of desired element}
-\outarg{ndarray}{ret}{appropriately shaped, possibly non-contiguous ndarray
-corresponding to global array patch held locally on the processor}
+\outarg{ndarray}{ret}{appropriately shaped, possibly non-contiguous ndarray corresponding to global array patch held locally on the processor}
 \end{funcargs}
 \end{pyapi}
 
@@ -3451,7 +3449,7 @@ void NGA_Strided_acc(int g_a, int lo[], int hi[], int skip[], void* buf,
 \inarg{int*}{skip[ndim]}{array of strides for each dimension}
 \inarg{void*}{buf}{pointer to the local buffer array where the data goes}
 \inarg{int*}{ld[ndim-1]}{array specifying leading dimensions/strides/extents for buffer array}
-\inarg{double/DoublComplex/long*}{alpha}{scale factor}
+\inarg{double/DoubleComplex/long*}{alpha}{scale factor}
 \end{funcargs}
 \end{capi}
 
@@ -3484,7 +3482,7 @@ void GlobalArray::stridedAcc(int64_t lo[], int64_t hi[], int64_t skip[],
 \inarg{int*}{skip[ndim]}{array of strides for each dimension}
 \inarg{void*}{buf}{pointer to local buffer array where data goes}
 \inarg{int*}{ld[ndim-1]}{array specifying leading dimensions/strides/extents for buffer array}
-\inarg{void*}{alpha}{double/DoublComplex/long scale factor}
+\inarg{void*}{alpha}{double/DoubleComplex/long scale factor}
 \end{funcargs}
 \end{cxxapi}
 
@@ -3753,11 +3751,11 @@ Your code should include a MA include file, mafdecls.h.
           dcpl_mb(index) - for double complex data
 \end{verbatim}
 
-The addressing convention refers the first element \verb|(ilo,jlo)| of the
-patch. However, you can only pass that reference to another subroutine where it
-could be used like a normal array, see the following example. This constraint
-caused by the HP fortran compiler inability to reference shared memory data
-properly. The C interface has no such restrictions.
+The addressing convention refers the first element (ilo,jlo) of the patch.
+However, you can only pass that reference to another subroutine where it could
+be used like a normal array, see the following example. This constraint caused
+by the HP fortran compiler inability to reference shared memory data properly.
+The C interface has no such restrictions.
 
 Example
 
@@ -6497,12 +6495,14 @@ Patches must be non-overlapping (if g_a=g_b).
 
 \begin{capi}
 \begin{ccode}
-double NGA_Ddot_patch (int g_a, char ta, int alo[], int ahi[],
-                       int g_b, char tb, int blo[], int bhi[])
-long   NGA_Idot_patch (int g_a, char ta, int alo[], int ahi[],
-                       int g_b, char tb, int blo[], int bhi[])
-double complex NGA_Zdot_patch (int g_a, char ta, int alo[], int ahi[],
-                              int g_b, char tb, int blo[], int bhi[])
+double NGA_Ddot_patch       (int g_a, char ta, int alo[], int ahi[],
+                             int g_b, char tb, int blo[], int bhi[])
+int NGA_Idot_patch          (int g_a, char ta, int alo[], int ahi[],
+                             int g_b, char tb, int blo[], int bhi[])
+long NGA_Ldot_patch         (int g_a, char ta, int alo[], int ahi[],
+                             int g_b, char tb, int blo[], int bhi[])
+DoubleComplex NGA_Zdot_patch(int g_a, char ta, int alo[], int ahi[],
+                             int g_b, char tb, int blo[], int bhi[])
 \end{ccode}
 \begin{funcargs}
 \inarg{int}{g_a, g_b}{array handles}
@@ -6536,7 +6536,6 @@ double complex function nga_zdot_patch (g_a, ta, alo, ahi,
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{g_a, g_b}{}
-\funcarg{integer}{ndim}{number of dimensions}{NA}
 \inarg{integer}{alo(ndim), ahi(ndim)}{g_a patch coordinates}
 \inarg{integer}{blo(ndim), bhi(ndim)}{g_b patch coordinates}
 \inarg{character*1}{ta, tb}{transpose flags}
@@ -10245,7 +10244,6 @@ integer nga_merge_distr_patch(g_a, alo, ahi, g_b, blo, bhi)
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{g_a,g_b}{array handles}
-\funcarg{integer}{ndim}{number of dimensions of the global array}{NA}
 \inarg{integer}{alo(ndim),ahi(ndim)}{g_a patch coordinates}
 \inarg{integer}{blo(ndim),bhi(ndim)}{g_b patch coordinates}
 \end{funcargs}
@@ -11121,7 +11119,7 @@ should be compressed and icount is a variable that on output lists the number
 of values placed in the uncompressed array. This operation is the complement of
 the GA_Pack operation. An example is shown below.
 \begin{verbatim}
- GA_Unpack(g_src, g_dest, g_mask, 1, n, \&icount);
+GA_Unpack(g_src, g_dest, g_mask, 1, n, &icount);
 
 g_src:    1  7  9 12 15 16
 g_mask:   1  0  0  0  0  0  1  0  1  0  0  1  0  0  1  1  0
