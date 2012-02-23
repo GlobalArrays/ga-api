@@ -1,10 +1,4 @@
 API_DEPENDENCIES =
-API_DEPENDENCIES += preamble/allpreamble.tex
-API_DEPENDENCIES += preamble/cpreamble.tex
-API_DEPENDENCIES += preamble/cxxpreamble.tex
-API_DEPENDENCIES += preamble/fpreamble.tex
-API_DEPENDENCIES += preamble/pypreamble.tex
-
 API_DEPENDENCIES += figures/create-irreg.png
 API_DEPENDENCIES += figures/create-ghosts-irreg.png
 API_DEPENDENCIES += figures/set-irreg-dist.png

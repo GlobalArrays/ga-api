@@ -28,6 +28,17 @@ except ImportError,e:
     have_pygments = False
     extra_header = ""
     raise
+extra_header += '''<style type="text/css">
+table {
+    border-collapse:collapse;
+}
+table,th,td {
+    /*border:1px solid gray;*/
+    padding-left:10px;
+    padding-right:10px;
+}
+</style>
+'''
 
 apih            = re.compile(r'^\\apih{(.*)}{(.*)}$')
 inarg           = re.compile(r'^\\inarg{(.*)}{(.*)}{(.*)}$')
@@ -35,6 +46,9 @@ outarg          = re.compile(r'^\\outarg{(.*)}{(.*)}{(.*)}$')
 inoutarg        = re.compile(r'^\\inoutarg{(.*)}{(.*)}{(.*)}$')
 includegraphics = re.compile(r'^\\includegraphics{(.*)}$')
 seealso         = re.compile(r'^\\seealso{(.*)}$')
+
+style_out="color: rgb(102, 0, 0);"
+style_in ="color: rgb(0, 102, 0);"
 
 lang_to_pretty = {
         "c": "C",
@@ -93,6 +107,8 @@ def main():
     in_desc = False
     in_verb = False
     in_figure = False
+    in_itemize = False
+    itemize_buffer = ""
     # sort filenames but ignore the .tex extension
     for file in sorted(files, key=lambda x: x[:-4]):
         if file[-4:] != '.tex' or file[0] == '.':
@@ -111,6 +127,7 @@ def main():
                 name,desc = match.groups()
                 link = name.replace(" ", "_")
                 out.write('<h3 id="%s">%s</h3>\n' % (link, name))
+                out.write('<i>%s</i>\n' % desc)
             elif ((lang == "c" and "begin{capi}" in line)
                     or (lang == "f" and "begin{fapi}" in line)
                     or (lang == "py" and "begin{pyapi}" in line)
@@ -138,6 +155,7 @@ def main():
             elif in_api and "begin{funcargs}" in line:
                 in_funcargs = True
                 out.write("<small><table>\n")
+                out.write("<tr><th>Type</th><th>Name</th><th>Description</th><th>Intent</th></tr>\n")
             elif in_api and "end{funcargs}" in line:
                 in_funcargs = False
                 out.write("</table></small>\n")
@@ -148,21 +166,24 @@ def main():
                         print "in %s\nline: %s" % (path+file,line)
                         assert(False)
                     type,name,desc = match.groups()
-                    out.write('<tr><td>%s</td><td>%s</td><td>%s</td><td><span style="color: rgb(0,102,0)">[input/output]</span></td>\n' % (type,name,desc))
+                    out.write('<tr><td>%s</td><td>%s</td><td>%s</td><td><span style="%s">input</span>/<span style="%s">output</span></td>\n' % (
+                        type,name,desc,style_in,style_out))
                 elif 'inarg' in line:
                     match = inarg.match(line.strip())
                     if not match:
                         print "in %s\nline: %s" % (path+file,line)
                         assert(False)
                     type,name,desc = match.groups()
-                    out.write('<tr><td>%s</td><td>%s</td><td>%s</td><td><span style="color: rgb(0,102,0)">[input]</span></td>\n' % (type,name,desc))
+                    out.write('<tr><td>%s</td><td>%s</td><td>%s</td><td><span style="%s">input</span></td>\n' % (
+                        type,name,desc,style_in))
                 elif 'outarg' in line:
                     match = outarg.match(line.strip())
                     if not match:
                         print "in %s\nline: %s" % (path+file,line)
                         assert(False)
                     type,name,desc = match.groups()
-                    out.write('<tr><td>%s</td><td>%s</td><td>%s</td><td><span style="color: rgb(0,102,0)">[output]</span></td>\n' % (type,name,desc))
+                    out.write('<tr><td>%s</td><td>%s</td><td>%s</td><td><span style="%s">output</span></td>\n' % (
+                        type,name,desc,style_out))
                 else:
                     print "in %s\nline: %s" % (path+file,line)
                     assert(False)
@@ -212,14 +233,35 @@ def main():
                         graphics_file = match.group(1)
                         graphics_file += ".png"
                         out.write('<img src="figures/%s" />\n' % graphics_file)
+                elif "begin{itemize}" in line:
+                    in_itemize = True
+                    itemize_buffer = ""
+                elif "end{itemize}" in line:
+                    in_itemize = False
+                    items = itemize_buffer.split(r'\item')
+                    out.write('<ul>\n')
+                    for item in items:
+                        item = item.strip()
+                        if item: # skip blank items
+                            out.write('<li>%s</li>\n'%item)
+                    out.write('</ul>\n')
+                elif in_itemize:
+                    itemize_buffer += line.strip() + ' '
                 else:
-                    line = line.strip()
+                    line = line.strip() + ' '
                     if not line: # empty line, begin new paragraph
                         out.write("</p>\n<p>\n")
                     if r'\ref' in line:
                         line = line.replace(r'\ref{', '"')
                         line = line.replace(r'}', '" below ')
                         #line = re.sub(r'\ref{.*}', "below", line)
+                    # replace tex escape sequences
+                    line = line.replace(r'\{', '{')
+                    line = line.replace(r'\}', '}')
+                    line = line.replace(r'``', '"')
+                    line = line.replace(r"''", '"')
+                    line = line.replace(r"\&", '&')
+                    line = line.replace(r"$", '')
                     out.write(line)
             elif "seealso" in line:
                 match = seealso.match(line.strip())

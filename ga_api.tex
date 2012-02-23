@@ -539,11 +539,11 @@ chunk(1)=dim(1) gives distribution by vertical strips (chunk(1)*dims(1));
 setting chunk(2)=dim(2) gives distribution by horizontal strips
 (chunk(2)*dims(2)). Actual chunks will be modified so that they are at least
 the size of the minimum and each process has either zero or one chunk.
-Specifying chunk(i) as \textless 1 will cause that dimension (i-th) to be
-distributed evenly. The width of the ghost cell layer in each dimension is
-specified using the array width(). The local data of the global array residing
-on each processor will have a layer width[n] ghosts cells wide on either side
-of the visible data along the dimension n.
+Specifying chunk(i) as $< 1$ will cause that dimension (i-th) to be distributed
+evenly. The width of the ghost cell layer in each dimension is specified using
+the array width(). The local data of the global array residing on each
+processor will have a layer width[n] ghosts cells wide on either side of the
+visible data along the dimension n.
 
 Return value: a non-zero array handle means the call was successful.
 
@@ -5515,7 +5515,7 @@ the amount available under the GA limit and the amount available from MA
 (according to ma_inquire_avail operation). If no GA limit has been set, it
 returns what MA says is available.
 
-If ( ! GA_Uses_ma() \&\ \&\ ! GA_Memory_limited() ) returns $< 0$, indicating
+If ( !GA_Uses_ma() \&\& !GA_Memory_limited() ) returns $< 0$, indicating
 that the bound on currently available memory cannot be determined.
 
 \end{desc}
@@ -5833,14 +5833,14 @@ ga.print_stats()
 
 This non-collective (MIMD) operation prints information about:
 \begin{itemize}
-    \item Number of calls to the GA create/duplicate, destroy, get,
-     put, scatter, gather, and read_and_inc operations
+    \item Number of calls to the GA create/duplicate, destroy, get, put,
+    scatter, gather, and read_and_inc operations
     \item Total amount of data moved in the GA primitive operations
-    \item Amount of data moved in GA primitive operations to logicaly
-     remote locations
+    \item Amount of data moved in GA primitive operations to logicaly remote
+    locations
     \item Maximum memory consumption in global arrays, and
     \item Number of requests serviced in the interrupt-driven implementations
-     by the calling process.
+    by the calling process.
 \end{itemize}
 
 \end{desc}
