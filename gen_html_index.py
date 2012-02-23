@@ -21,6 +21,11 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         programming interface for distributed-memory computers." />
         <meta name="keywords" content="PNNL, Global Arrays, EMSL" />
         <!--#include virtual="/docs/global/shared/globals.inc"-->
+        <style type="text/css">
+        dt {
+        font-size:small;
+        }
+        </style>
     </head>
     <body>
     <dl>

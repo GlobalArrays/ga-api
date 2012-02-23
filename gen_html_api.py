@@ -36,6 +36,7 @@ table,th,td {
     /*border:1px solid gray;*/
     padding-left:10px;
     padding-right:10px;
+    font-size:small;
 }
 </style>
 '''
@@ -154,11 +155,11 @@ def main():
                 code += line
             elif in_api and "begin{funcargs}" in line:
                 in_funcargs = True
-                out.write("<small><table>\n")
+                out.write("<table>\n")
                 out.write("<tr><th>Type</th><th>Name</th><th>Description</th><th>Intent</th></tr>\n")
             elif in_api and "end{funcargs}" in line:
                 in_funcargs = False
-                out.write("</table></small>\n")
+                out.write("</table>\n")
             elif in_funcargs:
                 if 'inoutarg' in line:
                     match = inoutarg.match(line.strip())
