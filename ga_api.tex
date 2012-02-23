@@ -4790,10 +4790,12 @@ ga.scatter(int g_a, values, subsarray)
 \begin{desc}
 
 Scatters array elements into a global array. The contents of the input arrays
-(v,subscrArray) are preserved, but their contents might be (consistently)
-shuffled on return.
+(v,subsArray) are preserved.
 
-For(k=0; k<= n; k++)\{\ a[subsArray[k][0]][subsArray[k][1]][subsArray[k][2]]... = v[k];\}\
+\begin{verbatim}
+for (k=0; k<= n; k++)
+   {a[[subsArray[k][0]][subsArray[k][1]][subsArray[k][2]]... = v[k];}
+\end{verbatim}
 
 \end{desc}
 
@@ -4889,10 +4891,12 @@ ret = ga.gather(int g_a, subsarray, ndarray values=None)
 \begin{desc}
 
 Gathers array elements from a global array into a local array. The contents of
-the input arrays (v, subscrArray) are preserved, but their contents might be
-(consistently) shuffled on return.
+the input arrays (v, subsArray) are preserved.
 
-for (k=0; k<= n; k++)\{\\v[k] = a[subsArray[k][0]][subsArray[k][1]][subsArray[k][2]]...;\}\
+\begin{verbatim}
+for (k=0; k<= n; k++)
+   {v[k] = a[subsArray[k][0]][subsArray[k][1]][subsArray[k][2]]...;}
+\end{verbatim}
 
 \end{desc}
 
@@ -4993,10 +4997,12 @@ ga.scatter_acc(int g_a, values, subsarray, alpha=None)
 
 Scatters array elements from a local array into a global array. Adds values
 from the local array to existing values in the global array after multiplying
-by alpha. The contents of the input arrays (v, subscrArray) are preserved, but
-their contents might be (consistently) shuffled on return.
+by alpha. The contents of the input arrays (v, subsArray) are preserved.
 
-for(k=0; k<= n; k++)\{\\v[k] = a[subsArray[k][0]][subsArray[k][1]][subsArray[k][2]]...;\}\
+\begin{verbatim}
+for (k=0; k<= n; k++)
+   {a[subsArray[k][0]][subsArray[k][1]][subsArray[k][2]]... += v[k];}
+\end{verbatim}
 
 Like scatter, but adds values to existing values in the global array after
 multiplying by alpha.
@@ -5072,7 +5078,7 @@ ga.error(char *message, int code=1)
 \begin{desc}
 
 To be called in case of an error. Print an error message and an integer value
-that represents error code. Releases some system resources. This is the
+that represents an error code as well as releasing some system resources. This is the
 required way of aborting the program execution.
 
 \end{desc}
@@ -5138,7 +5144,7 @@ ret = ga.locate(int g_a, subscript)
 
 \begin{desc}
 
-Return in owner the GA compute process ID that `owns' the data. If any element
+Return the GA compute process ID that `owns' the data. If any element
 of subscript[] is out of bounds ``-1'' is returned.
 
 \end{desc}
@@ -5216,7 +5222,7 @@ map,procs = locate_region(int g_a, lo, hi)
 
 \begin{desc}
 
-Return the list of the GA processes ID that `own' the data. Parts of the
+Return a list of the GA processes ID that `own' the data. Parts of the
 specified patch might be actually `owned' by several processes. If lo/hi are
 out of bounds ``0'' is returned, otherwise the return value is equal to the
 number of processes that hold the data.
@@ -5329,7 +5335,7 @@ ret = ga.inquire_memory()
 
 \begin{desc}
 
-Returns amount of memory (in bytes) used in the allocated global arrays on
+Returns the amount of memory (in bytes) used in the allocated global arrays on
 the calling processor.
 
 \end{desc}
@@ -5417,7 +5423,7 @@ ret = ga.ndim(int g_a)
 
 \begin{desc}
 
-Returns the number of dimensions in array represented by the handle g_a.
+Returns the number of dimensions in the array represented by the handle g_a.
 
 \end{desc}
 
@@ -5471,7 +5477,7 @@ number of partitions of each array dimension.
 
 \end{desc}
 
-\apih{MEMORY AVAIL}{Inquire the memory available on the invoking processor to allocate global arrays}
+\apih{MEMORY AVAIL}{Inquire about memory available on the invoking processor to allocate global arrays}
 
 \begin{capi}
 \begin{ccode}
@@ -6378,9 +6384,9 @@ ga.gemm(int ta, int tb, int64_t m, int64_t n, int64_t k,
 \begin{desc}
 
 Performs one of the matrix-matrix operations:
-\[
+\begin{verbatim}
       C := alpha*op( A )*op( B ) + beta*C,
-\]
+\end{verbatim}
 
 where op( X ) is one of
 \begin{verbatim}
@@ -6896,7 +6902,7 @@ ga.add(int g_a, int g_b, int g_c, alpha=None, beta=None,
 Patches of arrays (which must have the same number of elements) are added
 together element-wise.
 \begin{verbatim}
-c[ ][ ] = alpha * a[ ][ ] + beta * b[ ][ ]
+         c[ ][ ] = alpha * a[ ][ ] + beta * b[ ][ ]
 \end{verbatim}
 
 \end{desc}
@@ -11041,7 +11047,7 @@ should be compressed and icount is a variable that on output lists the number
 of values placed in the compressed array. This operation is the complement of
 the GA_Unpack operation. An example is shown below
 \begin{verbatim}
-GA_Pack(g_src, g_dest, g_mask, 1, n, \&icount);
+GA_Pack(g_src, g_dest, g_mask, 1, n, &icount);
 
 g_mask:   1  0  0  0  0  0  1  0  1  0  0  1  0  0  1  1  0
 g_src:    1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17
