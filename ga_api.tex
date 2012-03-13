@@ -447,12 +447,30 @@ g_a = ga.create(int gtype, dims, char *name='', chunk=None,
 \begin{desc}
 
 Creates an ndim-dimensional array using the regular distribution model but with
-an explicitly specified processor list handle and returns an integer handle
+an explicitly specified processor group handle and returns an integer handle
 representing the array.
+\end{desc}
 
+\begin{fdesc}
+This call is essentially the same as the nga_create call, except for the
+processor group handle p_handle. It can also be used to create mirrored arrays.
+\end{fdesc}
+\begin{cdesc}
 This call is essentially the same as the NGA_Create call, except for the
-processor list handle p_handle. It can be used to create mirrored arrays.
+processor group handle p_handle. It can also be used to create mirrored arrays.
+\end{cdesc}
+\begin{cdesc}
+This call is essentially the same as the base GlobalArray constructor, except
+for the processor group handle p_handle. It can also be used to create mirrored
+arrays.
+\end{cdesc}
 
+\begin{pydesc}
+This call is essentially the same as the create call, except for the
+processor group handle p_handle. It can also be used to create mirrored arrays.
+\end{pydesc}
+
+\begin{desc}
 Return value: a non-zero array handle means the call was succesful.
 
 \end{desc}
@@ -748,12 +766,34 @@ The distribution is specified as a Cartesian product of distributions for each
 dimension. The array indices start at 0.  For example, Figure \ref{crirreg}
 demonstrates the distribution of a 2-dimensional 8x10 array on 6 (or more)
 processors.
+\end{desc}
 
-nblock[2]=\{3,2\}, the size of the map array is s=5 and the array map contains
-the following elements map=\{0,2,6, 0, 5\}. The distribution is nonuniform
+\begin{fdesc}
+nblock(2)=\{3,2\}, the size of the map array is s=5 and the array map contains
+the following elements map=\{1,3,7,1,6\}. The distribution is nonuniform
 because P1 and P4 get 20 elements each and processors P0, P2, P3, and P5 only
 10 elements each.
+\end{fdesc}
+\begin{cdesc}
+nblock[2]=\{3,2\}, the size of the map array is s=5 and the array map contains
+the following elements map=\{0,5,0,2,6\}. The distribution is nonuniform
+because P1 and P4 get 20 elements each and processors P0, P2, P3, and P5 only
+10 elements each.
+\end{cdesc}
+\begin{cxxdesc}
+nblock[2]=\{3,2\}, the size of the map array is s=5 and the array map contains
+the following elements map=\{0,5,0,2,6\}. The distribution is nonuniform
+because P1 and P4 get 20 elements each and processors P0, P2, P3, and P5 only
+10 elements each.
+\end{cxxdesc}
+\begin{pydesc}
+nblock(2)=\{3,2\}, the size of the map array is s=5 and the array map contains
+the following elements map=\{1,3,7, 1, 6\}. The distribution is nonuniform
+because P1 and P4 get 20 elements each and processors P0, P2, P3, and P5 only
+10 elements each.
+\end{pydesc}
 
+\begin{desc}
 \begin{figure}
 \includegraphics{create-irreg}
 \centering
@@ -847,12 +887,28 @@ g_a = ga.create_irreg(int gtype, dims, block, map, char *name='',
 \begin{desc}
 
 Creates an array by following the user-specified distribution and an explicitly
-specified processor list handle and returns an integer handle representing the
+specified processor group handle and returns an integer handle representing the
 array.
+\end{desc}
 
+\begin{fdesc}
+This call is essentially the same as the nga_create_irreg call, except for the
+processor group handle p_handle. It can also be used to create arrays on mirrored arrays.
+\end{fdesc}
+\begin{cdesc}
 This call is essentially the same as the NGA_Create_irreg call, except for the
-processor list handle p_handle. It can be used to create mirrored arrays.
+processor group handle p_handle. It can also be used to create mirrored arrays.
+\end{cdesc}
+\begin{cxxdesc}
+This call is essentially the same as GlobalArray constructors, except for the
+processor group handle p_handle. It can also be used to create mirrored arrays.
+\end{cxxdesc}
+\begin{pydesc}
+This call is essentially the same as the create_irreg call, except for the
+processor group handle p_handle. It can also be used to create arrays on mirrored arrays.
+\end{pydesc}
 
+\begin{desc}
 Return value: a non-zero array handle means the call was succesful.
 
 \end{desc}
@@ -943,13 +999,35 @@ dimension.
 
 Figure \ref{crghostir} demonstrates distribution of a 2-dimensional array 8x10
 on 6 (or more) processors.
+\end{desc}
 
+\begin{fdesc}
 nblock(2)=\{3,2\}, the size of map array is s=5 and the array map contains the
 following elements map=\{1,3,7, 1, 6\}. The distribution is nonuniform because,
 P1 and P4 get 20 elements each and processors P0, P2, P3, and P5 only 10
 elements each.
+\end{fdesc}
+\begin{cdesc}
+nblock[2]=\{3,2\}, the size of map array is s=5 and the array map contains the
+following elements map=\{0,2,6, 0, 6\}. The distribution is nonuniform because,
+P1 and P4 get 20 elements each and processors P0, P2, P3, and P5 only 10
+elements each.
+\end{cdesc}
+\begin{cxxdesc}
+nblock[2]=\{3,2\}, the size of map array is s=5 and the array map contains the
+following elements map=\{0,2,6, 0, 6\}. The distribution is nonuniform because,
+P1 and P4 get 20 elements each and processors P0, P2, P3, and P5 only 10
+elements each.
+\end{cxxdesc}
+\begin{pydesc}
+nblock(2)=\{3,2\}, the size of map array is s=5 and the array map contains the
+following elements map=\{1,3,7, 1, 6\}. The distribution is nonuniform because,
+P1 and P4 get 20 elements each and processors P0, P2, P3, and P5 only 10
+elements each.
+\end{pydesc}
 
-The array width[] is used to control the width of the ghost cell boundary
+\begin{desc}
+The array width is used to control the width of the ghost cell boundary
 around the visible data on each processor. The local data of the Global Array
 residing on each processor will have a layer width[n] ghosts cells wide on
 either side of the visible data along the dimension n.
@@ -1052,12 +1130,25 @@ g_a = ga.create_ghosts_irreg(int gtype, dims, width, block, map,
 \begin{desc}
 
 Creates an array with ghost cells by following the user-specified distribution
-and returns integer handle representing the array.
+and returns an integer handle representing the array. The user can specify that
+the array is created on a particular processor group.
+\end{desc}
 
-This call is essentially the same as the NGA_Create_ghosts_irreg call, except
-for the processor list handle p_handle. It can be used to create mirrored
-arrays.
+\begin{fdesc}
+This call is similar to the nga_create_ghosts_irreg call.
+\end{fdesc}
+\begin{cdesc}
+This call is similar to the NGA_Create_ghosts_irreg call.
+\end{cdesc}
+\begin{cxxdesc}
+This call is similar to the constructor for creating irregular distributions
+with ghost cells.
+\end{cxxdesc}
+\begin{pydesc}
+This call is similar to the create_ghosts_irreg call.
+\end{pydesc}
 
+\begin{desc}
 Return value: a non-zero array handle means the call was succesful.
 
 \end{desc}
@@ -1274,14 +1365,42 @@ ga.set_irreg_distr(int g_a, mapc, nblock)
 This function can be used to partition the array data among the individual
 processors for a global array handle obtained using the GA_Create_handle
 function.
+\end{desc}
 
+\begin{fdesc}
 The distribution is specified as a Cartesian product of distributions for each
 dimension. For example, the following figure demonstrates distribution of a
-2-dimensional array 8x10 on 6 (or more) processors. nblock(2)=\{3,2\}, the size
+2-dimensional array 8x10 on 6 processors. nblock(2)=\{3,2\}, the size
 of mapc array is s=5 and array mapc contains the following elements mapc=\{1,
 3, 7, 1, 6\}. The distribution is nonuniform because, P1 and P4 get 20 elements
 each and processors P0, P2, P3, and P5 only 10 elements each.
+\end{fdesc}
+\begin{cdesc}
+The distribution is specified as a Cartesian product of distributions for each
+dimension. For example, the following figure demonstrates distribution of a
+2-dimensional array 8x10 on 6 processors. nblock(2)=\{3,2\}, the size
+of mapc array is s=5 and array mapc contains the following elements
+mapc=\{0,5,0,2,6\}. The distribution is nonuniform because, P1 and P4 get 20
+elements each and processors P0, P2, P3, and P5 only 10 elements each.
+\end{cdesc}
+\begin{cxxdesc}
+The distribution is specified as a Cartesian product of distributions for each
+dimension. For example, the following figure demonstrates distribution of a
+2-dimensional array 8x10 on 6 processors. nblock(2)=\{3,2\}, the size
+of mapc array is s=5 and array mapc contains the following elements
+mapc=\{0,5,0,2,6\}. The distribution is nonuniform because, P1 and P4 get 20
+elements each and processors P0, P2, P3, and P5 only 10 elements each.
+\end{cxxdesc}
+\begin{pydesc}
+The distribution is specified as a Cartesian product of distributions for each
+dimension. For example, the following figure demonstrates distribution of a
+2-dimensional array 8x10 on 6 processors. nblock(2)=\{3,2\}, the size
+of mapc array is s=5 and array mapc contains the following elements mapc=\{1,
+3, 7, 1, 6\}. The distribution is nonuniform because, P1 and P4 get 20 elements
+each and processors P0, P2, P3, and P5 only 10 elements each.
+\end{pydesc}
 
+\begin{desc}
 The array width() is used to control the width of the ghost cell boundary
 around the visible data on each processor. The local data of the global array
 residing on each processor will have a layer width(n) ghosts cells wide on
