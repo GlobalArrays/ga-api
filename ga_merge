@@ -58,14 +58,14 @@ foreach my $file (sort @files2) {
 }
 
 my $API_DECS = "\\documentclass\[12pt\]\{article\}\n";
-$API_DECS .= "\\usepackage\{fullpage\}\n";
-$API_DECS .= "\\usepackage\{color\}\n";
-$API_DECS .= "\\usepackage\{alltt\}\n";
-$API_DECS .= "\\usepackage\{underscore\}\n";
-$API_DECS .= "\\usepackage\{environ\}\n";
-$API_DECS .= "\\usepackage\{graphicx\}\n";
-$API_DECS .= "\\include\{preamble\}\n";
-$API_DECS .= "\\include\{otype\}\n\n";
+#$API_DECS .= "\\usepackage\{fullpage\}\n";
+#$API_DECS .= "\\usepackage\{color\}\n";
+#$API_DECS .= "\\usepackage\{alltt\}\n";
+#$API_DECS .= "\\usepackage\{underscore\}\n";
+#$API_DECS .= "\\usepackage\{environ\}\n";
+#$API_DECS .= "\\usepackage\{graphicx\}\n";
+$API_DECS .= "\\include\{preamble\/preamble\}\n";
+#$API_DECS .= "\\include\{otype\}\n\n";
 
 open(OUTFILE, ">$GA_DOC_DIR/$GA_API_DOC");
 
