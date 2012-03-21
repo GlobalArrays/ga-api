@@ -130,12 +130,14 @@ def main():
                 out.write('<h3 id="%s">%s</h3>\n' % (link, name))
                 out.write('<i>%s</i>\n' % desc)
             elif ((lang == "c" and "begin{capi}" in line)
-                    or (lang == "f" and "begin{fapi}" in line)
+                    or (lang == "f"
+                        and ("begin{fapi}" in line or "begin{f2dapi}" in line))
                     or (lang == "py" and "begin{pyapi}" in line)
                     or (lang == "cxx" and "begin{cxxapi}" in line)):
                 in_api = True
             elif ((lang == "c" and "end{capi}" in line)
-                    or (lang == "f" and "end{fapi}" in line)
+                    or (lang == "f"
+                        and ("end{fapi}" in line or "end{f2dapi}" in line))
                     or (lang == "py" and "end{pyapi}" in line)
                     or (lang == "cxx" and "end{cxxapi}" in line)):
                 in_api = False
