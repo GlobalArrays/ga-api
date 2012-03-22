@@ -121,9 +121,9 @@ subroutine ga_acc(g_a, ilo, ihi, jlo, jhi, buf, ld, alpha)
 \begin{funcargs}
 \inarg{integer}{g_a}{}
 \inarg{integer}{ilo, ihi, jlo, jhi}{}
-\inarg{double precision/complex}{buf}{TODO}
+\inarg{double precision/complex}{buf}{local buffer containing data}
 \inarg{integer}{ld}{}
-\inarg{double precision/complex}{alpha}{TODO}
+\inarg{double precision/complex}{alpha}{scale argument for accumulate}
 \end{funcargs}
 \end{f2dapi}
 
@@ -136,7 +136,7 @@ subroutine nga_acc(g_a, lo, hi, buf, ld, alpha)
 \inarg{integer}{ndim}{number of dimensions of the global array}
 \inarg{integer}{lo(ndim)}{array of starting indices for global array section}
 \inarg{integer}{hi(ndim)}{array of ending indices for global array section}
-\outarg{type}{buf}{local buffer array where the local data is}
+\outarg{type}{buf}{local buffer containing data}
 \inarg{integer}{ld(ndim-1)}{array specifying leading dimensions for buffer array}
 \inarg{type}{alpha}{scale argument for accumulate}
 \end{funcargs}
@@ -740,7 +740,7 @@ subroutine ga_add_constant(g_a,  alpha)
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{g_a}{array handle}
-\inarg{double/complex/integer/float}{alpha}{TODO}
+\inarg{double/complex/integer/float}{alpha}{added value}
 \end{funcargs}
 \end{fapi}
 
@@ -790,7 +790,7 @@ subroutine ga_add_constant_patch(g_a, lo, hi, alpha)
 \inarg{integer}{g_a}{array handle}
 \inarg{integer}{ndim}{number of dimensions}
 \inarg{integer}{lo(ndim), hi(ndim)}{patch coordinates}
-\inarg{double/complex/integer/float}{alpha}{TODO}
+\inarg{double/complex/integer/float}{alpha}{added value}
 \end{funcargs}
 \end{fapi}
 
@@ -897,7 +897,7 @@ subroutine ga_add_patch(alpha, g_a, ailo, aihi, ajlo, ajhi,
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{g_a, g_b, g_c}{}
-\inarg{double precision/complex/integer}{alpha, beta}{TODO}
+\inarg{double precision/complex/integer}{alpha, beta}{scale factors patches}
 \inarg{integer}{ailo, aihi, ajlo, ajhi}{g_a patch coordinates}
 \inarg{integer}{bilo, bihi, bjlo, bjhi}{g_b patch coordinates}
 \inarg{integer}{cilo, cihi, cjlo, cjhi}{g_c patch coordinates}
@@ -911,7 +911,7 @@ subroutine nga_add_patch(alpha, g_a, alo, ahi, beta, g_b, blo, bhi
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{g_a, g_b, g_c}{}
-\inarg{double precision/complex/integer}{alpha,beta}{TODO}
+\inarg{double precision/complex/integer}{alpha,beta}{scale factors for patches}
 \inarg{integer}{ndim}{number of dimensions}
 \inarg{integer}{alo(ndim), ahi(ndim)}{g_a patch coordinates}
 \inarg{integer}{blo(ndim), bhi(ndim)}{g_b patch coordinates}
@@ -1047,7 +1047,7 @@ subroutine ga_brdcst(type, buf, lenbuf, root)
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{type}{}
-\inoutarg{byte}{buf(lenbuf)}{TODO}
+\inoutarg{byte}{buf(lenbuf)}{buffer contain broadcasted/received data}
 \inarg{integer}{lenbuf}{}
 \inarg{integer}{root}{}
 \end{funcargs}
@@ -1109,7 +1109,7 @@ subroutine ga_check_handle(g_a, string)
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{g_a}{}
-\inarg{character(*)*}{string}{TODO}
+\inarg{character(*)*}{string}{message string}
 \end{funcargs}
 \end{fapi}
 
@@ -1654,7 +1654,7 @@ Return value: a non-zero array handle means the call was succesful.
 
 \end{desc}
 
-\seealso{CREATE CONFIG,CREATE GHOST IRREG,CREATE GHOSTS,CREATE GHOSTS CONFIG,CREATE GHOSTS IRREG CONFIG,CREATE HANDLE,CREATE IRREG,CREATE IRREG CONFIG}
+\seealso{CREATE CONFIG,CREATE GHOSTSSSSSSSSS IRREG,CREATE GHOSTS,CREATE GHOSTS CONFIG,CREATE GHOSTS IRREG CONFIG,CREATE HANDLE,CREATE IRREG,CREATE IRREG CONFIG}
 
 \apih{CREATE CONFIG}{Creates a GA for a specific processor group}
 
@@ -1761,7 +1761,7 @@ Return value: a non-zero array handle means the call was succesful.
 
 \seealso{CREATE,SET PGROUP}
 
-\apih{CREATE GHOST IRREG}{Creates an irregular-distributed GA with ghost cells}
+\apih{CREATE GHOSTS IRREG}{Creates an irregular-distributed GA with ghost cells}
 
 \begin{capi}
 \begin{ccode}
@@ -3926,7 +3926,7 @@ subroutine ga_fill_patch(g_a, ailo, aihi, ajlo, ajhi, s)
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{g_a}{}
-\inarg{double precision/complex/integer}{s}{TODO}
+\inarg{double precision/complex/integer}{s}{fill value}
 \inarg{integer}{ailo, aihi, ajlo, ajhi}{g_a patch coordinates}
 \end{funcargs}
 \end{f2dapi}
@@ -3937,7 +3937,7 @@ subroutine nga_fill_patch (g_a, alo, ahi, s)
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{g_a}{}
-\inarg{double precision/complex/integer}{s}{TODO}
+\inarg{double precision/complex/integer}{s}{fill value}
 \inarg{integer}{ndim}{number of dimensions}
 \inarg{integer}{alo(ndim), ahi(ndim)}{g_a patch coordinates}
 \end{funcargs}
@@ -4222,7 +4222,7 @@ subroutine ga_get(g_a, ilo, ihi, jlo, jhi, buf, ld)
 \begin{funcargs}
 \inarg{integer}{g_a}{array handle}
 \inarg{integer}{ilo, ihi, jlo, jhi}{}
-\outarg{double precision/complex/integer}{buf}{TODO}
+\outarg{double precision/complex/integer}{buf}{local buffer where data goes to}
 \inarg{integer}{ld}{leading dimension}
 \end{funcargs}
 \end{f2dapi}
@@ -4462,12 +4462,12 @@ subroutine ga_zgop(type, x, n, op)
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{type}{this argument is deprecated}
-\inoutarg{integer}{x(n)}{TODO}
-\inoutarg{real}{x(n)}{TODO}
-\inoutarg{double precision}{x(n)}{TODO}
-\inoutarg{single complex}{x(n)}{TODO}
-\inoutarg{double complex}{x(n)}{TODO}
-\inarg{character*(*)}{op}{TODO}
+\inoutarg{integer}{x(n)}{local array of initial/final values}
+\inoutarg{real}{x(n)}{local array of initial/final values}
+\inoutarg{double precision}{x(n)}{local array of initial/final values}
+\inoutarg{single complex}{x(n)}{local array of initial/final values}
+\inoutarg{double complex}{x(n)}{local array of initial/final values}
+\inarg{character*(*)}{op}{global operation}
 \end{funcargs}
 \end{fapi}
 
@@ -5055,9 +5055,10 @@ int NGA_Locate_region(int g_a, int lo[], int hi[], int map[], int procs[])
 logical function ga_locate_region(g_a, ilo, ihi, jlo, jhi, map, np)
 \end{fcode}
 \begin{funcargs}
-\inarg{integer}{g_a, ilo, ihi, jlo, jhi}{TODO}
-\outarg{integer}{map(5,*)}{TODO}
-\outarg{integer}{np}{TODO}
+\inarg{integer}{g_a}{global array handle}
+\inarg{integer}{ilo, ihi, jlo, jhi}{bounding indices for array section}
+\outarg{integer}{map(5,*)}{array containing mapping information}
+\outarg{integer}{np}{number of processors containing data}
 \end{funcargs}
 \end{f2dapi}
 
@@ -5071,7 +5072,7 @@ logical function nga_locate_region(g_a, lo, hi, map, proclist, np)
 \inarg{integer}{lo(ndim),hi(ndim)}{region(patch) specifications}
 \outarg{integer}{map(2*ndim,*)}{patch ownership array}
 \outarg{integer}{proclist(np)}{list of processes}
-\outarg{integer}{np}{number of processes}
+\outarg{integer}{np}{number of processes containing data}
 \inarg{}{map(1:ndim,i)}{contains lower bound dimensions for part owned by process proclist(i)}
 \inarg{}{map(ndim+1:2*ndim,i)}{contains upper bound dimensions for part owned by process proclist(i)}
 \end{funcargs}
@@ -5337,8 +5338,8 @@ subroutine ga_matmul_patch (transa, transb, alpha, beta,
 \inarg{integer}{g_a, ailo, aihi, ajlo, ajhi}{patch of g_a}
 \inarg{integer}{g_b, bilo, bihi, bjlo, bjhi}{patch of g_b}
 \inarg{integer}{g_c, cilo, cihi, cjlo, cjhi}{patch of g_c}
-\inarg{double precision/complex}{alpha, beta}{TODO}
-\inarg{character*1}{transa, transb}{TODO}
+\inarg{double precision/complex}{alpha, beta}{scale factors}
+\inarg{character*1}{transa, transb}{transpose operators}
 \end{funcargs}
 \end{f2dapi}
 
@@ -5353,8 +5354,8 @@ subroutine nga_matmul_patch(transa, transb, alpha, beta,
 \inarg{integer}{g_a, alo, ahi}{patch of g_a}
 \inarg{integer}{g_b, blo, bhi}{patch of g_b}
 \inarg{integer}{g_c, clo, chi}{patch of g_c}
-\inarg{double precision/complex}{alpha, beta}{TODO}
-\inarg{character*1}{transa, transb}{TODO}
+\inarg{double precision/complex}{alpha, beta}{scale factors}
+\inarg{character*1}{transa, transb}{transpose operators}
 \end{funcargs}
 \end{fapi}
 
@@ -7671,8 +7672,8 @@ subroutine ga_put(g_a, ilo, ihi, jlo, jhi, buf, ld)
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{g_a}{}
-\inarg{integer}{ilo, ihi, jlo, jhi}{}
-\outarg{double precision/complex/integer}{buf}{TODO}
+\inarg{integer}{ilo, ihi, jlo, jhi}{bounding indices for global array section}
+\outarg{double precision/complex/integer}{buf}{local buffer where data comes from}
 \inarg{integer}{ld}{}
 \end{funcargs}
 \end{f2dapi}
@@ -8573,7 +8574,7 @@ subroutine ga_scale(g_a, s)
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{g_a}{array handle}
-\inarg{double precision/complex/integer}{s}{TODO}
+\inarg{double precision/complex/integer}{s}{scale factor}
 \end{funcargs}
 \end{fapi}
 
@@ -8670,7 +8671,7 @@ subroutine ga_scale_patch(g_a, ailo, aihi, ajlo, ajhi, s)
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{g_a}{}
-\inarg{double precision/complex/integer}{s}{TODO}
+\inarg{double precision/complex/integer}{s}{scale factor}
 \inarg{integer}{ailo, aihi, ajlo, ajhi}{g_a patch coordinates}
 \end{funcargs}
 \end{f2dapi}
@@ -8681,7 +8682,7 @@ subroutine nga_scale_patch(g_a, alo, ahi, s)
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{g_a}{}
-\inarg{double precision/complex/integer}{s}{TODO}
+\inarg{double precision/complex/integer}{s}{scale factor}
 \inarg{integer}{ndim}{number of dimensions}
 \inarg{integer}{alo(ndim), ahi(ndim)}{g_a patch coordinates}
 \end{funcargs}
@@ -8946,8 +8947,9 @@ subroutine ga_scatter(g_a, v, i, j, n)
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{g_a}{}
-\inarg{double precision}{v(n)}{TODO}
-\inarg{integer}{i(n), j(n), n}{TODO}
+\inarg{double precision}{v(n)}{vector of values to be scattered}
+\inarg{integer}{i(n), j(n)}{array of subscripts for each destination element}
+\inarg{integer}{n}{number of elements to be scattered}
 \end{funcargs}
 \end{f2dapi}
 
@@ -10010,7 +10012,7 @@ subroutine ga_shift_diagonal(g_a, c)
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{g_a}{array handle}
-\inarg{double/complex/integer/float}{c}{TODO}
+\inarg{double/complex/integer/float}{c}{shift value}
 \end{funcargs}
 \end{fapi}
 
