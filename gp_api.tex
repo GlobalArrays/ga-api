@@ -1,0 +1,217 @@
+\documentclass[12pt]{article}
+\include{preamble/preamble}
+\begin{document}
+
+
+\apih{ACCESS ELEMENT}{Obtain a pointer to a locally held GP element}
+
+\begin{capi}
+\begin{ccode}
+void GP_Access_element(int g_p, int *subscript, void *ptr, int *size)
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{g_p}{pointer array handle}
+\inarg{int*}{subscript}{indices of array element}
+\outarg{void*}{ptr}{pointer to locally held element}
+\outarg{int*}{size}{size in bytes of locally held element}
+\end{funcargs}
+\end{capi}
+
+\local
+
+\begin{desc}
+
+This function returns a pointer to the data element element represented by the
+array subscript. The suscript must be local to the processor, which means that
+it must be within the bounds returned by the GP_Distribution function for the
+calling process. It is an error if the subscript values represent an element
+on a different processor.
+
+\end{desc}
+
+\seealso{DISTRIBUTION, RELEASE ELEMENT, RELEASE UPDATE ELEMENT}
+
+\apih{ALLOCATE}{Allocate resources for a new GP array}
+
+\begin{capi}
+\begin{ccode}
+int GP_Allocate(int g_p)
+\begin{funcargs}
+\inarg{int}{g_p}{pointer array handle}
+\end{funcargs}
+\end{ccode}
+\end{capi}
+
+\local
+
+\begin{desc}
+
+This function is called after a new array handle has been created and its
+attributes have been set. This function actually allocates resources for the GP
+array and allows it to be used by the program to store data.
+
+\end{desc}
+
+\seealso{CREATE HANDLE, SET DIMENSIONS}
+
+\apih{ASSIGN LOCAL ELEMENT}{Assign a pointer to local data}
+
+\begin{capi}
+\begin{ccode}
+void GP_Assign_local_element(int g_p, int *subscript, void *ptr, int size)
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{g_p}{pointer array handle}
+\inarg{int*}{subscript}{indices of array element}
+\inarg{void*}{ptr}{pointer to local data}
+\inarg{int}{size}{size in bytes of local data}
+\end{funcargs}
+\end{capi}
+
+\local
+
+\begin{desc}
+
+This function is used to associate a GP array element located locally on the
+process with a memory segment. The memory must be allocated using the GP_Malloc
+function and the size argument used in this call must correspond to the size
+argument in the GP_Malloc call. It is an error if the subscript indices fall
+outside the range of values returned by the GP_Distribution call for the calling
+process. 
+
+\end{desc}
+
+\seealso{DISTRIBUTION, MALLOC}
+
+\apih{CREATE HANDLE}{Create a GP handle}
+
+\begin{capi}
+\begin{ccode}
+int GP_Create_handle()
+\end{ccode}
+\end{capi}
+
+\local
+
+\begin{desc}
+
+This function creates a new GP handle and returns it to the user. Calling this
+function is the first step in creating a new GP array.
+
+\end{desc}
+
+\seealso{ALLOCATE}
+
+\apih{DESTROY}{Remove a GP array from the system and free up resources}
+
+\begin{capi}
+\begin{ccode}
+int GP_Destroy(int g_p)
+\begin{funcargs}
+\inarg{int}{g_p}{pointer array handle}
+\end{funcargs}
+\end{ccode}
+\end{capi}
+
+\local
+
+\begin{desc}
+
+Destroy a GP array and free up the associated resources. Not that this function
+does not remove individual array elements. These should be removed first by a
+call to GP_Free_local_element and GP_Free. The first call returns the pointer to
+a local element and sets the corresponding pointer and size in the GP to zero
+and the second actually removes the local memory segment. The complete code for
+properly destroying a hypothetical 2-dimensional GP array is
+
+\begin{verbatim}
+   GP_Distribution(g_p, me, lo, hi);
+   for (i = lo[0]; i<=hi[0]; i++) {
+     subscript[0] = i;
+     for (j = lo[1]; j<=hi[1]; j++) {
+       subscript[1] = j;
+       GP_Free(GP_Free_local_element(g_p, subscript);
+     }
+   }
+   GP_Destroy(g_p);
+\end{verbatim}
+
+\end{desc}
+
+\seealso{FREE, FREE LOCAL ELEMENT}
+
+\apih{DISTRIBUTION}{Report array bounds for elements held locally on specified
+processor}
+
+\begin{capi}
+\begin{ccode}
+void GP_Distribution(int g_p, int proc, int *lo, int *hi)
+\begin{funcargs}
+\inarg{int}{g_p}{pointer array handle}
+\inarg{int}{proc}{requested processor}
+\outarg{int*}{lo}{lower indices of locally held data}
+\outarg{int*}{hi}{upper indices of locally held data}
+\end{funcargs}
+\end{ccode}
+\end{capi}
+
+\local
+
+\begin{desc}
+
+Return the bounding indices of the data held locally on processor proc. For the
+calling processor, this data can usually be accessed much more quickly than data
+on remote processors.
+
+\end{desc}
+
+\apih{FREE}{Free up memory allocated using GP_Malloc}
+
+\begin{capi}
+\begin{ccode}
+void GP_Free(void *ptr)
+\begin{funcargs}
+\inarg{void*}{ptr}{pointer to local memory segment}
+\end{funcargs}
+\end{ccode}
+\end{capi}
+
+\local
+
+\begin{desc}
+
+This function is used to free up local memory segments allocated using
+GP_Malloc. Note that it should not be using on segments allocated using ordinary
+malloc.
+
+\end{desc}
+
+\seealso{MALLOC, DESTROY, FREE LOCAL ELEMENT}
+
+\apih{FREE LOCAL ELEMENT}{Remove association between local memory segment and GP array}
+
+\begin{capi}
+\begin{ccode}
+void* GP_Free_local_element(int g_p, int *subscript)
+\begin{funcargs}
+\inarg{int}{g_p}{pointer array handle}
+\inarg{int*}{subscript}{subscript to local array element}
+\end{funcargs}
+\end{ccode}
+\end{capi}
+
+\local
+
+\begin{desc}
+
+This function removes the association between a local memory segment and the
+corresponding local GP array element and returns a pointer to the local memory
+segment. Future requests for that array element
+will return a null pointer and zero size. Note that this does not remove the
+memory segment itself, which must be done by a separate call to GP_Free.
+
+\end{desc}
+
+\seealso{FREE, DESTROY}
+
+\end{document}
