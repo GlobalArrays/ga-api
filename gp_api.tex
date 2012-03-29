@@ -7,10 +7,10 @@
 
 \begin{capi}
 \begin{ccode}
-void GP_Access_element(int g_p, int *subscript, void *ptr, int *size)
+void GP\_Access\_element(int g\_p, int *subscript, void *ptr, int *size)
 \end{ccode}
 \begin{funcargs}
-\inarg{int}{g_p}{pointer array handle}
+\inarg{int}{g\_p}{pointer array handle}
 \inarg{int*}{subscript}{indices of array element}
 \outarg{void*}{ptr}{pointer to locally held element}
 \outarg{int*}{size}{size in bytes of locally held element}
@@ -23,7 +23,7 @@ void GP_Access_element(int g_p, int *subscript, void *ptr, int *size)
 
 This function returns a pointer to the data element element represented by the
 array subscript. The suscript must be local to the processor, which means that
-it must be within the bounds returned by the GP_Distribution function for the
+it must be within the bounds returned by the GP\_Distribution function for the
 calling process. It is an error if the subscript values represent an element
 on a different processor.
 
@@ -35,9 +35,9 @@ on a different processor.
 
 \begin{capi}
 \begin{ccode}
-int GP_Allocate(int g_p)
+int GP\_Allocate(int g\_p)
 \begin{funcargs}
-\inarg{int}{g_p}{pointer array handle}
+\inarg{int}{g\_p}{pointer array handle}
 \end{funcargs}
 \end{ccode}
 \end{capi}
@@ -58,10 +58,10 @@ array and allows it to be used by the program to store data.
 
 \begin{capi}
 \begin{ccode}
-void GP_Assign_local_element(int g_p, int *subscript, void *ptr, int size)
+void GP\_Assign\_local\_element(int g\_p, int *subscript, void *ptr, int size)
 \end{ccode}
 \begin{funcargs}
-\inarg{int}{g_p}{pointer array handle}
+\inarg{int}{g\_p}{pointer array handle}
 \inarg{int*}{subscript}{indices of array element}
 \inarg{void*}{ptr}{pointer to local data}
 \inarg{int}{size}{size in bytes of local data}
@@ -73,10 +73,10 @@ void GP_Assign_local_element(int g_p, int *subscript, void *ptr, int size)
 \begin{desc}
 
 This function is used to associate a GP array element located locally on the
-process with a memory segment. The memory must be allocated using the GP_Malloc
+process with a memory segment. The memory must be allocated using the GP\_Malloc
 function and the size argument used in this call must correspond to the size
-argument in the GP_Malloc call. It is an error if the subscript indices fall
-outside the range of values returned by the GP_Distribution call for the calling
+argument in the GP\_Malloc call. It is an error if the subscript indices fall
+outside the range of values returned by the GP\_Distribution call for the calling
 process. 
 
 \end{desc}
@@ -87,7 +87,7 @@ process.
 
 \begin{capi}
 \begin{ccode}
-int GP_Create_handle()
+int GP\_Create\_handle()
 \end{ccode}
 \end{capi}
 
@@ -106,9 +106,9 @@ function is the first step in creating a new GP array.
 
 \begin{capi}
 \begin{ccode}
-int GP_Destroy(int g_p)
+int GP\_Destroy(int g\_p)
 \begin{funcargs}
-\inarg{int}{g_p}{pointer array handle}
+\inarg{int}{g\_p}{pointer array handle}
 \end{funcargs}
 \end{ccode}
 \end{capi}
@@ -119,21 +119,21 @@ int GP_Destroy(int g_p)
 
 Destroy a GP array and free up the associated resources. Not that this function
 does not remove individual array elements. These should be removed first by a
-call to GP_Free_local_element and GP_Free. The first call returns the pointer to
+call to GP\_Free\_local\_element and GP\_Free. The first call returns the pointer to
 a local element and sets the corresponding pointer and size in the GP to zero
 and the second actually removes the local memory segment. The complete code for
 properly destroying a hypothetical 2-dimensional GP array is
 
 \begin{verbatim}
-   GP_Distribution(g_p, me, lo, hi);
+   GP\_Distribution(g\_p, me, lo, hi);
    for (i = lo[0]; i<=hi[0]; i++) {
      subscript[0] = i;
      for (j = lo[1]; j<=hi[1]; j++) {
        subscript[1] = j;
-       GP_Free(GP_Free_local_element(g_p, subscript);
+       GP\_Free(GP\_Free\_local\_element(g\_p, subscript);
      }
    }
-   GP_Destroy(g_p);
+   GP\_Destroy(g\_p);
 \end{verbatim}
 
 \end{desc}
@@ -145,9 +145,9 @@ processor}
 
 \begin{capi}
 \begin{ccode}
-void GP_Distribution(int g_p, int proc, int *lo, int *hi)
+void GP\_Distribution(int g\_p, int proc, int *lo, int *hi)
 \begin{funcargs}
-\inarg{int}{g_p}{pointer array handle}
+\inarg{int}{g\_p}{pointer array handle}
 \inarg{int}{proc}{requested processor}
 \outarg{int*}{lo}{lower indices of locally held data}
 \outarg{int*}{hi}{upper indices of locally held data}
@@ -165,11 +165,11 @@ on remote processors.
 
 \end{desc}
 
-\apih{FREE}{Free up memory allocated using GP_Malloc}
+\apih{FREE}{Free up memory allocated using GP\_Malloc}
 
 \begin{capi}
 \begin{ccode}
-void GP_Free(void *ptr)
+void GP\_Free(void *ptr)
 \begin{funcargs}
 \inarg{void*}{ptr}{pointer to local memory segment}
 \end{funcargs}
@@ -181,7 +181,7 @@ void GP_Free(void *ptr)
 \begin{desc}
 
 This function is used to free up local memory segments allocated using
-GP_Malloc. Note that it should not be using on segments allocated using ordinary
+GP\_Malloc. Note that it should not be using on segments allocated using ordinary
 malloc.
 
 \end{desc}
@@ -192,9 +192,9 @@ malloc.
 
 \begin{capi}
 \begin{ccode}
-void* GP_Free_local_element(int g_p, int *subscript)
+void* GP\_Free\_local\_element(int g\_p, int *subscript)
 \begin{funcargs}
-\inarg{int}{g_p}{pointer array handle}
+\inarg{int}{g\_p}{pointer array handle}
 \inarg{int*}{subscript}{subscript to local array element}
 \end{funcargs}
 \end{ccode}
@@ -208,10 +208,360 @@ This function removes the association between a local memory segment and the
 corresponding local GP array element and returns a pointer to the local memory
 segment. Future requests for that array element
 will return a null pointer and zero size. Note that this does not remove the
-memory segment itself, which must be done by a separate call to GP_Free.
+memory segment itself, which must be done by a separate call to GP\_Free.
 
 \end{desc}
 
 \seealso{FREE, DESTROY}
+
+\apih{GATHER SIZE}{Determine the size of a random selection of GP array elements}
+
+\begin{capi}
+\begin{ccode}
+void GP\_Gather\_size(int g\_p, int nv, int *subscript, int *size)
+\begin{funcargs}
+\inarg{int}{g\_p}{pointer array handle}
+\inarg{int}{nv}{number of array elements in subscript array}
+\inarg{int*}{subscript}{list of array element indices}
+\outarg{int*}{size}{total size of array elements (in bytes)}
+\end{funcargs}
+\end{ccode}
+\end{capi}
+
+\local
+
+\begin{desc}
+
+This function can be used to determine the size of list of array elements that
+will be copied to a local buffer in a GP\_Gather call. This allows users to
+allocate a buffer of the correct size before requesting the actual data. The
+total number of elements to be gathered is nv and the
+subscript array contains ndim*nv elements where ndim is the dimension of the GP
+array. The first ndim elements of subscript correspond to the indices of the first
+array element, the next ndim subscript entries are for the second array element,
+etc.
+
+\end{desc}
+
+\seealso{GATHER}
+
+\apih{GATHER}{Copy a random selection of GP array elements to a local buffer}
+
+\begin{capi}
+\begin{ccode}
+void GP\_Gather(int g\_p, int nv, int *subscript, void *buf, void **buf\_ptr,
+                int *buf\_size, int *size)
+\begin{funcargs}
+\inarg{int}{g\_p}{pointer array handle}
+\inarg{int}{nv}{number of array elements in subscript array}
+\inarg{int*}{subscript}{list of array element indices}
+\inarg{void*}{buf}{pointer to local memory that contains data}
+\outarg{void**}{buf\_ptr}{array of pointers to individual elements}
+\outarg{int*}{buf\_size}{array containing sizes of array elements}
+\outarg{int*}{size}{total size of array elements (in bytes)}
+\end{funcargs}
+\end{ccode}
+\end{capi}
+
+\local
+
+\begin{desc}
+
+This function can be used to copy an arbitrary collection of GP array elements
+into a local buffer. The pointer buf corresponds to a local memory segment that
+is large enough to contain the requested data. The size of this buffer can be
+determined beforehand by a call to GP\_Gather\_size. The data is packed into
+this data contiguously, but it may not be easy for users to access it. The
+pointer array buf\_ptr provides users pointers to the individual array elements
+and corresponds to the list of subscripts. The array buf\_size provides users
+with the sizes of individual array elements. The total size of the request is
+returned in the variable size.
+
+\end{desc}
+
+\seealso{GATHER SIZE}
+
+\apih{GET SIZE}{Determine size of a block of data in a GP array}
+
+\begin{capi}
+\begin{ccode}
+void GP\_Get\_size(int g\_p, int *lo, int *hi, int *size)
+\begin{funcargs}
+\inarg{int}{g\_p}{pointer array handle}
+\inarg{int*}{lo}{lower indices of array block}
+\inarg{int*}{hi}{upper indices of array block}
+\outarg{int*}{size}{total size of array block (in bytes)}
+\end{funcargs}
+\end{ccode}
+\end{capi}
+
+\local
+
+\begin{desc}
+
+This function can be used to determine the size of the data contained in a block
+of GP array elements. The block is defined by the lower indices in the array lo
+and the upper indices in the array hi. The total size of the data is returned in
+bytes. This allows users to allocate a buffer of the correct size before
+requesting the actual data using a GP\_Get call.
+
+\end{desc}
+
+\seealso{GET}
+
+\apih{GET}{Request a block of data from a GP array}
+
+\begin{capi}
+\begin{ccode}
+void GP\_Get(int g\_p, int *lo, int *hi, void *buf, void **buf\_ptr, int *ld,
+             void *buf\_size, int *ld\_size, int *size)
+\begin{funcargs}
+\inarg{int}{g\_p}{pointer array handle}
+\inarg{int*}{lo}{lower indices of array block}
+\inarg{int*}{hi}{upper indices of array block}
+\inarg{void*}{buf}{pointer to local memory that contains data}
+\outarg{void**}{buf\_ptr}{array of pointers to individual elements}
+\inarg{int*}{ld}{stride array for buf\_ptr array}
+\outarg{int*}{buf\_size}{array containing sizes of array elements}
+\inarg{int*}{ld\_sz}{stride array for buf\_size array}
+\outarg{int*}{size}{total size of array block (in bytes)}
+\end{funcargs}
+\end{ccode}
+\end{capi}
+
+\local
+
+\begin{desc}
+
+This function retrieves a block of data from a GP array and copies it to a local
+buffer.  The block is defined by the lower indices in the array lo
+and the upper indices in the array hi. The size of the local buffer can be
+determined prior to using this call by using the function GP\_Get\_size. The
+data is placed contiguously in the buffer designated by the void pointer buf.
+Pointers to the individual array elements can be retrieved from the pointer
+array buf\_ptr. This array is layed out using the stride array ld. Similarly,
+the size of individual array elements is stored in the array buf\_size, which is
+layed out using the stride array ld\_sz.
+
+\end{desc}
+
+\seealso{GET SIZE}
+
+\apih{INITIALIZE}{Initialize the GP toolkit}
+
+\begin{capi}
+\begin{ccode}
+void GP\_Initialize()
+\end{ccode}
+\end{capi}
+
+\local
+
+\begin{desc}
+
+This function initializes the GP toolkit and sets up internal data structures
+that are used by the remaining GP functions. It should be called after the GA
+initialize function has been called.
+
+\end{desc}
+
+\seealso{TERMINATE}
+
+\apih{MALLOC}{Allocate memory for GP array elements}
+
+\begin{capi}
+\begin{ccode}
+void GP\_Malloc(size\_t size)
+\begin{funcargs}
+\inarg{size\_t}{size}{size (in bytes) of allocated segment}
+\end{funcargs}
+\end{ccode}
+\end{capi}
+
+\local
+
+\begin{desc}
+
+This function is used to allocate memory segments that will be associated with
+GP array elements. Note that this function \emph{must} be used instead of
+ordinary malloc since it internally registers network addresses that are used by
+the GP toolkit.
+
+\end{desc}
+
+\seealso{FREE, ASSIGN LOCAL ELEMENT}
+
+\apih{MEMZERO}{Zero all bytes in a GP array}
+
+\begin{capi}
+\begin{ccode}
+void GP\_Memzero(int g\_p)
+\begin{funcargs}
+\inarg{int}{g\_p}{pointer array handle}
+\end{funcargs}
+\end{ccode}
+\end{capi}
+
+\local
+
+\begin{desc}
+
+This function function can be used to set all the individual bytes
+contained in a GP array to zero.
+
+\end{desc}
+
+\apih{PUT}{Copy a block of data to a GP array}
+
+\begin{capi}
+\begin{ccode}
+void GP\_Put(int g\_p, int *lo, int *hi, void **buf\_ptr, int *ld,
+             void *buf\_size, int *ld\_size, int *size, int checksize)
+\begin{funcargs}
+\inarg{int}{g\_p}{pointer array handle}
+\inarg{int*}{lo}{lower indices of array block}
+\inarg{int*}{hi}{upper indices of array block}
+\inarg{void**}{buf\_ptr}{array of pointers to individual elements}
+\inarg{int*}{ld}{stride array for buf\_ptr array}
+\inarg{int*}{buf\_size}{array containing sizes of array elements}
+\inarg{int*}{ld\_sz}{stride array for buf\_size array}
+\outarg{int*}{size}{total size of array block (in bytes)}
+\inarg{int}{checksize}{optional size verification}
+\end{funcargs}
+\end{ccode}
+\end{capi}
+
+\local
+
+\begin{desc}
+
+This function copies local data to a block of GP array elements.
+and copies it to a local
+buffer. The block is defined by the lower indices in the array lo
+and the upper indices in the array hi. The size of the local buffer can be
+determined prior to using this call by using the function GP\_Get\_size. The
+data is placed contiguously in the buffer designated by the void pointer buf.
+Pointers to the individual array elements can be retrieved from the pointer
+array buf\_ptr. buf\_ptr array is layed out using the stride array ld. Similarly,
+the size of individual array elements is stored in the array buf\_size, which is
+layed out using the stride array ld\_sz. The checksize variable can be used to
+optionally compare the element size values in buf\_size with the values stored in
+the GP array. If they are different, the code throws an error. This is useful
+for debugging but adds more communication overhead to the put call. The size of
+the data transfer is returned in size.
+
+\end{desc}
+
+\apih{RELEASE ELEMENT}{Release access after reading from GP array element}
+
+\begin{capi}
+\begin{ccode}
+void GP\_Release\_element(int g\_p, int *subscript)
+\begin{funcargs}
+\inarg{int}{g\_p}{pointer array handle}
+\inarg{int*}{subscript}{indices of GP array element}
+\end{funcargs}
+\end{ccode}
+\end{capi}
+
+\local
+
+\begin{desc}
+
+Release access to a GP array element after reading from it. This should always
+be used in conjunction with GP\_Access\_element.
+
+\end{desc}
+
+\seealso{ACCESS ELEMENT, RELEASE UPDATE ELEMENT}
+
+\apih{RELEASE UPDATE ELEMENT}{Release access after modifying a GP array element}
+
+\begin{capi}
+\begin{ccode}
+void GP\_Release\_update\_element(int g\_p, int *subscript)
+\begin{funcargs}
+\inarg{int}{g\_p}{pointer array handle}
+\inarg{int*}{subscript}{indices of GP array element}
+\end{funcargs}
+\end{ccode}
+\end{capi}
+
+\local
+
+\begin{desc}
+
+Release access to a GP array element after modifying it. This should always be
+used in conjunction with GP\_Access\_element.
+
+\end{desc}
+
+\seealso{ACCESS ELEMENT, RELEASE ELEMENT}
+
+\apih{SCATTER}{Copy local data to a random selection of GP array elements}
+
+\begin{capi}
+\begin{ccode}
+void GP\_Scatter(int g\_p, int nv, int *subscript, void **buf\_ptr,
+                int *buf\_size, int *size, int checksize)
+\begin{funcargs}
+\inarg{int}{g\_p}{pointer array handle}
+\inarg{int}{nv}{number of array elements in subscript array}
+\inarg{int*}{subscript}{list of array element indices}
+\inarg{void*}{buf}{pointer to local memory that contains data}
+\outarg{void**}{buf\_ptr}{array of pointers to individual elements}
+\outarg{int*}{buf\_size}{array containing sizes of array elements}
+\outarg{int*}{size}{total size of array elements (in bytes)}
+\end{funcargs}
+\end{ccode}
+\end{capi}
+
+\local
+
+\begin{desc}
+
+This function can be used to scatter an arbitrary collection of local elements
+into a GP array. The number of elements that will be scattered to the GP array
+is nv and the subscripts of these elements are in the nv*ndim sized subscript
+array. The subscripts are ordered such that the first ndim entries correspond
+to the indices of the first element, the next ndim entries are the subsrcript of
+the second element, and so on. The pointer array buf\_ptr is a list of pointers
+to the local data that will be scattered to the GP array elements
+and corresponds to the list of subscripts. The array buf\_size represents the
+size of each of the elements. The checksize variable allows users to make an
+optional check that compares the sizes in the buf\_size array with the sizes
+stored in the GP array and throws an error if they are different. This is
+useful for debugging but adds more communication overhead to the scatter call.
+The total size of the request is returned in the variable size.
+
+\end{desc}
+
+\apih{SET CHUNK}{Set minimum chunking size on each processor}
+
+\begin{capi}
+\begin{ccode}
+void GP\_Set\_chunk(int g\_p, int *chunk)
+\begin{funcargs}
+\inarg{int}{g\_p}{pointer array handle}
+\inarg{int*}{chunk}{minimun chunk sizes in each dimension}
+\end{funcargs}
+\end{ccode}
+\end{capi}
+
+\local
+
+\begin{desc}
+
+This is a crude way of controlling the partitioning of GP arrays across
+processors by setting the minimum size for each dimension a local
+block of a GP array. If the value of the chunk array for a particular dimension
+is less than or equal to 0, then partitioning is left completely to the GP
+library. The chunk array is particularly useful for blocking the partitioning of
+an array along certain axes by setting chunk[n]=dims[n]. More control of the
+data distribution can be achieved using the GP\_Set\_irreg\_distr function.
+
+\end{desc}
+
+\seealso{CREATE HANDLE, SET IRREG DISTR}
 
 \end{document}
