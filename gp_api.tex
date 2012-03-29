@@ -7,10 +7,10 @@
 
 \begin{capi}
 \begin{ccode}
-void GP\_Access\_element(int g\_p, int *subscript, void *ptr, int *size)
+void GP_Access_element(int g_p, int *subscript, void *ptr, int *size)
 \end{ccode}
 \begin{funcargs}
-\inarg{int}{g\_p}{pointer array handle}
+\inarg{int}{g_p}{pointer array handle}
 \inarg{int*}{subscript}{indices of array element}
 \outarg{void*}{ptr}{pointer to locally held element}
 \outarg{int*}{size}{size in bytes of locally held element}
@@ -29,20 +29,20 @@ on a different processor.
 
 \end{desc}
 
-\seealso{DISTRIBUTION, RELEASE ELEMENT, RELEASE UPDATE ELEMENT}
+\seealso{DISTRIBUTION,RELEASE ELEMENT,RELEASE UPDATE ELEMENT}
 
 \apih{ALLOCATE}{Allocate resources for a new GP array}
 
 \begin{capi}
 \begin{ccode}
-int GP\_Allocate(int g\_p)
-\begin{funcargs}
-\inarg{int}{g\_p}{pointer array handle}
-\end{funcargs}
+int GP_Allocate(int g_p)
 \end{ccode}
+\begin{funcargs}
+\inarg{int}{g_p}{pointer array handle}
+\end{funcargs}
 \end{capi}
 
-\local
+\wcoll
 
 \begin{desc}
 
@@ -52,16 +52,16 @@ array and allows it to be used by the program to store data.
 
 \end{desc}
 
-\seealso{CREATE HANDLE, SET DIMENSIONS}
+\seealso{CREATE HANDLE,SET DIMENSIONS}
 
 \apih{ASSIGN LOCAL ELEMENT}{Assign a pointer to local data}
 
 \begin{capi}
 \begin{ccode}
-void GP\_Assign\_local\_element(int g\_p, int *subscript, void *ptr, int size)
+void GP_Assign_local_element(int g_p, int *subscript, void *ptr, int size)
 \end{ccode}
 \begin{funcargs}
-\inarg{int}{g\_p}{pointer array handle}
+\inarg{int}{g_p}{pointer array handle}
 \inarg{int*}{subscript}{indices of array element}
 \inarg{void*}{ptr}{pointer to local data}
 \inarg{int}{size}{size in bytes of local data}
@@ -81,17 +81,17 @@ process.
 
 \end{desc}
 
-\seealso{DISTRIBUTION, MALLOC}
+\seealso{DISTRIBUTION,MALLOC}
 
 \apih{CREATE HANDLE}{Create a GP handle}
 
 \begin{capi}
 \begin{ccode}
-int GP\_Create\_handle()
+int GP_Create_handle()
 \end{ccode}
 \end{capi}
 
-\local
+\wcoll
 
 \begin{desc}
 
@@ -106,14 +106,14 @@ function is the first step in creating a new GP array.
 
 \begin{capi}
 \begin{ccode}
-int GP\_Destroy(int g\_p)
-\begin{funcargs}
-\inarg{int}{g\_p}{pointer array handle}
-\end{funcargs}
+int GP_Destroy(int g_p)
 \end{ccode}
+\begin{funcargs}
+\inarg{int}{g_p}{pointer array handle}
+\end{funcargs}
 \end{capi}
 
-\local
+\wcoll
 
 \begin{desc}
 
@@ -125,34 +125,34 @@ and the second actually removes the local memory segment. The complete code for
 properly destroying a hypothetical 2-dimensional GP array is
 
 \begin{verbatim}
-   GP\_Distribution(g\_p, me, lo, hi);
+   GP_Distribution(g_p, me, lo, hi);
    for (i = lo[0]; i<=hi[0]; i++) {
      subscript[0] = i;
      for (j = lo[1]; j<=hi[1]; j++) {
        subscript[1] = j;
-       GP\_Free(GP\_Free\_local\_element(g\_p, subscript);
+       GP_Free(GP_Free_local_element(g_p, subscript);
      }
    }
-   GP\_Destroy(g\_p);
+   GP_Destroy(g_p);
 \end{verbatim}
 
 \end{desc}
 
-\seealso{FREE, FREE LOCAL ELEMENT}
+\seealso{FREE,FREE LOCAL ELEMENT}
 
 \apih{DISTRIBUTION}{Report array bounds for elements held locally on specified
 processor}
 
 \begin{capi}
 \begin{ccode}
-void GP\_Distribution(int g\_p, int proc, int *lo, int *hi)
+void GP_Distribution(int g_p, int proc, int *lo, int *hi)
+\end{ccode}
 \begin{funcargs}
-\inarg{int}{g\_p}{pointer array handle}
+\inarg{int}{g_p}{pointer array handle}
 \inarg{int}{proc}{requested processor}
 \outarg{int*}{lo}{lower indices of locally held data}
 \outarg{int*}{hi}{upper indices of locally held data}
 \end{funcargs}
-\end{ccode}
 \end{capi}
 
 \local
@@ -169,11 +169,11 @@ on remote processors.
 
 \begin{capi}
 \begin{ccode}
-void GP\_Free(void *ptr)
+void GP_Free(void *ptr)
+\end{ccode}
 \begin{funcargs}
 \inarg{void*}{ptr}{pointer to local memory segment}
 \end{funcargs}
-\end{ccode}
 \end{capi}
 
 \local
@@ -186,18 +186,18 @@ malloc.
 
 \end{desc}
 
-\seealso{MALLOC, DESTROY, FREE LOCAL ELEMENT}
+\seealso{MALLOC,DESTROY,FREE LOCAL ELEMENT}
 
 \apih{FREE LOCAL ELEMENT}{Remove association between local memory segment and GP array}
 
 \begin{capi}
 \begin{ccode}
-void* GP\_Free\_local\_element(int g\_p, int *subscript)
+void* GP_Free_local_element(int g_p, int *subscript)
+\end{ccode}
 \begin{funcargs}
-\inarg{int}{g\_p}{pointer array handle}
+\inarg{int}{g_p}{pointer array handle}
 \inarg{int*}{subscript}{subscript to local array element}
 \end{funcargs}
-\end{ccode}
 \end{capi}
 
 \local
@@ -212,23 +212,23 @@ memory segment itself, which must be done by a separate call to GP\_Free.
 
 \end{desc}
 
-\seealso{FREE, DESTROY}
+\seealso{FREE,DESTROY}
 
 \apih{GATHER SIZE}{Determine the size of a random selection of GP array elements}
 
 \begin{capi}
 \begin{ccode}
-void GP\_Gather\_size(int g\_p, int nv, int *subscript, int *size)
+void GP_Gather_size(int g_p, int nv, int *subscript, int *size)
+\end{ccode}
 \begin{funcargs}
-\inarg{int}{g\_p}{pointer array handle}
+\inarg{int}{g_p}{pointer array handle}
 \inarg{int}{nv}{number of array elements in subscript array}
 \inarg{int*}{subscript}{list of array element indices}
 \outarg{int*}{size}{total size of array elements (in bytes)}
 \end{funcargs}
-\end{ccode}
 \end{capi}
 
-\local
+\ncoll
 
 \begin{desc}
 
@@ -249,21 +249,21 @@ etc.
 
 \begin{capi}
 \begin{ccode}
-void GP\_Gather(int g\_p, int nv, int *subscript, void *buf, void **buf\_ptr,
-                int *buf\_size, int *size)
+void GP_Gather(int g_p, int nv, int *subscript, void *buf,
+               void **buf_ptr, int *buf_size, int *size)
+\end{ccode}
 \begin{funcargs}
-\inarg{int}{g\_p}{pointer array handle}
+\inarg{int}{g_p}{pointer array handle}
 \inarg{int}{nv}{number of array elements in subscript array}
 \inarg{int*}{subscript}{list of array element indices}
 \inarg{void*}{buf}{pointer to local memory that contains data}
-\outarg{void**}{buf\_ptr}{array of pointers to individual elements}
-\outarg{int*}{buf\_size}{array containing sizes of array elements}
+\outarg{void**}{buf_ptr}{array of pointers to individual elements}
+\outarg{int*}{buf_size}{array containing sizes of array elements}
 \outarg{int*}{size}{total size of array elements (in bytes)}
 \end{funcargs}
-\end{ccode}
 \end{capi}
 
-\local
+\ncoll
 
 \begin{desc}
 
@@ -285,17 +285,17 @@ returned in the variable size.
 
 \begin{capi}
 \begin{ccode}
-void GP\_Get\_size(int g\_p, int *lo, int *hi, int *size)
+void GP_Get_size(int g_p, int *lo, int *hi, int *size)
+\end{ccode}
 \begin{funcargs}
-\inarg{int}{g\_p}{pointer array handle}
+\inarg{int}{g_p}{pointer array handle}
 \inarg{int*}{lo}{lower indices of array block}
 \inarg{int*}{hi}{upper indices of array block}
 \outarg{int*}{size}{total size of array block (in bytes)}
 \end{funcargs}
-\end{ccode}
 \end{capi}
 
-\local
+\ncoll
 
 \begin{desc}
 
@@ -313,23 +313,23 @@ requesting the actual data using a GP\_Get call.
 
 \begin{capi}
 \begin{ccode}
-void GP\_Get(int g\_p, int *lo, int *hi, void *buf, void **buf\_ptr, int *ld,
-             void *buf\_size, int *ld\_size, int *size)
+void GP_Get(int g_p, int *lo, int *hi, void *buf, void **buf_ptr, int *ld,
+             void *buf_size, int *ld_size, int *size)
+\end{ccode}
 \begin{funcargs}
-\inarg{int}{g\_p}{pointer array handle}
+\inarg{int}{g_p}{pointer array handle}
 \inarg{int*}{lo}{lower indices of array block}
 \inarg{int*}{hi}{upper indices of array block}
 \inarg{void*}{buf}{pointer to local memory that contains data}
-\outarg{void**}{buf\_ptr}{array of pointers to individual elements}
-\inarg{int*}{ld}{stride array for buf\_ptr array}
-\outarg{int*}{buf\_size}{array containing sizes of array elements}
-\inarg{int*}{ld\_sz}{stride array for buf\_size array}
+\outarg{void**}{buf_ptr}{array of pointers to individual elements}
+\inarg{int*}{ld}{stride array for buf_ptr array}
+\outarg{int*}{buf_size}{array containing sizes of array elements}
+\inarg{int*}{ld_sz}{stride array for buf_size array}
 \outarg{int*}{size}{total size of array block (in bytes)}
 \end{funcargs}
-\end{ccode}
 \end{capi}
 
-\local
+\ncoll
 
 \begin{desc}
 
@@ -351,11 +351,11 @@ layed out using the stride array ld\_sz.
 
 \begin{capi}
 \begin{ccode}
-void GP\_Initialize()
+void GP_Initialize()
 \end{ccode}
 \end{capi}
 
-\local
+\wcoll
 
 \begin{desc}
 
@@ -371,11 +371,11 @@ initialize function has been called.
 
 \begin{capi}
 \begin{ccode}
-void GP\_Malloc(size\_t size)
-\begin{funcargs}
-\inarg{size\_t}{size}{size (in bytes) of allocated segment}
-\end{funcargs}
+void GP_Malloc(size_t size)
 \end{ccode}
+\begin{funcargs}
+\inarg{size_t}{size}{size (in bytes) of allocated segment}
+\end{funcargs}
 \end{capi}
 
 \local
@@ -389,20 +389,20 @@ the GP toolkit.
 
 \end{desc}
 
-\seealso{FREE, ASSIGN LOCAL ELEMENT}
+\seealso{FREE,ASSIGN LOCAL ELEMENT}
 
 \apih{MEMZERO}{Zero all bytes in a GP array}
 
 \begin{capi}
 \begin{ccode}
-void GP\_Memzero(int g\_p)
-\begin{funcargs}
-\inarg{int}{g\_p}{pointer array handle}
-\end{funcargs}
+void GP_Memzero(int g_p)
 \end{ccode}
+\begin{funcargs}
+\inarg{int}{g_p}{pointer array handle}
+\end{funcargs}
 \end{capi}
 
-\local
+\wcoll
 
 \begin{desc}
 
@@ -415,23 +415,23 @@ contained in a GP array to zero.
 
 \begin{capi}
 \begin{ccode}
-void GP\_Put(int g\_p, int *lo, int *hi, void **buf\_ptr, int *ld,
-             void *buf\_size, int *ld\_size, int *size, int checksize)
+void GP_Put(int g_p, int *lo, int *hi, void **buf_ptr, int *ld,
+             void *buf_size, int *ld_size, int *size, int checksize)
+\end{ccode}
 \begin{funcargs}
-\inarg{int}{g\_p}{pointer array handle}
+\inarg{int}{g_p}{pointer array handle}
 \inarg{int*}{lo}{lower indices of array block}
 \inarg{int*}{hi}{upper indices of array block}
-\inarg{void**}{buf\_ptr}{array of pointers to individual elements}
-\inarg{int*}{ld}{stride array for buf\_ptr array}
-\inarg{int*}{buf\_size}{array containing sizes of array elements}
-\inarg{int*}{ld\_sz}{stride array for buf\_size array}
+\inarg{void**}{buf_ptr}{array of pointers to individual elements}
+\inarg{int*}{ld}{stride array for buf_ptr array}
+\inarg{int*}{buf_size}{array containing sizes of array elements}
+\inarg{int*}{ld_sz}{stride array for buf_size array}
 \outarg{int*}{size}{total size of array block (in bytes)}
 \inarg{int}{checksize}{optional size verification}
 \end{funcargs}
-\end{ccode}
 \end{capi}
 
-\local
+\ncoll
 
 \begin{desc}
 
@@ -456,12 +456,12 @@ the data transfer is returned in size.
 
 \begin{capi}
 \begin{ccode}
-void GP\_Release\_element(int g\_p, int *subscript)
+void GP_Release_element(int g_p, int *subscript)
+\end{ccode}
 \begin{funcargs}
-\inarg{int}{g\_p}{pointer array handle}
+\inarg{int}{g_p}{pointer array handle}
 \inarg{int*}{subscript}{indices of GP array element}
 \end{funcargs}
-\end{ccode}
 \end{capi}
 
 \local
@@ -473,18 +473,18 @@ be used in conjunction with GP\_Access\_element.
 
 \end{desc}
 
-\seealso{ACCESS ELEMENT, RELEASE UPDATE ELEMENT}
+\seealso{ACCESS ELEMENT,RELEASE UPDATE ELEMENT}
 
 \apih{RELEASE UPDATE ELEMENT}{Release access after modifying a GP array element}
 
 \begin{capi}
 \begin{ccode}
-void GP\_Release\_update\_element(int g\_p, int *subscript)
+void GP_Release_update_element(int g_p, int *subscript)
+\end{ccode}
 \begin{funcargs}
-\inarg{int}{g\_p}{pointer array handle}
+\inarg{int}{g_p}{pointer array handle}
 \inarg{int*}{subscript}{indices of GP array element}
 \end{funcargs}
-\end{ccode}
 \end{capi}
 
 \local
@@ -496,27 +496,27 @@ used in conjunction with GP\_Access\_element.
 
 \end{desc}
 
-\seealso{ACCESS ELEMENT, RELEASE ELEMENT}
+\seealso{ACCESS ELEMENT,RELEASE ELEMENT}
 
 \apih{SCATTER}{Copy local data to a random selection of GP array elements}
 
 \begin{capi}
 \begin{ccode}
-void GP\_Scatter(int g\_p, int nv, int *subscript, void **buf\_ptr,
-                int *buf\_size, int *size, int checksize)
+void GP_Scatter(int g_p, int nv, int *subscript, void **buf_ptr,
+                int *buf_size, int *size, int checksize)
+\end{ccode}
 \begin{funcargs}
-\inarg{int}{g\_p}{pointer array handle}
+\inarg{int}{g_p}{pointer array handle}
 \inarg{int}{nv}{number of array elements in subscript array}
 \inarg{int*}{subscript}{list of array element indices}
 \inarg{void*}{buf}{pointer to local memory that contains data}
-\outarg{void**}{buf\_ptr}{array of pointers to individual elements}
-\outarg{int*}{buf\_size}{array containing sizes of array elements}
+\outarg{void**}{buf_ptr}{array of pointers to individual elements}
+\outarg{int*}{buf_size}{array containing sizes of array elements}
 \outarg{int*}{size}{total size of array elements (in bytes)}
 \end{funcargs}
-\end{ccode}
 \end{capi}
 
-\local
+\ncoll
 
 \begin{desc}
 
@@ -540,15 +540,15 @@ The total size of the request is returned in the variable size.
 
 \begin{capi}
 \begin{ccode}
-void GP\_Set\_chunk(int g\_p, int *chunk)
+void GP_Set_chunk(int g_p, int *chunk)
+\end{ccode}
 \begin{funcargs}
-\inarg{int}{g\_p}{pointer array handle}
+\inarg{int}{g_p}{pointer array handle}
 \inarg{int*}{chunk}{minimun chunk sizes in each dimension}
 \end{funcargs}
-\end{ccode}
 \end{capi}
 
-\local
+\wcoll
 
 \begin{desc}
 
@@ -562,22 +562,22 @@ data distribution can be achieved using the GP\_Set\_irreg\_distr function.
 
 \end{desc}
 
-\seealso{CREATE HANDLE, SET IRREG DISTR}
+\seealso{CREATE HANDLE,SET IRREG DISTR}
 
 \apih{SET DIMENSIONS}{Set dimensions of GP array}
 
 \begin{capi}
 \begin{ccode}
-void GP\_Set\_dimensions(int g\_p, int ndim, int *dims)
+void GP_Set_dimensions(int g_p, int ndim, int *dims)
+\end{ccode}
 \begin{funcargs}
-\inarg{int}{g\_p}{pointer array handle}
+\inarg{int}{g_p}{pointer array handle}
 \inarg{int}{ndim}{dimension of GP array}
 \inarg{int*}{dims}{size of array axes}
 \end{funcargs}
-\end{ccode}
 \end{capi}
 
-\local
+\wcoll
 
 \begin{desc}
 
@@ -592,16 +592,16 @@ global dimensions of the array, not the size of the array held locally.
 
 \begin{capi}
 \begin{ccode}
-void GP\_Set\_irreg\_distr(int g\_p, int *mapc, int *nblock)
+void GP_Set_irreg_distr(int g_p, int *mapc, int *nblock)
+\end{ccode}
 \begin{funcargs}
-\inarg{int}{g\_p}{pointer array handle}
+\inarg{int}{g_p}{pointer array handle}
 \inarg{int*}{mapc}{starting indices of partitions}
 \inarg{int*}{nblock}{processor grid}
 \end{funcargs}
-\end{ccode}
 \end{capi}
 
-\local
+\wcoll
 
 \begin{desc}
 
@@ -624,11 +624,11 @@ on.
 
 \begin{capi}
 \begin{ccode}
-void GP\_Sync()
+void GP_Sync()
 \end{ccode}
 \end{capi}
 
-\local
+\wcoll
 
 \begin{desc}
 
@@ -643,11 +643,11 @@ be used interchangeably.
 
 \begin{capi}
 \begin{ccode}
-void GP\_Terminate()
+void GP_Terminate()
 \end{ccode}
 \end{capi}
 
-\local
+\wcoll
 
 \begin{desc}
 
