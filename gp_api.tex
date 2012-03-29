@@ -564,4 +564,96 @@ data distribution can be achieved using the GP\_Set\_irreg\_distr function.
 
 \seealso{CREATE HANDLE, SET IRREG DISTR}
 
+\apih{SET DIMENSIONS}{Set dimensions of GP array}
+
+\begin{capi}
+\begin{ccode}
+void GP\_Set\_dimensions(int g\_p, int ndim, int *dims)
+\begin{funcargs}
+\inarg{int}{g\_p}{pointer array handle}
+\inarg{int}{ndim}{dimension of GP array}
+\inarg{int*}{dims}{size of array axes}
+\end{funcargs}
+\end{ccode}
+\end{capi}
+
+\local
+
+\begin{desc}
+
+This function sets the dimension and size of GP array. Note that these are the
+global dimensions of the array, not the size of the array held locally.
+
+\end{desc}
+
+\seealso{CREATE HANDLE}
+
+\apih{SET IRREG DISTR}{Specify partitioning of GP array}
+
+\begin{capi}
+\begin{ccode}
+void GP\_Set\_irreg\_distr(int g\_p, int *mapc, int *nblock)
+\begin{funcargs}
+\inarg{int}{g\_p}{pointer array handle}
+\inarg{int*}{mapc}{starting indices of partitions}
+\inarg{int*}{nblock}{processor grid}
+\end{funcargs}
+\end{ccode}
+\end{capi}
+
+\local
+
+\begin{desc}
+
+This function can be used to completely partition the GP array among the
+available processors. All details of the partition must be supplied by the user.
+The first component of the partitions is to choose how many blocks each axis
+will be divided into. This information is supplied in the nblock array. The
+product of the values for each axis in nblock must equal the total number of
+processors in the system. The mapc array contains the initial indices of each
+block along the axes directions. The first nblock[0] entries are the starting
+indices for blocks along the first axis direction, the next nblock[1] entries
+are the starting indices for the blocks along the second axis directions, and so
+on.
+
+\end{desc}
+
+\seealso{CREATE HANDLE}
+
+\apih{SYNC}{Synchronize across all processors}
+
+\begin{capi}
+\begin{ccode}
+void GP\_Sync()
+\end{ccode}
+\end{capi}
+
+\local
+
+\begin{desc}
+
+This function synchronizes the system across all processors and flushes out all
+outstanding communication in the system. It is the primary mechanism for
+insuring data consistency. This function is equivalent to GA\_sync and they can
+be used interchangeably.
+
+\end{desc}
+
+\apih{TERMINATE}{Terminate the GP library}
+
+\begin{capi}
+\begin{ccode}
+void GP\_Terminate()
+\end{ccode}
+\end{capi}
+
+\local
+
+\begin{desc}
+
+This function terminates the GP library and cleans up any resources used by the
+library. It should be called before call GA\_Terminate.
+
+\end{desc}
+
 \end{document}
