@@ -1565,7 +1565,7 @@ int NGA_Create(int type, int ndim, int dims[], char *array_name, int chunk[])
 \end{ccode}
 \begin{funcargs}
 \inarg{char*}{array_name}{a unique character string}
-\inarg{int}{type}{data type (MT_F_DBL,MT_F_INT,MT_F_DCPL)}
+\inarg{int}{type}{data type (C_DBL,C_INT,C_DCPL,etc.)}
 \inarg{int}{ndim}{number of array dimensions}
 \inarg{int*}{dims[ndim]}{array of dimensions}
 \inarg{int*}{chunk[ndim]}{array of chunks, each element specifies minimum size that given dimensions should be chunked up into}
@@ -1579,7 +1579,7 @@ logical function ga_create(type, dim1, dim2, array_name, chunk1, chunk2, g_a)
 \end{fcode}
 \begin{funcargs}
 \inarg{character*(*)}{array_name}{a unique character string}
-\inarg{integer}{type}{MA type}
+\inarg{integer}{type}{data type (MT_DBL,MT_INT,MT_DCPL,etc.)}
 \inarg{integer}{dim1,dim2}{array (dim1,dim2) as in FORTRAN}
 \inarg{integer}{chunk1,chunk2}{minimum size that dimensions should be chunked up into}
 \outarg{integer}{g_a}{handle for future references}
@@ -1592,7 +1592,7 @@ logical function nga_create(type, ndim, dims, array_name, chunk, g_a)
 \end{fcode}
 \begin{funcargs}
 \inarg{character*(*)}{array_name}{a unique character string}
-\inarg{integer}{type}{data type (MT_DBL,MT_INT,MT_DCPL)}
+\inarg{integer}{type}{data type (MT_DBL,MT_INT,MT_DCPL,etc.)}
 \inarg{integer}{ndim}{number of array dimensions}
 \inarg{integer}{dims(ndim)}{array of dimensions}
 \inarg{integer}{chunk(ndim)}{array of chunks, each element specifies minimum size that given dimensions should be chunked up into}
@@ -1609,7 +1609,7 @@ GlobalArray * GAServices::createGA(int type, int ndim, int dims[],
                                    char *arrayname, int chunk[])
 \end{cxxcode}
 \begin{funcargs}
-\inarg{int}{type}{data type(MT_F_DBL,MT_F_INT,MT_F_DCPL)}
+\inarg{int}{type}{data type(C_DBL,C_INT,C_DCPL,etc.)}
 \inarg{int}{ndim}{number of array dimensions}
 \inarg{int*}{dims[ndim]}{array of dimensions}
 \inarg{char*}{arrayname}{a unique character string}
@@ -1624,7 +1624,7 @@ g_a = ga.create(int gtype, dims, char *name='', chunk=None)
 \end{pycode}
 \begin{funcargs}
 \inarg{str}{name}{a unique character string}
-\inarg{int}{type}{data type e.g. C_DBL, C_INT, C_DCPL}
+\inarg{int}{type}{data type e.g. C_DBL, C_INT, C_DCPL, etc.}
 \inarg{1D array-like of ints}{dims}{shape of array}
 \inarg{1D array-like of ints}{chunk}{each element specifies minimum size that given dimensions should be chunked up into}
 \outarg{int}{g_a}{global array handle}
@@ -1654,7 +1654,7 @@ Return value: a non-zero array handle means the call was succesful.
 
 \end{desc}
 
-\seealso{CREATE CONFIG,CREATE GHOSTSSSSSSSSS IRREG,CREATE GHOSTS,CREATE GHOSTS CONFIG,CREATE GHOSTS IRREG CONFIG,CREATE HANDLE,CREATE IRREG,CREATE IRREG CONFIG}
+\seealso{CREATE CONFIG,CREATE GHOSTS IRREG,CREATE GHOSTS,CREATE GHOSTS CONFIG,CREATE GHOSTS IRREG CONFIG,CREATE HANDLE,CREATE IRREG,CREATE IRREG CONFIG}
 
 \apih{CREATE CONFIG}{Creates a GA for a specific processor group}
 
@@ -1665,7 +1665,7 @@ int NGA_Create_config(int type, int ndim, int dims[], char *array_name,
 \end{ccode}
 \begin{funcargs}
 \inarg{char*}{array_name}{a unique character string}
-\inarg{int}{type}{data type (MT_F_DBL,MT_F_INT,MT_F_DCPL)}
+\inarg{int}{type}{data type (C_DBL,C_INT,C_DCPL,etc.)}
 \inarg{int}{ndim}{number of array dimensions}
 \inarg{int*}{dims[ndim]}{array of dimensions}
 \inarg{int*}{chunk[ndim]}{array of chunks, each element specifies minimum size that given dimensions should be chunked up into}
@@ -1681,7 +1681,7 @@ logical function nga_create_config(type, ndim, dims, array_name, chunk,
 \end{fcode}
 \begin{funcargs}
 \inarg{character*(*)}{array_name}{a unique character string}
-\inarg{integer}{type}{data type (MT_DBL,MT_INT,MT_DCPL)}
+\inarg{integer}{type}{data type (MT_DBL,MT_INT,MT_DCPL,etc.)}
 \inarg{integer}{ndim}{number of array dimensions}
 \inarg{integer}{dims(ndim)}{array of dimensions}
 \inarg{integer}{chunk(ndim)}{array of chunks, each element specifies minimum size that given dimensions should be chunked up into}
@@ -1699,7 +1699,7 @@ GlobalArray::GlobalArray(int type, int ndim, int64_t dims[], char *arrayname,
                          int64_t chunk[], PGroup* p_handle)
 \end{cxxcode}
 \begin{funcargs}
-\inarg{int}{type}{data type(MT_F_DBL,MT_F_INT,MT_F_DCPL)}
+\inarg{int}{type}{data type(C_DBL,C_INT,C_DCPL,etc.)}
 \inarg{int}{ndim}{number of array dimensions}
 \inarg{int*}{dims[ndim]}{array of dimensions}
 \inarg{char*}{arrayname}{a unique character string}
@@ -1716,7 +1716,7 @@ g_a = ga.create(int gtype, dims, char *name='', chunk=None,
 \end{pycode}
 \begin{funcargs}
 \inarg{str}{name}{a unique character string}
-\inarg{int}{type}{data type e.g. C_DBL, C_INT, C_DCPL}
+\inarg{int}{type}{data type e.g. C_DBL, C_INT, C_DCPL, etc.}
 \inarg{1D array-like of ints}{dims}{shape of array}
 \inarg{1D array-like of ints}{chunk}{each element specifies minimum size that given dimensions should be chunked up into}
 \inarg{int}{pgroup}{processor group handle}
@@ -1770,7 +1770,7 @@ int NGA_Create_ghost_irreg(int type, int ndim, int dims[], width[],
 \end{ccode}
 \begin{funcargs}
 \inarg{char*}{array_name}{a unique character string}
-\inarg{int}{type}{data type (MT_DBL,MT_INT,MT_DCPL)}
+\inarg{int}{type}{data type (C_DBL,C_INT,C_DCPL,etc.)}
 \inarg{int}{ndim}{number of array dimensions}
 \inarg{int*}{dims[ndim]}{array of dimensions}
 \inarg{int*}{width[ndim]}{array of ghost cell widths}
@@ -1786,7 +1786,7 @@ logical function nga_create_ghosts_irreg(type, ndim, dims, width, array_name, ma
 \end{fcode}
 \begin{funcargs}
 \inarg{character*(*)}{array_name}{a unique character string}
-\inarg{integer}{type}{data type (MT_DBL,MT_INT,MT_DCPL)}
+\inarg{integer}{type}{data type (MT_DBL,MT_INT,MT_DCPL,etc.)}
 \inarg{integer}{ndim}{number of array dimensions}
 \inarg{integer}{dims(ndim)}{array of dimensions}
 \inarg{integer}{width(ndim)}{array of ghost cell widths}
@@ -1806,7 +1806,7 @@ GlobalArray::GlobalArray(int type, int ndim, int64_t dims[],
                          int64_t block[], int64_t maps[], char ghosts)
 \end{cxxcode}
 \begin{funcargs}
-\inarg{int}{type}{data type (MT_DBL,MT_INT,MT_DCPL)}
+\inarg{int}{type}{data type (C_DBL,C_INT,C_DCPL,etc.)}
 \inarg{int}{ndim}{number of array dimensions}
 \inarg{int*}{dims[ndim]}{array of dimensions}
 \inarg{int*}{width[ndim]}{array of ghost cell widths}
@@ -1823,7 +1823,7 @@ g_a = ga.create_ghosts_irreg(int gtype, dims, width, block, map,
                              char *name='')
 \end{pycode}
 \begin{funcargs}
-\inarg{int}{gtype}{data type (C_DBL,C_INT,C_DCPL)}
+\inarg{int}{gtype}{data type (C_DBL,C_INT,C_DCPL,etc.)}
 \inarg{1D array-like of ints}{dims}{array shape}
 \inarg{1D array-like of ints}{width}{ghost cell widths per dimension}
 \inarg{1D array-like of ints}{block}{no. of blocks each dimension is divided into}
@@ -1903,7 +1903,7 @@ int NGA_Create_ghosts(int type, int ndim, int dims[], int width[],
 \end{ccode}
 \begin{funcargs}
 \inarg{char*}{array_name}{a unique character string}
-\inarg{int}{type}{data type (MT_DBL,MT_INT,MT_DCPL)}
+\inarg{int}{type}{data type (C_DBL,C_INT,C_DCPL,etc.)}
 \inarg{int}{ndim}{number of array dimensions}
 \inarg{int*}{dims[ndim]}{array of dimensions}
 \inarg{int*}{width[ndim]}{array of ghost cell widths}
@@ -1940,7 +1940,7 @@ GlobalArray * GAServices::createGA_Ghosts(int type, int ndim, int dims[],
                                           int chunk[])
 \end{cxxcode}
 \begin{funcargs}
-\inarg{int}{type}{data type (MT_DBL,MT_INT,MT_DCPL)}
+\inarg{int}{type}{data type (C_DBL,C_INT,C_DCPL,etc.)}
 \inarg{int}{ndim}{number of array dimensions}
 \inarg{int*}{dims[ndim]}{array of dimensions}
 \inarg{int*}{width[ndim]}{array of ghost cell widths}
@@ -1956,7 +1956,7 @@ g_a = ga.create_ghosts(int gtype, dims, width, char *name='',
                        chunk=None)
 \end{pycode}
 \begin{funcargs}
-\inarg{int}{gtype}{data type (C_DBL,C_INT,C_DCPL)}
+\inarg{int}{gtype}{data type (C_DBL,C_INT,C_DCPL,etc.)}
 \inarg{1D array-like of ints}{dims}{array of dimensions}
 \inarg{1D array-like of ints}{width}{array of ghost cell widths}
 \inarg{char*}{name}{a unique character string}
@@ -2002,7 +2002,7 @@ int NGA_Create_ghosts_config(int type, int ndim, int dims[],
 \end{ccode}
 \begin{funcargs}
 \inarg{char*}{array_name}{a unique character string}
-\inarg{int}{type}{data type (MT_DBL,MT_INT,MT_DCPL)}
+\inarg{int}{type}{data type (C_DBL,C_INT,C_DCPL,etc.)}
 \inarg{int}{ndim}{number of array dimensions}
 \inarg{int*}{dims[ndim]}{array of dimensions}
 \inarg{int*}{width[ndim]}{array of ghost cell widths}
@@ -2019,7 +2019,7 @@ logical function nga_create_ghosts_config(type, ndim, dims, width, array_name,
 \end{fcode}
 \begin{funcargs}
 \inarg{character*(*)}{array_name}{a unique character string}
-\inarg{integer}{type}{data type (MT_DBL,MT_INT,MT_DCPL)}
+\inarg{integer}{type}{data type (MT_DBL,MT_INT,MT_DCPL,etc.)}
 \inarg{integer}{ndim}{number of array dimensions}
 \inarg{integer}{dims(ndim)}{array of dimensions}
 \inarg{integer}{width(ndim)}{array of ghost cell widths}
@@ -2040,7 +2040,7 @@ GlobalArray::GlobalArray(int type, int ndim, int64_t dims[], int64_t width[],
                          char ghosts)
 \end{cxxcode}
 \begin{funcargs}
-\inarg{int}{type}{data type (MT_DBL,MT_INT,MT_DCPL)}
+\inarg{int}{type}{data type (C_DBL,C_INT,C_DCPL,etc.)}
 \inarg{int}{ndim}{number of array dimensions}
 \inarg{int*}{dims[ndim]}{array of dimensions}
 \inarg{int*}{width[ndim]}{array of ghost cell widths}
@@ -2057,7 +2057,7 @@ g_a = ga.create_ghosts(int gtype, dims, width, char *name='',
                        chunk=None, int pgroup=-1)
 \end{pycode}
 \begin{funcargs}
-\inarg{int}{gtype}{data type (C_DBL,C_INT,C_DCPL)}
+\inarg{int}{gtype}{data type (C_DBL,C_INT,C_DCPL,etc.)}
 \inarg{1D array-like of ints}{dims}{array of dimensions}
 \inarg{1D array-like of ints}{width}{array of ghost cell widths}
 \inarg{char*}{name}{a unique character string}
@@ -2095,7 +2095,7 @@ int NGA_Create_ghost_irreg_config(int type, int ndim, int dims[],
 \end{ccode}
 \begin{funcargs}
 \inarg{char*}{array_name}{a unique character string}
-\inarg{int}{type}{data type (MT_DBL,MT_INT,MT_DCPL)}
+\inarg{int}{type}{data type (C_DBL,C_INT,C_DCPL,etc.)}
 \inarg{int}{ndim}{number of array dimensions}
 \inarg{int*}{dims[ndim]}{array of dimensions}
 \inarg{int*}{width[ndim]}{array of ghost cell widths}
@@ -2114,7 +2114,7 @@ logical function nga_create_ghosts_irreg_config(type, ndim,
 \end{fcode}
 \begin{funcargs}
 \inarg{character*(*)}{array_name}{a unique character string}
-\inarg{integer}{type}{data type (MT_DBL,MT_INT,MT_DCPL)}
+\inarg{integer}{type}{data type (MT_DBL,MT_INT,MT_DCPL,etc.)}
 \inarg{integer}{ndim}{number of array dimensions}
 \inarg{integer}{dims(ndim)}{array of dimensions}
 \inarg{integer}{width(ndim)}{array of ghost cell widths}
@@ -2136,7 +2136,7 @@ GlobalArray::GlobalArray(int type, int ndim, int64_t dims[],
                          PGroup* p_handle,char ghosts)
 \end{cxxcode}
 \begin{funcargs}
-\inarg{int}{type}{data type (MT_DBL,MT_INT,MT_DCPL)}
+\inarg{int}{type}{data type (C_DBL,C_INT,C_DCPL,etc.)}
 \inarg{int}{ndim}{number of array dimensions}
 \inarg{int*}{dims[ndim]}{array of dimensions}
 \inarg{int*}{width[ndim]}{array of ghost cell widths}
@@ -2154,7 +2154,7 @@ g_a = ga.create_ghosts_irreg(int gtype, dims, width, block, map,
                              char *name='', int pgroup=-1)
 \end{pycode}
 \begin{funcargs}
-\inarg{int}{gtype}{data type (C_DBL,C_INT,C_DCPL)}
+\inarg{int}{gtype}{data type (C_DBL,C_INT,C_DCPL,etc.)}
 \inarg{1D array-like of ints}{dims}{array shape}
 \inarg{1D array-like of ints}{width}{ghost cell widths per dimension}
 \inarg{1D array-like of ints}{block}{no. of blocks each dimension is divided into}
@@ -2250,7 +2250,7 @@ int NGA_Create_irreg(int type, int ndim, int dims[], char *array_name,
 \end{ccode}
 \begin{funcargs}
 \inarg{char*}{array_name}{a unique character string}
-\inarg{int}{type}{MA data type (MT_F_DBL,MT_F_INT,MT_F_DCPL)}
+\inarg{int}{type}{MA data type (C_DBL,C_INT,C_DCPL,etc.)}
 \inarg{int}{ndim}{number of array dimensions}
 \inarg{int*}{dims}{array of dimension values}
 \inarg{int*}{nblock[ndim]}{no. of blocks each dimension is divided into}
@@ -2266,7 +2266,7 @@ logical function ga_create_irreg(type, dim1, dim2, array_name, map1,
 \end{fcode}
 \begin{funcargs}
 \inarg{character*(*)}{array_name}{a unique character string}
-\inarg{integer}{type}{MA type}
+\inarg{integer}{type}{data type (MT_DBL,MT_INT,MT_DCPL,etc.)}
 \inarg{integer}{dim1,dim2}{array (dim1,dim2) as in FORTRAN}
 \inarg{integer}{nblock1}{no. of blocks first dimension is divided into}
 \inarg{integer}{nblock2}{no. of blocks second dimension is divided into}
@@ -2284,7 +2284,7 @@ logical function nga_create_irreg(type, ndim, dims, array_name, map,
 \end{fcode}
 \begin{funcargs}
 \inarg{character*(*)}{array_name}{a unique character string}
-\inarg{integer}{type}{data type (MT_DBL,MT_INT,MT_DCPL)}
+\inarg{integer}{type}{data type (MT_DBL,MT_INT,MT_DCPL,etc.)}
 \inarg{integer}{ndim}{number of array dimensions}
 \inarg{integer}{dims(ndim)}{array of dimensions}
 \inarg{integer}{nblock(ndim)}{no. of blocks each dimension is divided into}
@@ -2305,7 +2305,7 @@ GlobalArray::GlobalArray(int type, int ndim, int64_t dims[],
                          int64_t maps[])
 \end{cxxcode}
 \begin{funcargs}
-\inarg{int}{type}{MA data type (MT_F_DBL,MT_F_INT,MT_F_DCPL)}
+\inarg{int}{type}{MA data type (C_DBL,C_INT,C_DCPL,etc.)}
 \inarg{int}{ndim}{number of array dimensions}
 \inarg{int*}{dims}{array of dimension values}
 \inarg{char*}{arrayname}{a unique character string}
@@ -2319,7 +2319,7 @@ GlobalArray::GlobalArray(int type, int ndim, int64_t dims[],
 g_a = ga.create_irreg(int gtype, dims, block, map, char *name='')
 \end{pycode}
 \begin{funcargs}
-\inarg{int}{gtype}{data type (C_DBL,C_INT,C_DCPL)}
+\inarg{int}{gtype}{data type (C_DBL,C_INT,C_DCPL,etc.)}
 \inarg{1D array-like of ints}{dims}{array of dimension values}
 \inarg{1D array-like of ints}{block}{no. of blocks each dimension is divided into}
 \inarg{1D array-like of ints}{map}{starting index for for each block; len(map) is a sum all elements of block array}
@@ -2393,7 +2393,7 @@ int NGA_Create_irreg_config(int type, int ndim, int dims[],
 \end{ccode}
 \begin{funcargs}
 \inarg{char*}{array_name}{a unique character string}
-\inarg{int}{type}{MA data type (MT_F_DBL,MT_F_INT,MT_F_DCPL)}
+\inarg{int}{type}{MA data type (C_DBL,C_INT,C_DCPL,etc.)}
 \inarg{int}{ndim}{number of array dimensions}
 \inarg{int*}{dims}{array of dimension values}
 \inarg{int*}{nblock[ndim]}{no. of blocks each dimension is divided into}
@@ -2410,7 +2410,7 @@ logical function nga_create_irreg_config(type, ndim, dims, array_name,
 \end{fcode}
 \begin{funcargs}
 \inarg{character*(*)}{array_name}{a unique character string}
-\inarg{integer}{type}{data type (MT_DBL,MT_INT,MT_DCPL)}
+\inarg{integer}{type}{data type (MT_DBL,MT_INT,MT_DCPL,etc.)}
 \inarg{integer}{ndim}{number of array dimensions}
 \inarg{integer}{dims(ndim)}{array of dimensions}
 \inarg{integer}{nblock(ndim)}{no. of blocks each dimension is divided into}
@@ -2431,7 +2431,7 @@ GlobalArray::  GlobalArray(int type, int ndim, int64_t dims[],
                            PGroup* p_handle)
 \end{cxxcode}
 \begin{funcargs}
-\inarg{int}{type}{MA data type (MT_F_DBL,MT_F_INT,MT_F_DCPL)}
+\inarg{int}{type}{MA data type (C_DBL,C_INT,C_DCPL,etc.)}
 \inarg{int}{ndim}{number of array dimensions}
 \inarg{int*}{dims}{array of dimension values}
 \inarg{char*}{arrayname}{a unique character string}
@@ -2447,7 +2447,7 @@ g_a = ga.create_irreg(int gtype, dims, block, map, char *name='',
                       int pgroup=-1)
 \end{pycode}
 \begin{funcargs}
-\inarg{int}{gtype}{data type (C_DBL,C_INT,C_DCPL)}
+\inarg{int}{gtype}{data type (C_DBL,C_INT,C_DCPL,etc.)}
 \inarg{1D array-like of ints}{dims}{array of dimension values}
 \inarg{1D array-like of ints}{block}{no. of blocks each dimension is divided into}
 \inarg{1D array-like of ints}{map}{starting index for for each block; len(map) is a sum all elements of block array}
