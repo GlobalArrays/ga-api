@@ -6505,6 +6505,9 @@ g_src:    1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17
 g_dest:   1  7  9 12 15 16
 icount:   6
 \end{verbatim}
+
+The current implementation requires that the distribution of the g_mask array
+matches the distribution of the g_src array.
 \end{desc}
 
 \apih{PATCH ENUM}{Enumerates a global array patch}
@@ -10907,6 +10910,9 @@ g_dest:   1  0  0  0  0  0  7  0  9  0  0 12  0  0 15 16  0
 icount:   6
 
 \end{verbatim}
+
+The current implementation requires that the distribution of the g_mask array
+matches the distribution of the g_dest array.
 \end{desc}
 
 \apih{UPDATE GHOST DIR}{Updates ghost cells along a specific direction}
