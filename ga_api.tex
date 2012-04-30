@@ -5825,7 +5825,7 @@ g_a is the sum of the individual arrays before the merge operation. After the
 merge, all mirrored arrays are equal.
 \end{desc}
 
-\apih{NBACC}{Accumulates into a global array without blocking the calling process}
+\apih{NBACC}{Accumulates data into a global array without blocking the calling process}
 
 \begin{capi}
 \begin{ccode}
@@ -5926,7 +5926,7 @@ global array section (lo[],hi[]) += alpha * buffer
 
 \seealso{ACC}
 
-\apih{NBGET}{Gets from a global array without blocking the calling process}
+\apih{NBGET}{Gets data from a global array without blocking the calling process}
 
 \begin{capi}
 \begin{ccode}
@@ -5937,9 +5937,9 @@ void NGA_NbGet(int g_a, int lo[], int hi[],
 \inarg{int}{g_a}{global array handle}
 \inarg{int*}{lo[ndim]}{array of starting indices for global array section}
 \inarg{int*}{hi[ndim]}{array of ending indices for global array section}
-\outarg{void*}{buf}{pointer to the local buffer array where the data goes}
+\inoutarg{void*}{buf}{pointer to the local buffer array where the data goes}
 \inarg{int*}{ld[ndim-1]}{array specifying leading dimensions/strides/extents for buffer array}
-\inarg{ga_nbhdl_t*}{nbhandle}{pointer to the non-blocking request handle}
+\outarg{ga_nbhdl_t*}{nbhandle}{pointer to the non-blocking request handle}
 \end{funcargs}
 \end{capi}
 
@@ -5951,9 +5951,9 @@ subroutine ga_nbget(g_a, ilo, ihi, jlo, jhi, buf, ld, nbhandle)
 \inarg{integer}{g_a}{global array handle}
 \inarg{integer}{ilo,ihi}{starting indices for global array section}
 \inarg{integer}{jlo,jhi}{ending indices for global array section}
-\outarg{type}{buf}{local buffer array where the data goes}
+\inoutarg{type}{buf}{local buffer array where the data goes}
 \inarg{integer}{ld}{leading dimension/stride/extent for buffer array}
-\inarg{integer}{nbhandle}{non-blocking request handle}
+\outarg{integer}{nbhandle}{non-blocking request handle}
 \end{funcargs}
 \end{f2dapi}
 
@@ -5965,9 +5965,9 @@ subroutine nga_nbget(g_a, lo, hi, buf, ld, nbhandle)
 \inarg{integer}{g_a}{global array handle}
 \inarg{integer}{lo[ndim]}{array of starting indices for global array section}
 \inarg{integer}{hi[ndim]}{array of ending indices for global array section}
-\outarg{type}{buf}{local buffer array where the data goes}
+\inoutarg{type}{buf}{local buffer array where the data goes}
 \inarg{integer}{ld[ndim-1]}{array specifying leading dimensions/strides/extents for buffer array}
-\inarg{integer}{nbhandle}{non-blocking request handle}
+\outarg{integer}{nbhandle}{non-blocking request handle}
 \end{funcargs}
 \end{fapi}
 
@@ -5981,7 +5981,7 @@ void GlobalArray::nbGet(int64_t lo[], int64_t hi[],
 \begin{funcargs}
 \inarg{int*}{lo[ndim]}{patch coordinates of block}
 \inarg{int*}{hi[ndim]}{patch coordinates of block}
-\inarg{void*}{buf}{local buffer to receive data}
+\inoutarg{void*}{buf}{local buffer to receive data}
 \inarg{int*}{ld[ndim-1]}{array of strides for local data}
 \outarg{GANbhdl*}{nbhandle}{nonblocking handle}
 \end{funcargs}
@@ -5996,7 +5996,7 @@ ret,nbhandle = ga.nbget(int g_a, lo=None, hi=None, ndarray buffer=None)
 \inarg{1D array-like of ints}{lo}{lower bound patch coordinates, inclusive}
 \inarg{1D array-like of ints}{hi}{higher bound patch coordinates, exclusive}
 \inarg{ndarray}{buffer}{an ndarray of the appropriate type, large enough to hold lo,hi}
-\outarg{ndarray}{ret}{local buffer array where the data goes to}
+\inoutarg{ndarray}{ret}{local buffer array where the data goes to}
 \outarg{ga_nbhdl_t}{nbhandle}{non-blocking handle}
 \end{funcargs}
 \end{pyapi}
@@ -6068,7 +6068,7 @@ number of partitions of each array dimension.
 
 \end{desc}
 
-\apih{NBPUT}{Puts into a global array without blocking the calling process}
+\apih{NBPUT}{Puts data into a global array without blocking the calling process}
 
 \begin{capi}
 \begin{ccode}
@@ -6081,7 +6081,7 @@ void NGA_NbPut(int g_a, int lo[], int hi[],
 \inarg{int*}{hi[ndim]}{array of ending indices for global array section}
 \inarg{void*}{buf}{pointer to the local buffer array where the data is}
 \inarg{int*}{ld[ndim-1]}{array specifying leading dimensions/strides/extents for buffer array}
-\inarg{ga_nbhdl_t*}{nbhandle}{pointer to the non-blocking request handle}
+\outarg{ga_nbhdl_t*}{nbhandle}{pointer to the non-blocking request handle}
 \end{funcargs}
 \end{capi}
 
@@ -6095,7 +6095,7 @@ subroutine ga_nbput(g_a, ilo, ihi, jlo, jhi, buf, ld, nbhandle)
 \inarg{integer}{jlo,jhi}{ending indices for global array section}
 \inarg{}{typebuf}{local buffer array where the data is}
 \inarg{integer}{ld}{leading dimension/stride/extent for buffer array}
-\inarg{integer}{nbhandle}{non-blocking request handle}
+\outarg{integer}{nbhandle}{non-blocking request handle}
 \end{funcargs}
 \end{f2dapi}
 
@@ -6109,7 +6109,7 @@ subroutine nga_nbput(g_a, lo, hi, buf, ld, nbhandle)
 \inarg{integer}{hi[ndim]}{array of ending indices for global array section}
 \inarg{}{typebuf}{local buffer array where the data is}
 \inarg{integer}{ld[ndim-1]}{array specifying leading dimensions/strides/extents for buffer array}
-\inarg{integer}{nbhandle}{non-blocking request handle}
+\outarg{integer}{nbhandle}{non-blocking request handle}
 \end{funcargs}
 \end{fapi}
 
