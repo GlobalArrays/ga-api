@@ -5045,7 +5045,7 @@ int NGA_Locate_region(int g_a, int lo[], int hi[], int map[], int procs[])
 \inarg{int}{ndim}{number of dimensions of the global array}
 \inarg{int*}{lo[ndim]}{array of starting indices for array section}
 \inarg{int*}{hi[ndim]}{array of ending indices for array section}
-\outarg{int*}{map[][2*ndim]}{array with mapping information}
+\outarg{int*}{map[]}{array with mapping information}
 \outarg{int*}{procs[nproc]}{list of processes that own a part of array section}
 \end{funcargs}
 \end{capi}
@@ -5086,7 +5086,7 @@ int GlobalArray::locateRegion(int64_t lo[], int64_t hi[], int64_t map[], int pro
 \begin{funcargs}
 \inarg{int*}{lo[ndim]}{array of starting indices for array section}
 \inarg{int*}{hi[ndim]}{array of ending indices for array section}
-\outarg{int*}{map[][2*ndim]}{array with mapping information}
+\outarg{int*}{map[]}{array with mapping information}
 \outarg{int*}{procs[nproc]}{list of processes that own a part of selection}
 \end{funcargs}
 \end{cxxapi}
@@ -5113,12 +5113,32 @@ specified patch might be actually `owned' by several processes. If lo/hi are
 out of bounds ``0'' is returned, otherwise the return value is equal to the
 number of processes that hold the data.
 
+\begin{fdesc}
 \begin{verbatim}
-     map[i][0:ndim-1]         - lo[i]
-     map[i][ndim:2*ndim-1]    - hi[i]
-     procs[i]                 - processor id that owns data in patch
-                                lo[i]:hi[i]
+     map(1:ndim,i)            - lo(1:ndim)
+     map(ndim+1:2*ndim,i)     - hi(1:ndim)
+     procs(i)                 - processor id that owns data in patch
+                                described by lo,hi
 \end{verbatim}
+\end{fdesc}
+
+\begin{cdesc}
+\begin{verbatim}
+     map[n*2*ndim+i]         - lo[i] for block n
+     map[n*2*ndim+ndim+i]    - hi[i] for block n
+     procs[n]                - processor id that owns data in patch
+                               described by lo,hi
+\end{verbatim}
+\end{cdesc}
+
+\begin{cxxdesc}
+\begin{verbatim}
+     map[n*2*ndim+i]         - lo[i] for block n
+     map[n*2*ndim+ndim+i]    - hi[i] for block n
+     procs[n]                - processor id that owns data in patch
+                               described by lo,hi
+\end{verbatim}
+\end{cxxdesc}
 
 \end{desc}
 
