@@ -250,24 +250,54 @@ ret = ga.access(int g_a, lo=None, hi=None)
 
 \local
 
-\begin{desc}
+\begin{cdesc}
 
 Provides access to the specified patch of a global array. Returns array of
 leading dimensions ld and a pointer to the first element in the patch.  This
 routine allows to access directly, in place elements in the local section of a
-global array. It useful for writing new GA operations. A call to ga_access
-normally follows a previous call to ga_distribution that returns coordinates of
+global array. It useful for writing new GA operations. A call to GA_Access
+normally follows a previous call to GA_Distribution that returns coordinates of
 the patch associated with a processor. You need to make sure that the
-coordinates of the patch are valid (test values returned from ga_distribution).
+coordinates of the patch are valid (test values returned from GA_Distribution).
 
-Each call to ga_access has to be followed by a call to either ga_release or
-ga_release_update. You can access in this fashion only local data.  Since the
+Each call to GA_Access has to be followed by a call to either GA_Release or
+GA_Release_update. You can access in this fashion only local data.  Since the
 data is shared with other processes, you need to consider issues of mutual
 exclusion.
 
-\end{desc}
+\end{cdesc}
+
+\begin{cxxdesc}
+
+Provides access to the specified patch of a global array. Returns array of
+leading dimensions ld and a pointer to the first element in the patch.  This
+routine allows to access directly, in place elements in the local section of a
+global array. It useful for writing new GA operations. A call to access
+normally follows a previous call to distribution that returns coordinates of
+the patch associated with a processor. You need to make sure that the
+coordinates of the patch are valid (test values returned from distribution).
+
+Each call to access has to be followed by a call to either release or
+releaseUpdate. You can access in this fashion only local data.  Since the
+data is shared with other processes, you need to consider issues of mutual
+exclusion.
+
+\end{cxxdesc}
 
 \begin{pydesc}
+Provides access to the specified patch of a global array. Returns array of
+leading dimensions ld and a pointer to the first element in the patch.  This
+routine allows to access directly, in place elements in the local section of a
+global array. It useful for writing new GA operations. A call to access
+normally follows a previous call to distribution that returns coordinates of
+the patch associated with a processor. You need to make sure that the
+coordinates of the patch are valid (test values returned from distribution).
+
+Each call to access has to be followed by a call to either release or
+release_update. You can access in this fashion only local data.  Since the
+data is shared with other processes, you need to consider issues of mutual
+exclusion.
+
 Note: The entire local data is always accessed, but if a smaller patch is
 requested, an appropriately sliced ndarray is returned.
 \end{pydesc}
@@ -276,7 +306,7 @@ requested, an appropriately sliced ndarray is returned.
 
 Provides access to the specified patch of array. Returns leading dimension ld
 and and MA-like index for the data. This routine is intended for writing new GA
-operations. Call to ga_access should normally follow a call to ga_distribution
+operations. A call to ga_access should normally follow a call to ga_distribution
 that returns coordinates of the patch associated with a processor. You need to
 make sure that the coordinates of the patch are valid (test values returned
 from ga_distribution).
@@ -288,11 +318,9 @@ Your code should include a MA include file, mafdecls.h.
           dcpl_mb(index) - for double complex data
 \end{verbatim}
 
-The addressing convention refers the first element (ilo,jlo) of the patch.
+The addressing convention refers the first element of the patch.
 However, you can only pass that reference to another subroutine where it could
-be used like a normal array, see the following example. This constraint caused
-by the HP fortran compiler inability to reference shared memory data properly.
-The C interface has no such restrictions.
+be used like a normal array, see the following example.
 
 Example
 
@@ -309,6 +337,17 @@ you can reference A(ilo:ihi,jlo:jhi) in the following way:
 \begin{verbatim}
           call foo(dbl_mb(index), ihi-ilo+1, jhi-jlo+1, lda)
 \end{verbatim}
+
+Note that the size of the integer index must match the platform, 32-bit
+platforms need to use 4-byte integers and 64-bit platforms need to use 8-byte
+integers, regardless of whether the other integers in the program are compiled
+as 4 or 8-byte integers. This can create portability problems when code is being
+built on different platforms. Users can use the preprocessors symbol
+GA_ACCESS_INDEX_TYPE to correctly size the integers used as indices across
+different architectures. The GA_ACCESS_INDEX_TYPE is used instead of an integer
+declaration and the the global.fh file needs to be included in the subroutine.
+This will result in code that works for both 32 and 64-bit platforms without
+having to explicity convert the integer size.
 
 \end{fdesc}
 
@@ -354,7 +393,7 @@ void GlobalArray::accessBlock(int64_t idx, void *ptr, int64_t ld[]) const
 
 \begin{pyapi}
 \begin{pycode}
-ret = ga.access_block_grid(int g_a, int idx)
+ret = ga.access_block(int g_a, int idx)
 \end{pycode}
 \begin{funcargs}
 \inarg{int}{g_a}{array handle}
@@ -365,8 +404,46 @@ ret = ga.access_block_grid(int g_a, int idx)
 
 \local
 
-\begin{desc}
+\begin{cdesc}
+This function can be used to gain direct access to the data represented by a
+single block in a global array with a block-cyclic data distribution.  The
+index idx is the index of the block in the array assuming that blocks are
+numbered sequentially in a column-major order. A quick way of determining
+whether a block with index idx is held locally on a processor is to calculate
+whether idx\%nproc equals the processor ID, where nproc is the total number
+of processors. Once the pointer has been returned, local data can be accessed as
+described in the documentation for NGA_Access. Each call to NGA_Access_block
+should be followed by a call to either NGA_Release_block or
+NGA_Release_update_block.
+\end{cdesc}
 
+\begin{cxxdesc}
+This function can be used to gain direct access to the data represented by a
+single block in a global array with a block-cyclic data distribution.  The
+index idx is the index of the block in the array assuming that blocks are
+numbered sequentially in a column-major order. A quick way of determining
+whether a block with index idx is held locally on a processor is to calculate
+whether idx\%nproc equals the processor ID, where nproc is the total number
+of processors. Once the pointer has been returned, local data can be accessed as
+described in the documentation for access. Each call to accessBlock
+should be followed by a call to either ReleaseBlock or
+releaseUpdateBlock.
+\end{cxxdesc}
+
+\begin{pydesc}
+This function can be used to gain direct access to the data represented by a
+single block in a global array with a block-cyclic data distribution.  The
+index idx is the index of the block in the array assuming that blocks are
+numbered sequentially in a column-major order. A quick way of determining
+whether a block with index idx is held locally on a processor is to calculate
+whether idx\%nproc equals the processor ID, where nproc is the total number
+of processors. Once the array has been returned, local data can be accessed as
+described in the documentation for access. Each call to access_block
+should be followed by a call to either release_block or
+release_update_block.
+\end{pydesc}
+
+\begin{fdesc}
 This function can be used to gain direct access to the data represented by a
 single block in a global array with a block-cyclic data distribution.  The
 index idx is the index of the block in the array assuming that blocks are
@@ -374,11 +451,13 @@ numbered sequentially in a column-major order. A quick way of determining
 whether a block with index idx is held locally on a processor is to calculate
 whether mod(idx,nproc) equals the processor ID, where nproc is the total number
 of processors. Once the index has been returned, local data can be accessed as
-described in the documentation for NGA_Access. Each call to ga_access_block
-should be followed by a call to either NGA_Release_block or
-NGA_Release_update_block.
+described in the documentation for nga_access. Each call to nga_access_block
+should be followed by a call to either nga_release_block or
+nga_release_update_block.
 
-\end{desc}
+Please check the documentation for the nga_access function for more information on
+how to use the index returned by this subroutine to access locally held data.
+\end{fdesc}
 
 \seealso{ACCESS,RELEASE BLOCK,RELEASE UPDATE BLOCK}
 
@@ -436,8 +515,7 @@ ret = ga.access_block_grid(int g_a, subscript)
 
 \local
 
-\begin{desc}
-
+\begin{cdesc}
 This function can be used to gain direct access to the data represented by a
 single block in a global array with a SCALAPACK block-cyclic data distribution
 that is based on an underlying processor grid. The subscript array contains the
@@ -445,12 +523,45 @@ subscript of the block in the array of blocks. This subscript is based on the
 location of the block in a grid, each of whose dimensions is equal to the
 number of blocks that fit along that dimension. Once the index has been
 returned, local data can be accessed as described in the documentation for
-NGA_Access. Each call to ga_access_block_grid should be followed by a call to
+NGA_Access. Each call to NGA_Access_block_grid should be followed by a call to
 either NGA_Release_block_grid or NGA_Release_update_block_grid.
+\end{cdesc}
 
-Returns: ndarray representing local block
+\begin{cxxdesc}
+This function can be used to gain direct access to the data represented by a
+single block in a global array with a SCALAPACK block-cyclic data distribution
+that is based on an underlying processor grid. The subscript array contains the
+subscript of the block in the array of blocks. This subscript is based on the
+location of the block in a grid, each of whose dimensions is equal to the
+number of blocks that fit along that dimension. Once the index has been
+returned, local data can be accessed as described in the documentation for
+access. Each call to accessBlockGrid should be followed by a call to
+either releaseBlockGrid or releaseUpdateBlockGrid.
+\end{cxxdesc}
 
-\end{desc}
+\begin{pydesc}
+This function can be used to gain direct access to the data represented by a
+single block in a global array with a SCALAPACK block-cyclic data distribution
+that is based on an underlying processor grid. The subscript array contains the
+subscript of the block in the array of blocks. This subscript is based on the
+location of the block in a grid, each of whose dimensions is equal to the
+number of blocks that fit along that dimension. Once the index has been
+returned, local data can be accessed as described in the documentation for
+access. Each call to access_block_grid should be followed by a call to
+either release_block_grid or release_update_block_grid.
+\end{pydesc}
+
+\begin{fdesc}
+This function can be used to gain direct access to the data represented by a
+single block in a global array with a SCALAPACK block-cyclic data distribution
+that is based on an underlying processor grid. The subscript array contains the
+subscript of the block in the array of blocks. This subscript is based on the
+location of the block in a grid, each of whose dimensions is equal to the
+number of blocks that fit along that dimension. Once the index has been
+returned, local data can be accessed as described in the documentation for
+nga_access. Each call to nga_access_block_grid should be followed by a call to
+either nga_release_block_grid or nga_release_update_block_grid.
+\end{fdesc}
 
 \seealso{ACCESS,RELEASE BLOCK GRID,RELEASE UPDATE BLOCK GRID}
 
@@ -507,8 +618,7 @@ ret = ga.access_block(int g_a, int proc)
 
 \local
 
-\begin{desc}
-
+\begin{cdesc}
 This function can be used to gain access to the all the locally held data on a
 particular processor that is associated with a block-cyclic distributed array.
 Once the index has been returned, local data can be accessed as described in
@@ -516,10 +626,45 @@ the documentation for NGA_Access. The parameter len is the number of data
 elements that are held locally. The data inside this segment has a lot of
 additional structure so this function is not generally useful to developers. It
 is primarily used inside the GA library to implement other GA routines. Each
-call to ga_access_block_segment should be followed by a call to either
+call to NGA_Access_block_segment should be followed by a call to either
 NGA_Release_block_segment or NGA_Release_update_block_segment.
+\end{cdesc}
 
-\end{desc}
+\begin{cxxdesc}
+This function can be used to gain access to the all the locally held data on a
+particular processor that is associated with a block-cyclic distributed array.
+Once the index has been returned, local data can be accessed as described in
+the documentation for access. The parameter len is the number of data
+elements that are held locally. The data inside this segment has a lot of
+additional structure so this function is not generally useful to developers. It
+is primarily used inside the GA library to implement other GA routines. Each
+call to accessBlockSegment should be followed by a call to either
+releaseBlockSegment or releaseUpdateBlockSegment.
+\end{cxxdesc}
+
+\begin{pydesc}
+This function can be used to gain access to the all the locally held data on a
+particular processor that is associated with a block-cyclic distributed array.
+Once the index has been returned, local data can be accessed as described in
+the documentation for access. The parameter len is the number of data
+elements that are held locally. The data inside this segment has a lot of
+additional structure so this function is not generally useful to developers. It
+is primarily used inside the GA library to implement other GA routines. Each
+call to access_block_segment should be followed by a call to either
+release_block_segment or release_update_block_segment.
+\end{pydesc}
+
+\begin{fdesc}
+This function can be used to gain access to the all the locally held data on a
+particular processor that is associated with a block-cyclic distributed array.
+Once the index has been returned, local data can be accessed as described in
+the documentation for nga_access. The parameter len is the number of data
+elements that are held locally. The data inside this segment has a lot of
+additional structure so this function is not generally useful to developers. It
+is primarily used inside the GA library to implement other GA routines. Each
+call to nga_access_block_segment should be followed by a call to either
+nga_release_block_segment or nga_release_update_block_segment.
+\end{fdesc}
 
 \seealso{ACCESS,RELEASE BLOCK SEGMENT,RELEASE UPDATE BLOCK SEGMENT}
 
@@ -587,6 +732,11 @@ relative to the origin of the local patch (which is assumed to be indexed by
 
 \end{desc}
 
+\begin{fdesc}
+To use the index returned by the nga_access_ghost_element subroutine, see the
+documentation on nga_access.
+\end{fdesc}
+
 \seealso{ACCESS,RELEASE GHOST ELEMENT,RELEASE UPDATE GHOST ELEMENT}
 
 \apih{ACCESS GHOSTS}{Accesses the ghost cells allocated locally on a GA}
@@ -639,8 +789,7 @@ ret = ga.access_ghosts(int g_a)
 
 \local
 
-\begin{desc}
-
+\begin{cdesc}
 Provides access to the local patch of the global array. Returns leading
 dimension ld and and pointer for the data.  This routine will provide access to
 the ghost cell data residing on each processor. Calls to NGA_Access_ghosts
@@ -650,8 +799,44 @@ the coordinates of the patch are valid (test values returned from
 NGA_Distribution).
 
 You can only access local data.
+\end{cdesc}
 
-\end{desc}
+\begin{cxxdesc}
+Provides access to the local patch of the global array. Returns leading
+dimension ld and and pointer for the data.  This routine will provide access to
+the ghost cell data residing on each processor. Calls to accessGhosts
+should normally follow a call to distribution that returns coordinates of
+the visible data patch associated with a processor. You need to make sure that
+the coordinates of the patch are valid (test values returned from
+distribution).
+
+You can only access local data.
+\end{cxxdesc}
+
+\begin{pydesc}
+Provides access to the local patch of the global array. Returns leading
+dimension ld and and pointer for the data.  This routine will provide access to
+the ghost cell data residing on each processor. Calls to access_ghosts
+should normally follow a call to distribution that returns coordinates of
+the visible data patch associated with a processor. You need to make sure that
+the coordinates of the patch are valid (test values returned from
+distribution).
+
+You can only access local data.
+\end{pydesc}
+
+\begin{fdesc}
+Provides access to the local patch of the global array. Returns leading
+dimension ld and and pointer for the data.  This routine will provide access to
+the ghost cell data residing on each processor. Calls to nga_access_ghosts
+should normally follow a call to nga_distribution that returns coordinates of
+the visible data patch associated with a processor. You need to make sure that
+the coordinates of the patch are valid (test values returned from
+nga_distribution).
+
+You can only access local data. To see how to use the index returned by this
+subroutine, check the documentation on nga_acces.
+\end{fdesc}
 
 \seealso{ACCESS,RELEASE GHOSTS,RELEASE UPDATE GHOSTS}
 
