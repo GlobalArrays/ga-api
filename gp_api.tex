@@ -250,7 +250,7 @@ etc.
 \begin{capi}
 \begin{ccode}
 void GP_Gather(int g_p, int nv, int *subscript, void *buf,
-               void **buf_ptr, int *buf_size, int *size)
+               void **buf_ptr, int *buf_size, int *size, int setbuf)
 \end{ccode}
 \begin{funcargs}
 \inarg{int}{g_p}{pointer array handle}
@@ -260,6 +260,7 @@ void GP_Gather(int g_p, int nv, int *subscript, void *buf,
 \outarg{void**}{buf_ptr}{array of pointers to individual elements}
 \outarg{int*}{buf_size}{array containing sizes of array elements}
 \outarg{int*}{size}{total size of array elements (in bytes)}
+\inarg{int}{setbuf}{flag for using contents buf_ptr and buf_size arrays}
 \end{funcargs}
 \end{capi}
 
@@ -276,6 +277,15 @@ pointer array buf\_ptr provides users pointers to the individual array elements
 and corresponds to the list of subscripts. The array buf\_size provides users
 with the sizes of individual array elements. The total size of the request is
 returned in the variable size.
+
+If the setbuf parameter is set to 0
+then it is assumed that there is no useful information in the buf\_ptr and
+buf\_size arrays and the call computes this information. If setbuf is not 0,
+then the call assumes that buf\_size already contains the correct sizes of the
+requested elements and buf\_ptr already points to memory locations that can
+receive the requested data. In this case, buf is ignored. This call can be used
+to increase performance, if applicable, or to copy the contents of one GP array
+into another GP array.
 
 \end{desc}
 
@@ -314,7 +324,7 @@ requesting the actual data using a GP\_Get call.
 \begin{capi}
 \begin{ccode}
 void GP_Get(int g_p, int *lo, int *hi, void *buf, void **buf_ptr, int *ld,
-             void *buf_size, int *ld_size, int *size)
+             void *buf_size, int *ld_size, int *size, int setbuf)
 \end{ccode}
 \begin{funcargs}
 \inarg{int}{g_p}{pointer array handle}
@@ -326,6 +336,7 @@ void GP_Get(int g_p, int *lo, int *hi, void *buf, void **buf_ptr, int *ld,
 \outarg{int*}{buf_size}{array containing sizes of array elements}
 \inarg{int*}{ld_sz}{stride array for buf_size array}
 \outarg{int*}{size}{total size of array block (in bytes)}
+\inarg{int}{setbuf}{flag for using contents buf_ptr and buf_size arrays}
 \end{funcargs}
 \end{capi}
 
@@ -341,7 +352,14 @@ data is placed contiguously in the buffer designated by the void pointer buf.
 Pointers to the individual array elements can be retrieved from the pointer
 array buf\_ptr. This array is layed out using the stride array ld. Similarly,
 the size of individual array elements is stored in the array buf\_size, which is
-layed out using the stride array ld\_sz.
+layed out using the stride array ld\_sz. If the setbuf parameter is set to 0
+then it is assumed that there is no useful information in the buf\_ptr and
+buf\_size arrays and the call computes this information. If setbuf is not 0,
+then the call assumes that buf\_size already contains the correct sizes of the
+requested elements and buf\_ptr already points to memory locations that can
+receive the requested data. In this case, buf is ignored. This call can be used
+to increase performance, if applicable, or to copy the contents of one GP array
+into another GP array.
 
 \end{desc}
 
