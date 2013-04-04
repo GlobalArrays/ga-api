@@ -1213,6 +1213,59 @@ Returns True if allocation of g_a was successful.
 
 \end{desc}
 
+\apih{ALLOC GATSCAT BUF}{Allocates an internal buffer for gather/scatter
+operations}
+
+\begin{capi}
+\begin{ccode}
+void NGA_Alloc_gatscat_buf(int nelems)
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{nelems}{maximum number of elements to scatter/gather}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+void nga_alloc_gatscat_buf(nelems)
+\end{fcode}
+\begin{funcargs}
+\inarg{integer}{nelems}{maximum number of elements to scatter/gather}
+\end{funcargs}
+\end{fapi}
+
+\begin{cxxapi}
+\begin{cxxcode}
+void GlobalArray::allocGatscatBuf(int nelems) const
+\end{cxxcode}
+\begin{funcargs}
+\inarg{int}{nelems}{maximum number of elements to scatter/gather}
+\end{funcargs}
+\end{cxxapi}
+
+\begin{pyapi}
+\begin{pycode}
+ga.alloc_gatscat_buf(int nelems)
+\end{pycode}
+\begin{funcargs}
+\inarg{int}{nelems}{maximum number of elements to scatter/gather}
+\end{funcargs}
+\end{pyapi}
+
+\local
+
+\begin{desc}
+This function can be used to enhance the performance when the gather/scatter
+operations are being called multiple times in succession. If the maximum number
+of elements being called in any gather/scatter operation is known prior to
+executing a code segment, then some internal buffers used in the gather/scatter
+operations can be allocated beforehand instead of at every individual call. This
+can result in substantial performance boosts in some cases. When the buffers are
+no longer needed they can be removed using the corresponding free call.
+\end{desc}
+
+\seealso{FREE GATSCAT BUF}
+
 \apih{BRDCST}{Broadcasts elements among all processes}
 
 \begin{capi}
@@ -3043,7 +3096,8 @@ subroutine ga_distribution(g_a, iproc, ilo, ihi, jlo, jhi)
 \begin{funcargs}
 \inarg{integer}{g_a}{array handle}
 \inarg{integer}{iproc}{process number}
-\outarg{integer}{ilo,ihi,jlo,jhi}{range held by process iproc}
+\outarg{integer}{ilo,ihi}{i-range held by process iproc}
+\outarg{integer}{jlo,jhi}{j-range held by process iproc}
 \end{funcargs}
 \end{f2dapi}
 
@@ -3085,16 +3139,38 @@ lo,hi = ga.distribution(int g_a, int iproc=-1)
 
 \local
 
-\begin{desc}
+\begin{fdesc}
+This function returns the bounding indices of the block owned by the process
+iproc. These indices are inclusive.
 
 If no array elements are owned by process iproc, the range is returned as
-lo[ ]=0 and hi[ ]= -1 for all dimensions.
+lo()=0 and hi()= -1 for all dimensions.
+\end{fdesc}
+
+\begin{cdesc}
+This function returns the bounding indices of the block owned by the process
+iproc. These indices are inclusive.
+
+If no array elements are owned by process iproc, the range is returned as
+lo[]=-1 and hi[]= -2 for all dimensions.
+\end{cdesc}
+
+\begin{cxxdesc}
+This function returns the bounding indices of the block owned by the process
+iproc. These indices are inclusive.
+
+If no array elements are owned by process iproc, the range is returned as
+lo[]=-1 and hi[]= -2 for all dimensions.
+\end{cxxdesc}
+
+\begin{pydesc}
+This function returns the bounding indices of the block owned by the process
+iproc. These indices are inclusive.
 
 Return the distribution given to iproc. If iproc is not specified, then
 ga.nodeid() is used. The range is returned as -1 for lo and -2 for hi if no
 elements are owned by iproc.
-
-\end{desc}
+\end{pydesc}
 
 \apih{DOT}{Dot product of two global arrays}
 
@@ -4161,6 +4237,43 @@ Fill the patch of g_a with value of `val'
 \end{desc}
 
 \seealso{FILL}
+
+\apih{FREE GATSCAT BUF}{Frees an internal buffer for gather/scatter
+operations}
+
+\begin{capi}
+\begin{ccode}
+void NGA_Free_gatscat_buf()
+\end{ccode}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+void nga_free_gatscat_buf()
+\end{fcode}
+\end{fapi}
+
+\begin{cxxapi}
+\begin{cxxcode}
+void GlobalArray::freeGatscatBuf()
+\end{cxxcode}
+\end{cxxapi}
+
+\begin{pyapi}
+\begin{pycode}
+void ga.free_gatscat_buf()
+\end{pycode}
+\end{pyapi}
+
+\local
+
+\begin{desc}
+This function is used to free up internal buffers that were set with the
+corresponding allocation call. The buffers can be used to improve performance if
+multiple calls are being made to the gather/scatter operations.
+\end{desc}
+
+\seealso{ALLOC GATSCAT BUF}
 
 \apih{GATHER}{Gathers elements from a global array}
 
