@@ -57,6 +57,11 @@ def main():
     for file in sorted(files, key=lambda x: x[:-4]):
         if file[-4:] != '.tex':
             print "skipping file %s" % path+file
+            continue
+        if os.path.isdir(path+file):
+            print "skipping dir %s" % path+file
+            continue
+        print "parsing %s" % path+file
         for line in open(path+file):
             if 'apih' in line:
                 line = line.strip()
@@ -67,7 +72,6 @@ def main():
                 link = name.replace(" ", "_")
                 out.write('<dt><a target="api" href="%s_op_api.html#%s">%s</a></dt>\n' % (
                     lang, link, name))
-                break
     out.write(post)
     out.close()
 
