@@ -4645,6 +4645,75 @@ This is a local function.
 
 \seealso{SET BLOCK CYCLIC,SET BLOCK CYCLIC PROC GRID}
 
+\apih{GET GHOST BLOCK}{Gets data, including ghost cells, from a global array
+with ghost cells}
+
+\begin{capi}
+\begin{ccode}
+void NGA_Get_ghost_block(int g_a, int lo[], int hi[], void* buf, int ld[])
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{g_a}{global array handle}
+\inarg{int}{ndim}{number of dimensions of the global array}
+\inarg{int*}{lo[ndim]}{array of starting indices for global array section}
+\inarg{int*}{hi[ndim]}{array of ending indices for global array section}
+\outarg{void*}{buf}{pointer to the local buffer array where the data goes}
+\inarg{int*}{ld[ndim-1]}{array specifying leading dimensions/strides/extents for buffer array}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+subroutine nga_get_ghost_block(g_a, lo, hi, buf, ld)
+\end{fcode}
+\begin{funcargs}
+\inarg{integer}{g_a}{global array handle}
+\inarg{integer}{ndim}{number of dimensions of the global array}
+\inarg{integer}{lo(ndim)}{array of starting indices for global array section}
+\inarg{integer}{hi(ndim)}{array of ending indices for global array section}
+\outarg{type}{buf}{local buffer array where the data goes to}
+\inarg{integer}{ld(ndim-1)}{array specifying leading dimensions for buffer array}
+\end{funcargs}
+\end{fapi}
+
+\begin{pyapi}
+\begin{pycode}
+ret = ga.get_ghost_block(int g_a, lo=None, hi=None, ndarray buffer=None)
+\end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{the array handle}
+\inarg{1D array-like of ints}{lo}{lower bound patch coordinates, inclusive}
+\inarg{1D array-like of ints}{hi}{higher bound patch coordinates, exclusive}
+\inarg{ndarray}{buffer}{an ndarray of the appropriate type, large enough to hold lo,hi}
+\outarg{ndarray}{ret}{local buffer array where the data goes to}
+\end{funcargs}
+\end{pyapi}
+
+\ncoll
+
+\begin{desc}
+
+This operation behaves similarly to the GA Get operation and will default to
+a standard Get if the global array has no ghost cells or the request does not
+fit into the ghost cell region of the calling processor. It is easier to use
+than the NGA_Access_ghosts function but it may be slower and requires more
+memory. The operation will copy data from the locally held portions of the global
+array, including the ghost cells, if the requested block falls within the region
+defined by visible block held by the process plus the ghost cell region. For
+example, if the process holds the visible block [2:8, 2:8] with a ghost cell
+width that is one element deep, then a request for the block [1:9,1:9] will use
+the local ghost cells to fill the local buffer. In this case, the data transfer
+is completely local. If the request is for a block such as [1:10,1:10], which
+would require data from another process, then the NGA_Get_ghost_block call
+reverts to an ordinary NGA_Get operation and ignores the locally held ghost
+data.
+
+Return: The local array buffer.
+
+\seealso{GET,ACCESS GHOSTS,RELEASE GHOSTS,RELEASE UPDATE GHOSTS}
+
+\end{desc}
+
 \apih{GET DEBUG}{Returns value of GA debug flag}
 
 \begin{capi}
