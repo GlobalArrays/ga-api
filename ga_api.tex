@@ -4643,7 +4643,7 @@ This is a local function.
 
 \end{desc}
 
-\seealso{SET BLOCK CYCLIC,SET BLOCK CYCLIC PROC GRID}
+\seealso{SET BLOCK CYCLIC,SET BLOCK CYCLIC PROC GRID,SET TILED PROC GRID}
 
 \apih{GET GHOST BLOCK}{Gets data, including ghost cells, from a global array
 with ghost cells}
@@ -9715,7 +9715,7 @@ the block-cyclic access functions.
 
 \begin{capi}
 \begin{ccode}
-void GA_Set_block_cyclic(int g_a, int dims[], int proc_grid[])
+void GA_Set_block_cyclic_proc_grid(int g_a, int dims[], int proc_grid[])
 \end{ccode}
 \begin{funcargs}
 \inarg{int}{g_a}{global array handle}
@@ -10379,6 +10379,127 @@ has no effect on the data distribution.
 \end{desc}
 
 \seealso{SET RESTRICTED}
+
+\apih{SET TILED PROC GRID}{This function specifies that the GA will use a
+regular SCALAPACK-type block cyclic data distribution but individual blocks will
+be contiguous in memory}
+
+\begin{capi}
+\begin{ccode}
+void GA_Set_tiled_proc_grid(int g_a, int block_dims[], int proc_grid[])
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{g_a}{global array handle}
+\inarg{int*}{block_dims[]}{array of block dimensions}
+\inarg{int*}{proc_grid[]}{processor grid dimensions}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+subroutine ga_set_tiled_proc_grid(g_a, block_dims, proc_grid)
+\end{fcode}
+\begin{funcargs}
+\inarg{integer}{g_a}{global array handle}
+\inarg{integer}{block_dims(ndim)}{array of block dimensions}
+\inarg{integer}{proc_grid(ndim)}{array of processor grid dimensions}
+\end{funcargs}
+\end{fapi}
+
+\begin{cxxapi}
+\begin{cxxcode}
+void GlobalArray::setTiledProcGrid(int block_dims[], int proc_grid[]) const
+\end{cxxcode}
+\begin{funcargs}
+\inarg{int*}{block_dims}{array of block dimensions}
+\inarg{int*}{proc_grid}{processor grid dimensions}
+\end{funcargs}
+\end{cxxapi}
+
+\gcoll
+
+\begin{desc}
+This subroutine is used to create a global array with a SCALAPACK-type block
+cyclic data distribution but with individual block that are contiguous in
+memory. This layout may be preferable for algorithms that are moving single
+blocks of data since the corresponding messages will involve contiguous data
+transfers instead of strided calls. This may result in performance gains for
+communication bound programs. Otherwise, the data layout is similar to that
+created by the block-cyclic processor grid function.
+
+The user specifies the dimensions of the processor
+grid in the array proc_grid. The product of the processor grid dimensions must
+equal the number of total number of processors and the number of dimensions in
+the processor grid must be the same as the number of dimensions in the global
+array. The data blocks are mapped onto the processor grid in a cyclic manner
+along each of the processor grid axes. The dimensions of individual blocks are
+located in the block_dims array.
+\end{desc}
+
+\seealso{SET BLOCK CYCLIC PROC GRID}
+
+\apih{SET TILED IRREG PROC GRID}{This function specifies that the GA will use a
+distribution of irregularly sized blocks that will be assigned to processors
+using SCALAPACK-type block cyclic data distribution with individual blocks being
+contiguous in memory}
+
+\begin{capi}
+\begin{ccode}
+void GA_Set_tiled_irreg_proc_grid(int g_a, int mapc[], int nblocks[], int proc_grid[])
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{g_a}{global array handle}
+\inarg{int}{mapc[]}{starting index of each block}
+\inarg{int}{nblocks[]}{array containing the number of blocks in each dimension}
+\inarg{int}{proc_grid[]}{processor grid dimensions}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+subroutine ga_set_tiled_irreg_proc_grid(g_a, mapc, nblocks, proc_grid)
+\end{fcode}
+\begin{funcargs}
+\inarg{integer}{g_a}{global array handle}
+\inarg{integer}{mapc(s)}{starting index of each block. s is equal to the sum of
+                         indices in nblocks array}
+\inarg{integer}{nblocks(ndim)}{array containing the number of blocks in
+                               each dimension}
+\inarg{integer}{proc_grid(ndim)}{processor grid dimensions}
+\end{funcargs}
+\end{fapi}
+
+\begin{cxxapi}
+\begin{cxxcode}
+void GlobalArray::setTiledIrregProcGrid(int mapc[], int nblocks[], int proc_grid[]) const
+\end{cxxcode}
+\begin{funcargs}
+\inarg{int}{mapc[]}{starting index of each block}
+\inarg{int}{nblocks[]}{array containing number of blocks in each dimension}
+\inarg{int}{proc_grid[]}{processor grid dimensions}
+\end{funcargs}
+\end{cxxapi}
+
+\gcoll
+
+\begin{desc}
+This subroutine is a combination of the function that set an irregular
+distribution and the function for creating a tiled block-cyclic distribution.
+Like the conventional tiled block-cylic distribution, individual blocks are
+contiguous in memory. Unlike the conventional tiled distribution, individual
+blocks can vary in size. The mapc array consists of the starting index of each
+block along each dimension and the number of blocks along each axis is stored in
+the nblocks array. The number of entries in mapc equals the sum of the entries
+in nblocks. The proc_grid array describes how blocks are distributed over
+processors using a block-cylic distribution. The product of the entries in
+proc_grid is equal to the number of processors in the group that the global
+array is created on.
+
+Note that the values in the nblocks arrays should be greater than or equal to
+the corresponding values in the proc_grid array.
+\end{desc}
+
+\seealso{SET BLOCK CYCLIC PROC GRID,SET IRREG DISTR}
 
 \apih{SHIFT DIAGONAL}{Adds specified constant to diagonal elements of a global array}
 
