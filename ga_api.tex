@@ -4645,8 +4645,7 @@ This is a local function.
 
 \seealso{SET BLOCK CYCLIC,SET BLOCK CYCLIC PROC GRID}
 
-\apih{GET GHOST BLOCK}{Gets data, including ghost cells, from a global array
-with ghost cells}
+\apih{GET GHOST BLOCK}{Gets data, including ghost cells, from a global array with ghost cells}
 
 \begin{capi}
 \begin{ccode}
@@ -6541,7 +6540,62 @@ global array. Any detected inconsitencies/errors in input arguments are fatal.
 
 \seealso{PUT}
 
-\apih{NBWAIT}{Waits for a non-blocking GA operation}
+\apih{NBTEST}{Tests a non-blocking GA operation for completion}
+
+\begin{capi}
+\begin{ccode}
+int NGA_NbTest(ga_nbhdl_t* nbhandle)
+\end{ccode}
+\begin{funcargs}
+\inarg{ga_nbhdl_t*}{nbhandle}{pointer to the non-blocking request handle}
+\outarg{int}{}{1 if operation has completed}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+logical function ga_nbtest(nbhandle)
+\end{fcode}
+\begin{funcargs}
+\inarg{integer}{nbhandle}{non-blocking request handle}
+\outarg{logical}{}{.TRUE. if operation has completed}
+\end{funcargs}
+\end{fapi}
+
+\begin{fapi}
+\begin{fcode}
+logical function nga_nbtest(nbhandle)
+\end{fcode}
+\begin{funcargs}
+\inarg{integer}{nbhandle}{non-blocking request handle}
+\outarg{logical}{}{.TRUE. if operation has completed}
+\end{funcargs}
+\end{fapi}
+
+\begin{cxxapi}
+\begin{cxxcode}
+int GAServices::nbTest(GANbhdl *nbhandle)
+\end{cxxcode}
+\begin{funcargs}
+\inarg{GANbhdl*}{nbhandle}{nonblocking handle}
+\outarg{int}{}{1 if operation has completed}
+\end{funcargs}
+\end{cxxapi}
+
+\ncoll
+
+\begin{desc}
+This function tests a non-blocking one-sided operation for completion. If true,
+the function is completed locally and the buffer is available for either use or
+reuse, depending on the operation. Once this operation has returned true, there
+is no need to call nbwait on the handle. The test function is properly
+implemented only on the Progress Ranks and RMA runtimes. For other runtimes, it
+defaults to the non-blocking wait function and always returns true.
+\end{desc}
+
+\seealso{NBWAIT, NBGET,NBPUT,NBACC}
+
+\apih{NBWAIT}{Waits for a non-blocking GA operation to complete}
 
 \begin{capi}
 \begin{ccode}
@@ -6572,7 +6626,7 @@ subroutine nga_nbwait(nbhandle)
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::nbWait(GANbhdl *nbhandle)
+void GAServices::nbWait(GANbhdl *nbhandle)
 \end{cxxcode}
 \begin{funcargs}
 \inarg{GANbhdl*}{nbhandle}{nonblocking handle}
@@ -6592,18 +6646,20 @@ This function completes a non-blocking one-sided operation locally. Waiting on
 a nonblocking put or an accumulate operation assures that data was injected
 into the network and the user buffer can now be reused. Completing a get
 operation assures data has arrived into the user memory and is ready for use.
-The wait operation ensures only local completion.
+The wait operation ensures only local completion. Not all runtimes support true
+non-blocking capability. For those that don't all operations are blocking and
+the wait function is a no-op.
 
 Unlike their blocking counterparts, the nonblocking operations are not ordered
 with respect to the destination. Performance being one reason, the other reason
-is that by ensuring ordering we incur additional and possibly unnecessary
+is that ensuring ordering would incur additional and possibly unnecessary
 overhead on applications that do not require their operations to be ordered.
 For cases where ordering is necessary, it can be done by calling a fence
 operation. The fence operation is provided to the user to confirm remote
 completion if needed.
 \end{desc}
 
-\seealso{NBGET,NBPUT,NBACC}
+\seealso{NBTEST,NBGET,NBPUT,NBACC}
 
 \apih{NDIM}{Inquires the number of dimensions in a global array}
 
@@ -6810,6 +6866,56 @@ ret = ga.norm1(int g_a)
 \begin{desc}
 Computes the 1-norm of the matrix or vector g_a.
 \end{desc}
+
+\apih{OVERLAY}{Create a global array on top of an existing allocation}
+
+\begin{capi}
+\begin{ccode}
+int GA_Overlay(int g_a, int g_p)
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{g_a}{handle for overlay array}
+\inarg{int}{g_p}{handle for parent array}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+logical function ga_overlay(g_a, g_p)
+\end{fcode}
+\begin{funcargs}
+\inarg{integer}{g_a}{handle for overlay array}
+\outarg{integer}{g_p}{handle for parent array}
+\end{funcargs}
+\end{fapi}
+
+\begin{cxxapi}
+\begin{cxxcode}
+int GlobalArray::overlay(const GlobalArray *g_p)
+\end{cxxcode}
+\begin{funcargs}
+\inarg{const GlobalArray*}{g_p}{parent array}
+\end{funcargs}
+\end{cxxapi}
+
+\gcoll
+
+\begin{desc}
+The overlay function is designed to allow users to create a global array on top
+of an existing global array. This can be used in situations where it is
+desirable to create and destroy a large number of global arrays in rapid
+succession and where the size of these global arrays can be bounded beforehand.
+A large global array is created at the start using conventional create or
+allocate calls and then is used as the parent for new global arrays that are
+allocated using the overlay call. This approach removes some collectives and
+memory allocation and deallocation calls from the process of creating a global
+array and should result in improved performance. Note that the parent global
+array should not be used while another array is overlayed on top of it. 
+\end{desc}
+
+\gcoll
+
+\seealso{ALLOCATE}
 
 \apih{PACK}{Compresses values from a source vector based on a corresponding integer mask}
 
@@ -7346,6 +7452,44 @@ processor group handle was not previously active.
 
 \seealso{PGROUP CREATE,PGROUP SET DEFAULT}
 
+\apih{PGROUP DUPLICATE}{Duplicate an existing GA processor group}
+
+\begin{capi}
+\begin{ccode}
+int GA_Pgroup_duplicate(int p_handle)
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{p_handle}{processor group handle}
+\outarg{int}{}{handle to new processor group}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+integer function ga_pgroup_duplicate(p_handle)
+\end{fcode}
+\begin{funcargs}
+\inarg{integer}{p_handle}{processor group handle}
+\outarg{integer}{}{handle to new processor group}
+\end{funcargs}
+\end{fapi}
+
+\begin{cxxapi}
+\begin{cxxcode}
+Pgroup PGroup::duplicate()
+\end{cxxcode}
+\end{cxxapi}
+
+\begin{desc}
+
+Return a copy of an existing processor group.
+
+\end{desc}
+
+\gcoll
+
+\seealso{PGROUP CREATE}
+
 \apih{PGROUP GET DEFAULT}{Sets default GA processor group}
 
 \begin{capi}
@@ -7639,6 +7783,42 @@ specified by pgroup.
 \end{desc}
 
 \seealso{NODEID}
+
+\apih{PGROUP SELF}{Create a process group with only the calling process in it}
+
+\begin{capi}
+\begin{ccode}
+int GA_Pgroup_self()
+\end{ccode}
+\begin{funcargs}
+\outarg{int}{}{handle to new processor group}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+integer function ga_pgroup_self()
+\end{fcode}
+\begin{funcargs}
+\outarg{integer}{}{handle to new processor group}
+\end{funcargs}
+\end{fapi}
+
+\begin{cxxapi}
+\begin{cxxcode}
+Pgroup PGroup::self()
+\end{cxxcode}
+\end{cxxapi}
+
+\begin{desc}
+
+Return a processor group that only contains the calling process.
+
+\end{desc}
+
+\ncoll
+
+\seealso{PGROUP CREATE}
 
 \apih{PGROUP SET DEFAULT}{Sets a default GA processor group}
 
@@ -10258,6 +10438,67 @@ a processor group by using a processor group handle in this call.
 
 \seealso{ALLOCATE}
 
+\apih{SET PROPERTY}{Assign a property to a global array}
+
+\begin{capi}
+\begin{ccode}
+void GA_Set_property(int g_a, char *property)
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{g_a}{global array handle}
+\inarg{char*}{property}{character string representing the property}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+subroutine ga_set_property(g_a, property)
+\end{fcode}
+\begin{funcargs}
+\inarg{integer}{g_a}{global array handle}
+\inarg{integer}{character*(*)}{character string representing the property}
+\end{funcargs}
+\end{fapi}
+
+\begin{cxxapi}
+\begin{cxxcode}
+void GlobalArray::setProperty(char *property)
+\end{cxxcode}
+\begin{funcargs}
+\inarg{char*}{property}{character string representing the property}
+\end{funcargs}
+\end{cxxapi}
+
+\gcoll
+
+\begin{desc}
+
+This function allows users to assign properties to an array if there is advanced
+knowledge that an array will be used in a certain way. The two properties
+currently supported are "read_only" and "read_cache". These can both be set
+after the global array is allocated.
+
+The read_only property is similar to creating a mirrored array in that the global
+arrays is replicated across an SMP node. This speeds up access to array data
+since all transfers can occur by shared memory copies on the same node. However,
+memory utilization increases since the global array is replicated across nodes even
+though it is distributed within a node. Setting the read_only property results in
+significant overhead since data for the array must be copied and redistributed.
+However, if the array is only used for read operations after initialization, this
+setting may be usefull in applications.
+
+The read_cache property is useful when an application may be repeatedly
+accessing the same data. The read_cache property stores the recent blocks of
+data obtained via "get" operations. If a subsequent "get" requests the same data or
+a subset of the data, the data is obtained from the stored request instead of 
+requesting it over the network. This can speed up performance if there are many
+duplicate requests for data. The total number of requests that are cached is
+limited and requests are stored in the cache on a first in, first out basis.
+
+\end{desc}
+
+\seealso{UNSET PROPERTY}
+
 \apih{SET RESTRICTED}{Specifies a GA handle will be allocated on a subset of processors}
 
 \begin{capi}
@@ -10379,6 +10620,40 @@ has no effect on the data distribution.
 \end{desc}
 
 \seealso{SET RESTRICTED}
+
+\apih{UNSET PROPERTY}{Assign a property to a global array}
+
+\begin{capi}
+\begin{ccode}
+void GA_Unset_property(int g_a)
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{g_a}{global array handle}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+subroutine ga_unset_property(g_a)
+\end{fcode}
+\begin{funcargs}
+\inarg{integer}{g_a}{global array handle}
+\end{funcargs}
+\end{fapi}
+
+\begin{cxxapi}
+\begin{cxxcode}
+void GlobalArray::unsetProperty()
+\end{cxxcode}
+\end{cxxapi}
+
+\gcoll
+
+\begin{desc}
+This function clears properties from the global array.
+\end{desc}
+
+\seealso{SET PROPERTY}
 
 \apih{SHIFT DIAGONAL}{Adds specified constant to diagonal elements of a global array}
 
