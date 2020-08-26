@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
-"""Search through tex files and pull out function names for html index."""
+""" build different versions of GA API documentation (C,Fortran,C++,Python)"""
+""" in HTML. This script works with Python 2.7.8 but fails with later      """
+""" versions (3.7.2). The script can be invoked with                       """
+""" gen_html_api.py <directory> <one of c,f,cxx,py> [optional output name] """
 
 import os
 import re
@@ -24,7 +27,7 @@ try:
     extra_header = '<style type="text/css">\n'
     extra_header += formatter.get_style_defs('.highlight')
     extra_header += '</style>\n'
-except ImportError,e:
+except ImportError:
     have_pygments = False
     extra_header = ""
     raise
