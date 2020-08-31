@@ -4,6 +4,9 @@
 """ in HTML. This script works with Python 2.7.8 but fails with later      """
 """ versions (3.7.2). The script can be invoked with                       """
 """ gen_html_api.py <directory> <one of c,f,cxx,py> [optional output name] """
+""" This script currently seems to parse all files in the directory with   """
+""" the .tex extension so you should run this script in a directory that   """
+""" only contains the file you want to work on                             """
 
 import os
 import re
@@ -260,13 +263,17 @@ def main():
                     itemize_buffer += line.strip() + ' '
                 else:
                     line = line.strip() + ' '
-                    if not line: # empty line, begin new paragraph
+                    if line == ' ': # empty line, begin new paragraph
                         out.write("</p>\n<p>\n")
                     if r'\ref' in line:
                         line = line.replace(r'\ref{', '"')
                         line = line.replace(r'}', '" below ')
                         #line = re.sub(r'\ref{.*}', "below", line)
                     # replace tex escape sequences
+                    if r'\href' in line:
+                        line = line.replace(r'\href{', '<a href = "')
+                        line = line.replace(r'}{', '" target="_blank">')
+                        line = line.replace(r'}', '</a>')
                     line = line.replace(r'\{', '{')
                     line = line.replace(r'\}', '}')
                     line = line.replace(r'``', '"')

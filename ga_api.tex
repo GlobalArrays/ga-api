@@ -1162,57 +1162,6 @@ together element-wise.
 
 \seealso{ADD}
 
-\apih{ALLOCATE}{Allocates the array specified by a GA handle}
-
-\begin{capi}
-\begin{ccode}
-int GA_Allocate(int g_a)
-\end{ccode}
-\begin{funcargs}
-\inarg{int}{g_a}{array handle}
-\outarg{int}{}{1 if allocation of g_a was successful}
-\end{funcargs}
-\end{capi}
-
-\begin{fapi}
-\begin{fcode}
-logical function ga_allocate(g_a)
-\end{fcode}
-\begin{funcargs}
-\inarg{integer}{g_a}{global array handle}
-\outarg{logical}{}{.TRUE. if allocation of g_a was successful}
-\end{funcargs}
-\end{fapi}
-
-\begin{cxxapi}
-\begin{cxxcode}
-int GlobalArray::allocate() const
-\end{cxxcode}
-\end{cxxapi}
-
-\begin{pyapi}
-\begin{pycode}
-ret = ga.allocate(int g_a)
-\end{pycode}
-\begin{funcargs}
-\inarg{int}{g_a}{array handle}
-\outarg{bool}{ret}{True if allocation of g_a was successful}
-\end{funcargs}
-\end{pyapi}
-
-\gcoll
-
-\begin{desc}
-
-This function allocates the memory for the global array handle originally
-obtained using the GA_Create_handle function. At a minimum, the GA_Set_data
-function must be called before the memory is allocated. Other GA_Set_xxx
-functions can also be called before invoking this function.
-
-Returns True if allocation of g_a was successful.
-
-\end{desc}
-
 \apih{ALLOC GATSCAT BUF}{Allocates an internal buffer for gather/scatter operations}
 
 \begin{capi}
@@ -1264,6 +1213,57 @@ no longer needed they can be removed using the corresponding free call.
 \end{desc}
 
 \seealso{FREE GATSCAT BUF}
+
+\apih{ALLOCATE}{Allocates the array specified by a GA handle}
+
+\begin{capi}
+\begin{ccode}
+int GA_Allocate(int g_a)
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\outarg{int}{}{1 if allocation of g_a was successful}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+logical function ga_allocate(g_a)
+\end{fcode}
+\begin{funcargs}
+\inarg{integer}{g_a}{global array handle}
+\outarg{logical}{}{.TRUE. if allocation of g_a was successful}
+\end{funcargs}
+\end{fapi}
+
+\begin{cxxapi}
+\begin{cxxcode}
+int GlobalArray::allocate() const
+\end{cxxcode}
+\end{cxxapi}
+
+\begin{pyapi}
+\begin{pycode}
+ret = ga.allocate(int g_a)
+\end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\outarg{bool}{ret}{True if allocation of g_a was successful}
+\end{funcargs}
+\end{pyapi}
+
+\gcoll
+
+\begin{desc}
+
+This function allocates the memory for the global array handle originally
+obtained using the GA_Create_handle function. At a minimum, the GA_Set_data
+function must be called before the memory is allocated. Other GA_Set_xxx
+functions can also be called before invoking this function.
+
+Returns True if allocation of g_a was successful.
+
+\end{desc}
 
 \apih{BRDCST}{Broadcasts elements among all processes}
 
@@ -1998,139 +1998,6 @@ Return value: a non-zero array handle means the call was succesful.
 
 \seealso{CREATE,SET PGROUP}
 
-\apih{CREATE GHOSTS IRREG}{Creates an irregular-distributed GA with ghost cells}
-
-\begin{capi}
-\begin{ccode}
-int NGA_Create_ghosts_irreg(int type, int ndim, int dims[], width[],
-                           char *array_name, nblock[], map[])
-\end{ccode}
-\begin{funcargs}
-\inarg{char*}{array_name}{a unique character string}
-\inarg{int}{type}{data type (C_DBL,C_INT,C_DCPL,etc.)}
-\inarg{int}{ndim}{number of array dimensions}
-\inarg{int*}{dims[ndim]}{array of dimensions}
-\inarg{int*}{width[ndim]}{array of ghost cell widths}
-\inarg{int*}{nblock[ndim]}{no. of blocks each dimension is divided into}
-\inarg{int*}{map[s]}{starting index for for each block; the size     s is a sum of all elements of nblock array}
-\outarg{int}{}{array handle}
-\end{funcargs}
-\end{capi}
-
-\begin{fapi}
-\begin{fcode}
-logical function nga_create_ghosts_irreg(type, ndim, dims, width, array_name, map, nblock, g_a)
-\end{fcode}
-\begin{funcargs}
-\inarg{character*(*)}{array_name}{a unique character string}
-\inarg{integer}{type}{data type (MT_DBL,MT_INT,MT_DCPL,etc.)}
-\inarg{integer}{ndim}{number of array dimensions}
-\inarg{integer}{dims(ndim)}{array of dimensions}
-\inarg{integer}{width(ndim)}{array of ghost cell widths}
-\inarg{integer}{nblock(ndim)}{no. of blocks each dimension is divided into}
-\inarg{integer}{map(s)}{starting index for for each block; the size s is a sum of all elements of nblock array}
-\outarg{integer}{g_a}{integer handle for future references}
-\end{funcargs}
-\end{fapi}
-
-\begin{cxxapi}
-\begin{cxxcode}
-GlobalArray::GlobalArray(int type, int ndim, int dims[], int width[],
-                         char *arrayname,
-                         int block[], int maps[], char ghosts);
-GlobalArray::GlobalArray(int type, int ndim, int64_t dims[],
-                         int64_t width[], char *arrayname,
-                         int64_t block[], int64_t maps[], char ghosts)
-\end{cxxcode}
-\begin{funcargs}
-\inarg{int}{type}{data type (C_DBL,C_INT,C_DCPL,etc.)}
-\inarg{int}{ndim}{number of array dimensions}
-\inarg{int*}{dims[ndim]}{array of dimensions}
-\inarg{int*}{width[ndim]}{array of ghost cell widths}
-\inarg{char*}{arrayname}{a unique character string}
-\inarg{int*}{block[ndim]}{no. of blocks each dimension is divided into}
-\inarg{int*}{maps[s]}{starting index for for each block; the size s is a sum of all elements of nblock array}
-\inarg{char}{ghosts}{this is a dummy parameter: added to increase the number of arguments, inorder to avoid the conflicts among constructors. (ghosts = 'g' or 'G')}
-\end{funcargs}
-\end{cxxapi}
-
-\begin{pyapi}
-\begin{pycode}
-g_a = ga.create_ghosts_irreg(int gtype, dims, width, block, map,
-                             char *name='')
-\end{pycode}
-\begin{funcargs}
-\inarg{int}{gtype}{data type (C_DBL,C_INT,C_DCPL,etc.)}
-\inarg{1D array-like of ints}{dims}{array shape}
-\inarg{1D array-like of ints}{width}{ghost cell widths per dimension}
-\inarg{1D array-like of ints}{block}{no. of blocks each dimension is divided into}
-\inarg{1D array-like of ints}{map}{starting index for for each block; len(map) is a sum all elements of block array}
-\inarg{char*}{name}{a unique character string}
-\outarg{int}{}{array handle}
-\end{funcargs}
-\end{pyapi}
-
-\dcoll
-
-\begin{desc}
-
-Creates an array with ghost cells by following the user-specified distribution
-and returns an integer handle representing the array.
-
-The distribution is specified as a Cartesian product of distributions for each
-dimension.
-
-Figure \ref{crghostir} demonstrates distribution of a 2-dimensional array 8x10
-on 6 (or more) processors.
-\end{desc}
-
-\begin{fdesc}
-nblock(2)=\{3,2\}, the size of map array is s=5 and the array map contains the
-following elements map=\{1,3,7, 1, 6\}. The distribution is nonuniform because,
-P1 and P4 get 20 elements each and processors P0, P2, P3, and P5 only 10
-elements each.
-\end{fdesc}
-
-\begin{cdesc}
-nblock[2]=\{3,2\}, the size of map array is s=5 and the array map contains the
-following elements map=\{0,2,6, 0, 6\}. The distribution is nonuniform because,
-P1 and P4 get 20 elements each and processors P0, P2, P3, and P5 only 10
-elements each.
-\end{cdesc}
-
-\begin{cxxdesc}
-nblock[2]=\{3,2\}, the size of map array is s=5 and the array map contains the
-following elements map=\{0,2,6, 0, 6\}. The distribution is nonuniform because,
-P1 and P4 get 20 elements each and processors P0, P2, P3, and P5 only 10
-elements each.
-\end{cxxdesc}
-
-\begin{pydesc}
-nblock(2)=\{3,2\}, the size of map array is s=5 and the array map contains the
-following elements map=\{1,3,7, 1, 6\}. The distribution is nonuniform because,
-P1 and P4 get 20 elements each and processors P0, P2, P3, and P5 only 10
-elements each.
-\end{pydesc}
-
-\begin{desc}
-The array width is used to control the width of the ghost cell boundary
-around the visible data on each processor. The local data of the Global Array
-residing on each processor will have a layer width[n] ghosts cells wide on
-either side of the visible data along the dimension n.
-
-Return value: a non-zero array handle means the call was succesful.
-
-\begin{figure}
-\includegraphics{create-ghosts-irreg}
-\centering
-\caption{Creating an Array with Ghost Cells}
-\label{crghostir}
-\end{figure}
-
-\end{desc}
-
-\seealso{CREATE,SET GHOSTS,SET IRREG DISTR}
-
 \apih{CREATE GHOSTS}{Creates a GA with ghost cells}
 
 \begin{capi}
@@ -2321,6 +2188,139 @@ Return value: a non-zero array handle means the call was successful.
 \end{desc}
 
 \seealso{CREATE,SET GHOSTS,SET PGROUP}
+
+\apih{CREATE GHOSTS IRREG}{Creates an irregular-distributed GA with ghost cells}
+
+\begin{capi}
+\begin{ccode}
+int NGA_Create_ghosts_irreg(int type, int ndim, int dims[], width[],
+                           char *array_name, nblock[], map[])
+\end{ccode}
+\begin{funcargs}
+\inarg{char*}{array_name}{a unique character string}
+\inarg{int}{type}{data type (C_DBL,C_INT,C_DCPL,etc.)}
+\inarg{int}{ndim}{number of array dimensions}
+\inarg{int*}{dims[ndim]}{array of dimensions}
+\inarg{int*}{width[ndim]}{array of ghost cell widths}
+\inarg{int*}{nblock[ndim]}{no. of blocks each dimension is divided into}
+\inarg{int*}{map[s]}{starting index for for each block; the size     s is a sum of all elements of nblock array}
+\outarg{int}{}{array handle}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+logical function nga_create_ghosts_irreg(type, ndim, dims, width, array_name, map, nblock, g_a)
+\end{fcode}
+\begin{funcargs}
+\inarg{character*(*)}{array_name}{a unique character string}
+\inarg{integer}{type}{data type (MT_DBL,MT_INT,MT_DCPL,etc.)}
+\inarg{integer}{ndim}{number of array dimensions}
+\inarg{integer}{dims(ndim)}{array of dimensions}
+\inarg{integer}{width(ndim)}{array of ghost cell widths}
+\inarg{integer}{nblock(ndim)}{no. of blocks each dimension is divided into}
+\inarg{integer}{map(s)}{starting index for for each block; the size s is a sum of all elements of nblock array}
+\outarg{integer}{g_a}{integer handle for future references}
+\end{funcargs}
+\end{fapi}
+
+\begin{cxxapi}
+\begin{cxxcode}
+GlobalArray::GlobalArray(int type, int ndim, int dims[], int width[],
+                         char *arrayname,
+                         int block[], int maps[], char ghosts);
+GlobalArray::GlobalArray(int type, int ndim, int64_t dims[],
+                         int64_t width[], char *arrayname,
+                         int64_t block[], int64_t maps[], char ghosts)
+\end{cxxcode}
+\begin{funcargs}
+\inarg{int}{type}{data type (C_DBL,C_INT,C_DCPL,etc.)}
+\inarg{int}{ndim}{number of array dimensions}
+\inarg{int*}{dims[ndim]}{array of dimensions}
+\inarg{int*}{width[ndim]}{array of ghost cell widths}
+\inarg{char*}{arrayname}{a unique character string}
+\inarg{int*}{block[ndim]}{no. of blocks each dimension is divided into}
+\inarg{int*}{maps[s]}{starting index for for each block; the size s is a sum of all elements of nblock array}
+\inarg{char}{ghosts}{this is a dummy parameter: added to increase the number of arguments, inorder to avoid the conflicts among constructors. (ghosts = 'g' or 'G')}
+\end{funcargs}
+\end{cxxapi}
+
+\begin{pyapi}
+\begin{pycode}
+g_a = ga.create_ghosts_irreg(int gtype, dims, width, block, map,
+                             char *name='')
+\end{pycode}
+\begin{funcargs}
+\inarg{int}{gtype}{data type (C_DBL,C_INT,C_DCPL,etc.)}
+\inarg{1D array-like of ints}{dims}{array shape}
+\inarg{1D array-like of ints}{width}{ghost cell widths per dimension}
+\inarg{1D array-like of ints}{block}{no. of blocks each dimension is divided into}
+\inarg{1D array-like of ints}{map}{starting index for for each block; len(map) is a sum all elements of block array}
+\inarg{char*}{name}{a unique character string}
+\outarg{int}{}{array handle}
+\end{funcargs}
+\end{pyapi}
+
+\dcoll
+
+\begin{desc}
+
+Creates an array with ghost cells by following the user-specified distribution
+and returns an integer handle representing the array.
+
+The distribution is specified as a Cartesian product of distributions for each
+dimension.
+
+Figure \ref{crghostir} demonstrates distribution of a 2-dimensional array 8x10
+on 6 (or more) processors.
+\end{desc}
+
+\begin{fdesc}
+nblock(2)=\{3,2\}, the size of map array is s=5 and the array map contains the
+following elements map=\{1,3,7, 1, 6\}. The distribution is nonuniform because,
+P1 and P4 get 20 elements each and processors P0, P2, P3, and P5 only 10
+elements each.
+\end{fdesc}
+
+\begin{cdesc}
+nblock[2]=\{3,2\}, the size of map array is s=5 and the array map contains the
+following elements map=\{0,2,6, 0, 6\}. The distribution is nonuniform because,
+P1 and P4 get 20 elements each and processors P0, P2, P3, and P5 only 10
+elements each.
+\end{cdesc}
+
+\begin{cxxdesc}
+nblock[2]=\{3,2\}, the size of map array is s=5 and the array map contains the
+following elements map=\{0,2,6, 0, 6\}. The distribution is nonuniform because,
+P1 and P4 get 20 elements each and processors P0, P2, P3, and P5 only 10
+elements each.
+\end{cxxdesc}
+
+\begin{pydesc}
+nblock(2)=\{3,2\}, the size of map array is s=5 and the array map contains the
+following elements map=\{1,3,7, 1, 6\}. The distribution is nonuniform because,
+P1 and P4 get 20 elements each and processors P0, P2, P3, and P5 only 10
+elements each.
+\end{pydesc}
+
+\begin{desc}
+The array width is used to control the width of the ghost cell boundary
+around the visible data on each processor. The local data of the Global Array
+residing on each processor will have a layer width[n] ghosts cells wide on
+either side of the visible data along the dimension n.
+
+Return value: a non-zero array handle means the call was succesful.
+
+\begin{figure}
+\includegraphics{create-ghosts-irreg}
+\centering
+\caption{Creating an Array with Ghost Cells}
+\label{crghostir}
+\end{figure}
+
+\end{desc}
+
+\seealso{CREATE,SET GHOSTS,SET IRREG DISTR}
 
 \apih{CREATE GHOSTS IRREG CONFIG}{Creates an irregular-distributed GA with ghost cells and a specific processor group}
 
@@ -4645,74 +4645,6 @@ This is a local function.
 
 \seealso{SET BLOCK CYCLIC,SET BLOCK CYCLIC PROC GRID,SET TILED PROC GRID}
 
-\apih{GET GHOST BLOCK}{Gets data, including ghost cells, from a global array with ghost cells}
-
-\begin{capi}
-\begin{ccode}
-void NGA_Get_ghost_block(int g_a, int lo[], int hi[], void* buf, int ld[])
-\end{ccode}
-\begin{funcargs}
-\inarg{int}{g_a}{global array handle}
-\inarg{int}{ndim}{number of dimensions of the global array}
-\inarg{int*}{lo[ndim]}{array of starting indices for global array section}
-\inarg{int*}{hi[ndim]}{array of ending indices for global array section}
-\outarg{void*}{buf}{pointer to the local buffer array where the data goes}
-\inarg{int*}{ld[ndim-1]}{array specifying leading dimensions/strides/extents for buffer array}
-\end{funcargs}
-\end{capi}
-
-\begin{fapi}
-\begin{fcode}
-subroutine nga_get_ghost_block(g_a, lo, hi, buf, ld)
-\end{fcode}
-\begin{funcargs}
-\inarg{integer}{g_a}{global array handle}
-\inarg{integer}{ndim}{number of dimensions of the global array}
-\inarg{integer}{lo(ndim)}{array of starting indices for global array section}
-\inarg{integer}{hi(ndim)}{array of ending indices for global array section}
-\outarg{type}{buf}{local buffer array where the data goes to}
-\inarg{integer}{ld(ndim-1)}{array specifying leading dimensions for buffer array}
-\end{funcargs}
-\end{fapi}
-
-\begin{pyapi}
-\begin{pycode}
-ret = ga.get_ghost_block(int g_a, lo=None, hi=None, ndarray buffer=None)
-\end{pycode}
-\begin{funcargs}
-\inarg{int}{g_a}{the array handle}
-\inarg{1D array-like of ints}{lo}{lower bound patch coordinates, inclusive}
-\inarg{1D array-like of ints}{hi}{higher bound patch coordinates, exclusive}
-\inarg{ndarray}{buffer}{an ndarray of the appropriate type, large enough to hold lo,hi}
-\outarg{ndarray}{ret}{local buffer array where the data goes to}
-\end{funcargs}
-\end{pyapi}
-
-\ncoll
-
-\begin{desc}
-
-This operation behaves similarly to the GA Get operation and will default to
-a standard Get if the global array has no ghost cells or the request does not
-fit into the ghost cell region of the calling processor. It is easier to use
-than the NGA_Access_ghosts function but it may be slower and requires more
-memory. The operation will copy data from the locally held portions of the global
-array, including the ghost cells, if the requested block falls within the region
-defined by visible block held by the process plus the ghost cell region. For
-example, if the process holds the visible block [2:8, 2:8] with a ghost cell
-width that is one element deep, then a request for the block [1:9,1:9] will use
-the local ghost cells to fill the local buffer. In this case, the data transfer
-is completely local. If the request is for a block such as [1:10,1:10], which
-would require data from another process, then the NGA_Get_ghost_block call
-reverts to an ordinary NGA_Get operation and ignores the locally held ghost
-data.
-
-Return: The local array buffer.
-
-\seealso{GET,ACCESS GHOSTS,RELEASE GHOSTS,RELEASE UPDATE GHOSTS}
-
-\end{desc}
-
 \apih{GET DEBUG}{Returns value of GA debug flag}
 
 \begin{capi}
@@ -4792,6 +4724,73 @@ ga.get_diag(int g_a, int g_v)
 \begin{desc}
 Inserts the diagonal elements of this matrix g_a into the vector g_v.
 \end{desc}
+
+\apih{GET GHOST BLOCK}{Gets data, including ghost cells, from a global array with ghost cells}
+
+\begin{capi}
+\begin{ccode}
+void NGA_Get_ghost_block(int g_a, int lo[], int hi[], void* buf, int ld[])
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{g_a}{global array handle}
+\inarg{int}{ndim}{number of dimensions of the global array}
+\inarg{int*}{lo[ndim]}{array of starting indices for global array section}
+\inarg{int*}{hi[ndim]}{array of ending indices for global array section}
+\outarg{void*}{buf}{pointer to the local buffer array where the data goes}
+\inarg{int*}{ld[ndim-1]}{array specifying leading dimensions/strides/extents for buffer array}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+subroutine nga_get_ghost_block(g_a, lo, hi, buf, ld)
+\end{fcode}
+\begin{funcargs}
+\inarg{integer}{g_a}{global array handle}
+\inarg{integer}{ndim}{number of dimensions of the global array}
+\inarg{integer}{lo(ndim)}{array of starting indices for global array section}
+\inarg{integer}{hi(ndim)}{array of ending indices for global array section}
+\outarg{type}{buf}{local buffer array where the data goes to}
+\inarg{integer}{ld(ndim-1)}{array specifying leading dimensions for buffer array}
+\end{funcargs}
+\end{fapi}
+
+\begin{pyapi}
+\begin{pycode}
+ret = ga.get_ghost_block(int g_a, lo=None, hi=None, ndarray buffer=None)
+\end{pycode}
+\begin{funcargs}
+\inarg{int}{g_a}{the array handle}
+\inarg{1D array-like of ints}{lo}{lower bound patch coordinates, inclusive}
+\inarg{1D array-like of ints}{hi}{higher bound patch coordinates, exclusive}
+\inarg{ndarray}{buffer}{an ndarray of the appropriate type, large enough to hold lo,hi}
+\outarg{ndarray}{ret}{local buffer array where the data goes to}
+\end{funcargs}
+\end{pyapi}
+
+\ncoll
+
+\begin{desc}
+
+This operation behaves similarly to the GA Get operation and will default to
+a standard Get if the global array has no ghost cells or the request does not
+fit into the ghost cell region of the calling processor. It is easier to use
+than the NGA_Access_ghosts function but it may be slower and requires more
+memory. The operation will copy data from the locally held portions of the global
+array, including the ghost cells, if the requested block falls within the region
+defined by visible block held by the process plus the ghost cell region. For
+example, if the process holds the visible block [2:8, 2:8] with a ghost cell
+width that is one element deep, then a request for the block [1:9,1:9] will use
+the local ghost cells to fill the local buffer. In this case, the data transfer
+is completely local. If the request is for a block such as [1:10,1:10], which
+would require data from another process, then the NGA_Get_ghost_block call
+reverts to an ordinary NGA_Get operation and ignores the locally held ghost
+data.
+
+Return: The local array buffer.
+\end{desc}
+
+\seealso{GET,ACCESS GHOSTS,RELEASE GHOSTS,RELEASE UPDATE GHOSTS}
 
 \apih{GOP}{Global commutative vector operations of elements among all processes}
 
@@ -5393,7 +5392,7 @@ ret = ga.locate(int g_a, subscript)
 
 \begin{desc}
 
-Return the GA compute process ID that `owns' the data. If any element
+Return the GA compute process ID that 'owns' the data. If any element
 of subscript[] is out of bounds ``-1'' is returned.
 
 \end{desc}
@@ -5476,6 +5475,7 @@ Return a list of the GA processes ID that `own' the data. Parts of the
 specified patch might be actually `owned' by several processes. If lo/hi are
 out of bounds ``0'' is returned, otherwise the return value is equal to the
 number of processes that hold the data.
+\end{desc}
 
 \begin{fdesc}
 \begin{verbatim}
@@ -5504,7 +5504,6 @@ number of processes that hold the data.
 \end{verbatim}
 \end{cxxdesc}
 
-\end{desc}
 
 \seealso{LOCATE}
 
@@ -5844,7 +5843,7 @@ where AA = op(A), BB = op(B), and op(X) is one of
       op(X) = X   or   op(X) = X',
 \end{verbatim}
 
-Valid values for transpose arguments: `n', `N', `t', `T'. It works for both
+Valid values for transpose arguments: 'n', 'N', 't', 'T'. It works for both
 double and double complex data tape.
 
 nga_matmul_patch is a N-dimensional patch version of ga_dgemm and is similar to
@@ -10336,6 +10335,57 @@ An example is shown in Figure \ref{setirregdist}.
 
 \seealso{ALLOCATE}
 
+\apih{SET MEMORY DEV}{Specify the type of memory used for the global array}
+
+\begin{capi}
+\begin{ccode}
+void GA_Set_memory_dev(int g_a, char *device)
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{g_a}{global array handle}
+\inarg{char*}{device}{character string specifying the memory type}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+subroutine ga_set_memory_dev(g_a, device)
+\end{fcode}
+\begin{funcargs}
+\inarg{integer}{g_a}{global array handle}
+\inarg{integer}{character*(*)}{character string specifying the memory type}
+\end{funcargs}
+\end{fapi}
+
+\begin{cxxapi}
+\begin{cxxcode}
+void GlobalArray::setMemoryDev(char *device)
+\end{cxxcode}
+\begin{funcargs}
+\inarg{char*}{property}{character string specifying the memory type}
+\end{funcargs}
+\end{cxxapi}
+
+\gcoll
+
+\begin{desc}
+
+This function allows users to specify what type of memory is used for allocating
+global arrays. This functionality relies on the Simpified Interface for Complex
+Memory library, available at
+\href{https://github.com/lanl/SICM}{https://github.com/lanl/SICM}. If Global Arrays is
+not linked to SICM, then this property is ignored and the array will be
+allocated on ordinary memory. This should still produce correct code, but
+performance may be lower.
+
+The type of memory available depends on the hardware being used. Currently
+supported options are "dram" (this is widely available but only corresponds to
+regular memory), "knl_hbm", and "ppc_hbm". The "hbm" options are high-bandwidth
+memory on the KNL and Power PC chips, respectively. If Global Arrays has not been
+compiled using SICM, the memory device option is ignored and a conventional
+global array is created.
+\end{desc}
+
 \apih{SET MEMORY LIMIT}{Limits the internal memory used by the GA runtime}
 
 \begin{capi}
@@ -10479,7 +10529,7 @@ currently supported are "read_only" and "read_cache". These can both be set
 after the global array is allocated.
 
 The read_only property is similar to creating a mirrored array in that the global
-arrays is replicated across an SMP node. This speeds up access to array data
+array is replicated across an SMP node. This speeds up access to array data
 since all transfers can occur by shared memory copies on the same node. However,
 memory utilization increases since the global array is replicated across nodes even
 though it is distributed within a node. Setting the read_only property results in
@@ -10489,9 +10539,9 @@ setting may be usefull in applications.
 
 The read_cache property is useful when an application may be repeatedly
 accessing the same data. The read_cache property stores the recent blocks of
-data obtained via "get" operations. If a subsequent "get" requests the same data or
+data obtained via "get" operations. If a subsequent "get" operation requests the same data or
 a subset of the data, the data is obtained from the stored request instead of 
-requesting it over the network. This can speed up performance if there are many
+accessing it over the network. This can speed up performance if there are many
 duplicate requests for data. The total number of requests that are cached is
 limited and requests are stored in the cache on a first in, first out basis.
 
@@ -10621,60 +10671,6 @@ has no effect on the data distribution.
 
 \seealso{SET RESTRICTED}
 
-\apih{SET TILED PROC GRID}{This function specifies that the GA will use a regular SCALAPACK-type block cyclic data distribution but individual blocks will be contiguous in memory}
-
-\begin{capi}
-\begin{ccode}
-void GA_Set_tiled_proc_grid(int g_a, int block_dims[], int proc_grid[])
-\end{ccode}
-\begin{funcargs}
-\inarg{int}{g_a}{global array handle}
-\inarg{int*}{block_dims[]}{array of block dimensions}
-\inarg{int*}{proc_grid[]}{processor grid dimensions}
-
-\begin{fapi}
-\begin{fcode}
-subroutine ga_set_tiled_proc_grid(g_a, block_dims, proc_grid)
-\end{fcode}
-\begin{funcargs}
-\inarg{integer}{g_a}{global array handle}
-\inarg{integer}{block_dims(ndim)}{array of block dimensions}
-\inarg{integer}{proc_grid(ndim)}{array of processor grid dimensions}
-\end{funcargs}
-\end{fapi}
-
-\begin{cxxapi}
-\begin{cxxcode}
-void GlobalArray::setTiledProcGrid(int block_dims[], int proc_grid[]) const
-\end{cxxcode}
-\begin{funcargs}
-\inarg{int*}{block_dims}{array of block dimensions}
-\inarg{int*}{proc_grid}{processor grid dimensions}
-\end{funcargs}
-\end{cxxapi}
-
-\gcoll
-
-\begin{desc}
-This subroutine is used to create a global array with a SCALAPACK-type block
-cyclic data distribution but with individual blocks that are contiguous in
-memory. This layout may be preferable for algorithms that are moving single
-blocks of data since the corresponding messages will involve contiguous data
-transfers instead of strided calls. This may result in performance gains for
-communication bound programs. Otherwise, the data layout is similar to that
-created by the block-cyclic processor grid function.
-
-The user specifies the dimensions of the processor
-grid in the array proc_grid. The product of the processor grid dimensions must
-equal the number of total number of processors and the number of dimensions in
-the processor grid must be the same as the number of dimensions in the global
-array. The data blocks are mapped onto the processor grid in a cyclic manner
-along each of the processor grid axes. The dimensions of individual blocks are
-located in the block_dims array.
-\end{desc}
-
-\seealso{SET BLOCK CYCLIC PROC GRID}
-
 \apih{SET TILED IRREG PROC GRID}{This function specifies that the GA will use a distribution of irregularly sized blocks that will be assigned to processors using SCALAPACK-type block cyclic data distribution with individual blocks being contiguous in memory}
 
 \begin{capi}
@@ -10733,38 +10729,61 @@ the corresponding values in the proc_grid array.
 
 \seealso{SET BLOCK CYCLIC PROC GRID,SET IRREG DISTR}
 
-\apih{UNSET PROPERTY}{Assign a property to a global array}
+\apih{SET TILED PROC GRID}{This function specifies that the GA will use a regular SCALAPACK-type block cyclic data distribution but individual blocks will be contiguous in memory}
 
 \begin{capi}
 \begin{ccode}
-void GA_Unset_property(int g_a)
+void GA_Set_tiled_proc_grid(int g_a, int block_dims[], int proc_grid[])
 \end{ccode}
 \begin{funcargs}
 \inarg{int}{g_a}{global array handle}
+\inarg{int*}{block_dims[]}{array of block dimensions}
+\inarg{int*}{proc_grid[]}{processor grid dimensions}
 \end{funcargs}
 \end{capi}
 
-\begin{cxxapi}
-\begin{cxxcode}
-void GlobalArray::unsetProperty()
-\end{cxxcode}
-\end{cxxapi}
-
 \begin{fapi}
 \begin{fcode}
-subroutine ga_unset_property(g_a)
+subroutine ga_set_tiled_proc_grid(g_a, block_dims, proc_grid)
 \end{fcode}
 \begin{funcargs}
 \inarg{integer}{g_a}{global array handle}
+\inarg{integer}{block_dims(ndim)}{array of block dimensions}
+\inarg{integer}{proc_grid(ndim)}{array of processor grid dimensions}
 \end{funcargs}
 \end{fapi}
 
+\begin{cxxapi}
+\begin{cxxcode}
+void GlobalArray::setTiledProcGrid(int block_dims[], int proc_grid[]) const
+\end{cxxcode}
+\begin{funcargs}
+\inarg{int*}{block_dims}{array of block dimensions}
+\inarg{int*}{proc_grid}{processor grid dimensions}
+\end{funcargs}
+\end{cxxapi}
+
 \gcoll
 
-This function clears properties from the global array.
+\begin{desc}
+This subroutine is used to create a global array with a SCALAPACK-type block
+cyclic data distribution but with individual blocks that are contiguous in
+memory. This layout may be preferable for algorithms that are moving single
+blocks of data since the corresponding messages will involve contiguous data
+transfers instead of strided calls. This may result in performance gains for
+communication bound programs. Otherwise, the data layout is similar to that
+created by the block-cyclic processor grid function.
+
+The user specifies the dimensions of the processor
+grid in the array proc_grid. The product of the processor grid dimensions must
+equal the number of total number of processors and the number of dimensions in
+the processor grid must be the same as the number of dimensions in the global
+array. The data blocks are mapped onto the processor grid in a cyclic manner
+along each of the processor grid axes. The dimensions of individual blocks are
+located in the block_dims array.
 \end{desc}
 
-\seealso{SET PROPERTY}
+\seealso{SET BLOCK CYCLIC PROC GRID}
 
 \apih{SHIFT DIAGONAL}{Adds specified constant to diagonal elements of a global array}
 
@@ -11684,6 +11703,40 @@ The current implementation requires that the distribution of the g_mask array
 matches the distribution of the g_dest array.
 \end{desc}
 
+\apih{UNSET PROPERTY}{Assign a property to a global array}
+
+\begin{capi}
+\begin{ccode}
+void GA_Unset_property(int g_a)
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{g_a}{global array handle}
+\end{funcargs}
+\end{capi}
+
+\begin{cxxapi}
+\begin{cxxcode}
+void GlobalArray::unsetProperty()
+\end{cxxcode}
+\end{cxxapi}
+
+\begin{fapi}
+\begin{fcode}
+subroutine ga_unset_property(g_a)
+\end{fcode}
+\begin{funcargs}
+\inarg{integer}{g_a}{global array handle}
+\end{funcargs}
+\end{fapi}
+
+\gcoll
+
+\begin{desc}
+This function clears properties from the global array.
+\end{desc}
+
+\seealso{SET PROPERTY}
+
 \apih{UPDATE GHOST DIR}{Updates ghost cells along a specific direction}
 
 \begin{capi}
@@ -11887,7 +11940,7 @@ double starttime, endtime;
 starttime = GA_Wtime();
 .... code snippet to be timed ....
 endtime   = GA_Wtime();
-printf(\"Time taken = \%lf secondsn\", endtime-starttime);
+printf("Time taken = %lf seconds\n", endtime-starttime);
 \end{verbatim}
 This function is only available in release 4.1 or greater.
 \end{desc}
