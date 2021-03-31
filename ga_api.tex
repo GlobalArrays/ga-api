@@ -187,7 +187,7 @@ global array section (lo[],hi[]) += *alpha * buffer
 
 \begin{capi}
 \begin{ccode}
-void NGA_Access(int g_a, int lo[], int hi[], void *ptr, int ld[])
+void NGA_Access(int g_a, int lo[], int hi[], void **ptr, int ld[])
 \end{ccode}
 \begin{funcargs}
 \inarg{int}{g_a}{global array handle}
@@ -195,7 +195,7 @@ void NGA_Access(int g_a, int lo[], int hi[], void *ptr, int ld[])
 \inarg{int*}{lo[ndim]}{array of starting indices for array section}
 \inarg{int*}{hi[ndim]}{array of ending indices for array section}
 \outarg{void**}{ptr}{points to location of first element in patch}
-\outarg{int*}{ld[ndim-1]}{leading dimensions for the pacth elements}
+\outarg{int*}{ld[ndim-1]}{leading dimensions for the patch elements}
 \end{funcargs}
 \end{capi}
 
@@ -226,14 +226,14 @@ subroutine nga_access(g_a, lo, hi, index, ld)
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::access(int lo[], int hi[], void *ptr, int ld[]) const
+void GlobalArray::access(int lo[], int hi[], void **ptr, int ld[]) const
 void GlobalArray::access(int64_t lo[], int64_t hi[], void *ptr, int64_t ld[]) cons
 \end{cxxcode}
 \begin{funcargs}
 \inarg{int*}{lo[ndim]}{array of starting indices for array section}
 \inarg{int*}{hi[ndim]}{array of ending indices for array section}
 \outarg{void**}{ptr}{points to location of first element in patch}
-\outarg{int*}{ld[ndim-1]}{leading dimensions for the pacth elements}
+\outarg{int*}{ld[ndim-1]}{leading dimensions for the patch elements}
 \end{funcargs}
 \end{cxxapi}
 
@@ -355,7 +355,7 @@ having to explicity convert the integer size.
 
 \begin{capi}
 \begin{ccode}
-void NGA_Access_block(int g_a, int idx, void *ptr, int ld[])
+void NGA_Access_block(int g_a, int idx, void **ptr, int ld[])
 \end{ccode}
 \begin{funcargs}
 \inarg{int}{g_a}{array handle}
@@ -381,13 +381,13 @@ subroutine nga_access_block(g_a, idx, index, ld)
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::accessBlock(int idx, void *ptr, int ld[]) const
-void GlobalArray::accessBlock(int64_t idx, void *ptr, int64_t ld[]) const
+void GlobalArray::accessBlock(int idx, void **ptr, int ld[]) const
+void GlobalArray::accessBlock(int64_t idx, void **ptr, int64_t ld[]) const
 \end{cxxcode}
 \begin{funcargs}
 \inarg{int}{idx}{index of block}
 \outarg{void**}{ptr}{points to location of first element in patch}
-\outarg{int*}{ld[ndim-1]}{leading dimensions for the pacth elements}
+\outarg{int*}{ld[ndim-1]}{leading dimensions for the patch elements}
 \end{funcargs}
 \end{cxxapi}
 
@@ -465,7 +465,7 @@ how to use the index returned by this subroutine to access locally held data.
 
 \begin{capi}
 \begin{ccode}
-void NGA_Access_block_grid(int g_a, int subscript[], void *ptr, int ld[])
+void NGA_Access_block_grid(int g_a, int subscript[], void **ptr, int ld[])
 \end{ccode}
 \begin{funcargs}
 \inarg{int}{g_a}{array handle}
@@ -491,8 +491,8 @@ subroutine nga_access_block_grid(g_a, subscript, index, ld)
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::accessBlockGrid(int index[], void *ptr, int ld[]) const
-void GlobalArray::accessBlockGrid(int64_t index[], void *ptr, int64_t ld[])
+void GlobalArray::accessBlockGrid(int index[], void **ptr, int ld[]) const
+void GlobalArray::accessBlockGrid(int64_t index[], void **ptr, int64_t ld[])
                                   const
 \end{cxxcode}
 \begin{funcargs}
@@ -569,7 +569,7 @@ either nga_release_block_grid or nga_release_update_block_grid.
 
 \begin{capi}
 \begin{ccode}
-void NGA_Access_block_segment(int g_a, int proc, void *ptr, int *len)
+void NGA_Access_block_segment(int g_a, int proc, void **ptr, int *len)
 \end{ccode}
 \begin{funcargs}
 \inarg{int}{g_a}{array handle}
@@ -593,9 +593,9 @@ subroutine nga_access_block_segment(g_a, proc, index, len)
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::accessBlockSegment(int index, void *ptr,
+void GlobalArray::accessBlockSegment(int index, void **ptr,
                                      int *len) const
-void GlobalArray::accessBlockSegment(int index, void *ptr,
+void GlobalArray::accessBlockSegment(int index, void **ptr,
                                      int64_t *len) const
 \end{cxxcode}
 \begin{funcargs}
@@ -672,7 +672,7 @@ nga_release_block_segment or nga_release_update_block_segment.
 
 \begin{capi}
 \begin{ccode}
-void NGA_Access_ghost_element(int g_a, void *ptr, int subscript[],
+void NGA_Access_ghost_element(int g_a, void **ptr, int subscript[],
                               int ld[])
 \end{ccode}
 \begin{funcargs}
@@ -697,9 +697,9 @@ subroutine nga_access_ghost_element(g_a, index, subscript, ld)
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::accessGhostElement(void *ptr, int subscript[],
+void GlobalArray::accessGhostElement(void **ptr, int subscript[],
                                      int ld[]) const
-void GlobalArray::accessGhostElement(void *ptr, int64_t subscript[],
+void GlobalArray::accessGhostElement(void **ptr, int64_t subscript[],
                                      int64_t ld[]) const
 \end{cxxcode}
 \begin{funcargs}
@@ -743,7 +743,7 @@ documentation on nga_access.
 
 \begin{capi}
 \begin{ccode}
-void NGA_Access_ghosts(int g_a, int dims[], void *ptr, int ld[])
+void NGA_Access_ghosts(int g_a, int dims[], void **ptr, int ld[])
 \end{ccode}
 \begin{funcargs}
 \inarg{int}{g_a}{array handle}
@@ -767,8 +767,8 @@ subroutine nga_access_ghosts(g_a, dims, index, ld)
 
 \begin{cxxapi}
 \begin{cxxcode}
-void GlobalArray::accessGhosts(int dims[], void *ptr, int ld[]) const
-void GlobalArray::accessGhosts(int64_t dims[], void *ptr, int64_t ld[]) const
+void GlobalArray::accessGhosts(int dims[], void **ptr, int ld[]) const
+void GlobalArray::accessGhosts(int64_t dims[], void **ptr, int64_t ld[]) const
 \end{cxxcode}
 \begin{funcargs}
 \outarg{int*}{dims[ndim]}{array of dimensions of local patch, including ghost cells}
