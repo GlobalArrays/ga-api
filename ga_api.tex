@@ -1265,6 +1265,8 @@ Returns True if allocation of g_a was successful.
 
 \end{desc}
 
+\seealso{DEALLOCATE}
+
 \apih{BRDCST}{Broadcasts elements among all processes}
 
 \begin{capi}
@@ -2786,6 +2788,44 @@ Returns: True on success, False on failure
 \end{desc}
 
 \seealso{DESTROY MUTEXES}
+
+\apih{DEALLOCATE}{Deallocates memory for a global array without removing the
+array}
+
+\begin{capi}
+\begin{ccode}
+void GA_Deallocate(int g_a)
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{g_a}{array handle}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+logical function ga_deallocate(g_a)
+\end{fcode}
+\begin{funcargs}
+\inarg{integer}{g_a}{array handle}
+\end{funcargs}
+\end{fapi}
+
+\begin{cxxapi}
+\begin{cxxcode}
+void GlobalArray::deallocate()
+\end{cxxcode}
+\end{cxxapi}
+
+\gcoll
+
+\begin{desc}
+
+Deallocates memory allocated by the array but leaves the array in place. The
+array can be reconstitued later by calling the allocate function.
+
+\end{desc}
+
+\seealso{ALLOCATE}
 
 \apih{DESTROY}{Destroys a global array}
 
