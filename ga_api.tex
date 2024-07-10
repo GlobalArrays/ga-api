@@ -11000,6 +11000,45 @@ It returns
 
 \end{desc}
 
+\apih{SPRS ARRAY CREATE}{Creates a sparse array handle}
+\begin{capi}
+\begin{ccode}
+int NGA_Sprs_array_create(int idim, int jdim, int type)
+int NGA_Sprs_array_create64(int64_t idim, int64_t jdim, int type)
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{idim}{row dimension}
+\inarg{int}{jdim}{column dimension}
+\inarg{int}{type}{array datatype}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+integer function nga_sprs_array_create(idim, jdim, type)
+\end{fcode}
+\begin{funcargs}
+\inarg{integer}{idim}{row dimension}
+\inarg{integer}{jdim}{column dimension}
+\inarg{integer}{type}{array datatype}
+\end{funcargs}
+\end{fapi}
+
+\begin{desc}
+This function returns a handle to a sparse array data structure with row
+dimension idim and column dimension jdim. The datatype can be any of the
+standard global array supported data types (user datatypes are currently not
+supported).
+\end{desc}
+
+\begin{cdesc}
+If the 64-bit function is used to create the sparse array, then all other
+operations on this array should also use the 64-bit versions, if available. In
+addition, pointers to internal arrays that access CSR formatted blocks of the
+array should also be of type int64_t. It is also advisable to configure Global
+Arrays using 64-bit integers.
+\end{cdesc}
+
 \apih{SPD INVERT}{Inverts a symmetric positive definite matrix}
 
 \begin{capi}
