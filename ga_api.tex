@@ -5065,6 +5065,44 @@ Allocate and initialize internal data structures in Global Arrays.
 
 \seealso{INITIALIZE LTD}
 
+\apih{INITIALIZE COMM}{Initializes GA on an MPI communicator}
+
+\begin{capi}
+\begin{ccode}
+void NGA_Initialize_comm(MPI_Comm comm)
+void GA_Initialize_comm(MPI_Comm comm)
+\end{ccode}
+\begin{funcargs}
+\inarg{MPI_Comm}{comm}{MPI communicator used to initialize GA}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+subroutine nga_initialize_comm(comm)
+subroutine ga_initialize_comm(comm)
+\end{fcode}
+\begin{funcargs}
+\inarg{MPI_Comm}{comm}{MPI communicator used to initialize GA}
+\end{funcargs}
+\end{fapi}
+
+\gcoll
+
+\begin{desc}
+
+Allocate and initialize internal data structures in Global Arrays on a
+restrictied set of processors described by comm. This can be used to initialize
+a GA application that is being called as a subroutine by an application that
+does not used GA without requiring that the calling application initialize GA.
+
+Note that if you are using the Progress Ranks runtime, you need to take care
+that the communicator you pass to the GA application has the correct properties.
+Specifically, the communicator must have at least 2 ranks per SMP node.
+\end{desc}
+
+\seealso{INITIALIZE,INITIALIZE LTD}
+
 \apih{INITIALIZE LTD}{Initializes GA with memory limit}
 
 \begin{capi}
@@ -6646,7 +6684,7 @@ implemented only on the Progress Ranks and RMA runtimes. For other runtimes, it
 defaults to the non-blocking wait function and always returns true.
 \end{desc}
 
-\seealso{NBWAIT, NBGET,NBPUT,NBACC}
+\seealso{NBWAIT,NBGET,NBPUT,NBACC}
 
 \apih{NBWAIT}{Waits for a non-blocking GA operation to complete}
 
@@ -11000,45 +11038,6 @@ It returns
 
 \end{desc}
 
-\apih{SPRS ARRAY CREATE}{Creates a sparse array handle}
-\begin{capi}
-\begin{ccode}
-int NGA_Sprs_array_create(int idim, int jdim, int type)
-int NGA_Sprs_array_create64(int64_t idim, int64_t jdim, int type)
-\end{ccode}
-\begin{funcargs}
-\inarg{int}{idim}{row dimension}
-\inarg{int}{jdim}{column dimension}
-\inarg{int}{type}{array datatype}
-\end{funcargs}
-\end{capi}
-
-\begin{fapi}
-\begin{fcode}
-integer function nga_sprs_array_create(idim, jdim, type)
-\end{fcode}
-\begin{funcargs}
-\inarg{integer}{idim}{row dimension}
-\inarg{integer}{jdim}{column dimension}
-\inarg{integer}{type}{array datatype}
-\end{funcargs}
-\end{fapi}
-
-\begin{desc}
-This function returns a handle to a sparse array data structure with row
-dimension idim and column dimension jdim. The datatype can be any of the
-standard global array supported data types (user datatypes are currently not
-supported).
-\end{desc}
-
-\begin{cdesc}
-If the 64-bit function is used to create the sparse array, then all other
-operations on this array should also use the 64-bit versions, if available. In
-addition, pointers to internal arrays that access CSR formatted blocks of the
-array should also be of type int64_t. It is also advisable to configure Global
-Arrays using 64-bit integers.
-\end{cdesc}
-
 \apih{SPD INVERT}{Inverts a symmetric positive definite matrix}
 
 \begin{capi}
@@ -11102,15 +11101,18 @@ It returns
 
 \begin{capi}
 \begin{ccode}
-void NGA_Sprs_array_access_col_block(int s_a, int iproc, void *idx, void *jdx,
-void *val)
+void NGA_Sprs_array_access_col_block(int s_a, int iproc, int **idx, int **jdx,
+void **val)
+void NGA_Sprs_array_access_col_block64_t(int s_a, int iproc, int64_t **idx,
+int64_t **jdx,
+void **val)
 \end{ccode}
 \begin{funcargs}
 \inarg{int}{s_a}{handle for sparse array}
 \inarg{int}{iproc}{process rank associated with column block}
-\outarg{void*}{idx}{pointer to offsets for each row}
-\outarg{void*}{jdx}{pointer to column indices for each row}
-\outarg{void*}{val}{pointer to values for each row}
+\outarg{int**}{idx}{pointer to offsets for each row}
+\outarg{int**}{jdx}{pointer to column indices for each row}
+\outarg{void**}{val}{pointer to values for each row}
 \end{funcargs}
 \end{capi}
 
@@ -11169,14 +11171,18 @@ should be int* pointers.
 \end{cdesc}
 \begin{fdesc}
 If iproc corresponds to a sub-block with no data, the indices idx, jdx and val
-will return as 0.
+will return as 0. See the discussion of the ga_access function for information
+on how the reference indices are used.
 \end{fdesc}
+
+\seealso{ACCESS,SPRS ARRAY ROW DISTRIBUTION,SPRS ARRAY COLUMN DISTRIBUTION}
 
 \apih{SPRS ARRAY ADD ELEMENT}{Add a single element to a sparse array data structure}
 
 \begin{capi}
 \begin{ccode}
 void NGA_Sprs_array_add_element(int s_a, int idx, int jdx, void *value)
+void NGA_Sprs_array_add_element64(int s_a, int64_t idx, int64_t jdx, void *value)
 \end{ccode}
 \begin{funcargs}
 \inarg{int}{s_a}{handle for sparse array}
@@ -11193,16 +11199,26 @@ subroutine nga_sprs_array_add_element(s_a, idx, jdx, value)
 \inarg{integer}{s_a}{handle for sparse array}
 \inarg{integer}{idx}{row row index of array element}
 \inarg{integer}{jdx}{column index of array element}
-\inarg{integer/real/complex}{value}{element value}
+\inarg{type}{value}{element value}
 \end{fapi}
 
 \ncoll
 
 \begin{desc}
-Add a non-zero element to array at the location (idx,jdx). Any
-process can add any element but an element should only be added once to the
-array.
+Once a sparse array data structure has been created, non-zero elements can be
+added to the array using this function. Any processor can add any element, the
+only restriction is that an element can only be added to the array once. It is
+up to the user to guarantee that an element is not added multiple times to the
+same array. It is advisable to add all diagonal elements to the array even if
+they are zero, otherwise some array operations may not work. This function can
+only be used after an array is created and before the assemble function is
+called on the array.
 \end{desc}
+
+\begin{cdesc}
+If the 64-bit function is used to create the sparse array, then the 64 bit
+version of this function should be used to add elements to the array.
+\end{cdesc}
 
 \apih{SPRS ARRAY ASSEMBLE}{Organize and distribute elements of sparse array}
 
@@ -11225,18 +11241,32 @@ logical function nga_sprs_array_assemble(s_a)
 \gcoll
 
 \begin{desc}
-This operation distributes the individual matrix elements added to the array to
-the appropriate processors and organizes the data into sub-blocks within each processor.
-All add element operations should be completed before calling this function and
-no additional elements can be added after calling this function.
+Assemble all elements that have been added to a sparse array data structure into
+a form that is suitable for computation. After calling this function, no more
+elements can be added to the array, although is is possible to modify the values
+of existing array elements.  This function returns true if the assembly is
+successful.
 
-After calling the assemble function, each processor has a row block of the
-sparse array and each row block is further divided into sparse sub-blocks
-corresponding to each processor. For most applications, the number of sub-blocks
-with non-zero elements will be smaller than the number of processors.
+Internally, this function partitions the sparse array into row blocks, with the
+number of row blocks equal to the number of processors. Each row block is
+further partitioned into column blocks, with the number of column blocks
+equal to the number of processors. The size of the partitions along both the row
+and column axes are approximately equal. The data inside each column partion is
+organized in a compressed sparse row (CSR) form. Column blocks containing no
+data are not included in the data structure, leading to a final data layout the
+is equivalent to a sparse array of sparse blocks. This is illustrated
+schematically in Figure \ref{sparsearray}.
 
-This function returns true if the assembly is successful.
+\begin{figure}
+\centering
+\includegraphics[width=6.0in,keepaspectratio=true]{sparse-array-layout}
+\caption{Sparse array data layout.}
+\label{sparsearray}
+\end{figure}
+
 \end{desc}
+
+\seealso{SPRS ARRAY CREATE}
 
 \apih{SPRS ARRAY COL BLOCK LIST}{Return a list of column blocks with non-zero entries}
 
@@ -11289,7 +11319,8 @@ the number of processors.
 
 \begin{capi}
 \begin{ccode}
-void NGA_Sprs_array_column_distribution(int s_a, int idim, int iproc, int *jlo, int *jhi)
+void NGA_Sprs_array_column_distribution(int s_a, int iproc, int *lo, int *hi)
+void NGA_Sprs_array_column_distribution64(int s_a, int iproc, int64_t *lo, int64_t *hi)
 \end{ccode}
 \begin{funcargs}
 \inarg{int}{s_a}{handle for sparse array}
@@ -11309,27 +11340,31 @@ subroutine nga_sprs_array_column_distribution(s_a, iproc, ilo, ihi)
 \outarg{integer}{jlo}{highest column index associated with process iproc}
 \end{fapi}
 
-\ncoll
+\local
 
 \begin{desc}
-This function returns the column indices associated with processor iproc. Note
+This function returns the lower and upper column indices associated with
+processor iproc. Note
 that ownership of matrix elements is solely determined by the row index but
-within a row block the data is partitioned into blocks associated with each
-process. Some blocks may have no data. The low and high column indices of this
-secondary partition are returned by this function. This may be used to obtain
-pointers to these individual blocks.
+within a row block the data is further partitioned into blocks associated with
+each process. Some blocks may have no data. The bounding column indices of this
+secondary partition are returned by this function.  This function will return
+valid index ranges even if the block contains no data.  Both C and Fortran
+interfaces use 0-based indexing for the column indices.
 \end{desc}
 
-\apih{SPRS ARRAY CREATE}{Create a sparse matrix data structure}
+\seealso{SPRS ARRAY ACCESS COL BLOCK}
 
+\apih{SPRS ARRAY CREATE}{Creates a sparse array handle}
 \begin{capi}
 \begin{ccode}
 int NGA_Sprs_array_create(int idim, int jdim, int type)
+int NGA_Sprs_array_create64(int64_t idim, int64_t jdim, int type)
 \end{ccode}
 \begin{funcargs}
-\inarg{int}{idim}{row dimension of array}
-\inarg{int}{jdim}{column dimension of array}
-\inarg{int}{type}{array data type}
+\inarg{int}{idim}{row dimension}
+\inarg{int}{jdim}{column dimension}
+\inarg{int}{type}{array datatype}
 \end{funcargs}
 \end{capi}
 
@@ -11337,23 +11372,37 @@ int NGA_Sprs_array_create(int idim, int jdim, int type)
 \begin{fcode}
 integer function nga_sprs_array_create(idim, jdim, type)
 \end{fcode}
-\inarg{integer}{idim}{row dimension of array}
-\inarg{integer}{jdim}{column dimension of array}
-\inarg{integer}{type}{array data type}
+\begin{funcargs}
+\inarg{integer}{idim}{row dimension}
+\inarg{integer}{jdim}{column dimension}
+\inarg{integer}{type}{array datatype}
+\end{funcargs}
 \end{fapi}
 
 \gcoll
 
 \begin{desc}
-This function returns a handle to a sparse array data structure corresponding to
-an idim x jdim sized matrix of type type.
+This function returns a handle to a sparse array data structure with row
+dimension idim and column dimension jdim. The datatype can be any of the
+standard global array supported data types (user datatypes are currently not
+supported).
 \end{desc}
 
-\apih{SPRS ARRAY DUPLICATE}{Duplicate an existing sparse array}
+\begin{cdesc}
+If the 64-bit function is used to create the sparse array, then all other
+operations on this array should use the 64-bit versions, if available. In
+addition, pointers to internal arrays that access CSR formatted blocks of the
+array should be of type int64_t. It is also advisable to configure Global
+Arrays using 64-bit integers.
+\end{cdesc}
+
+\seealso{SPRS ARRAY DESTROY}
+
+\apih{SPRS ARRAY DESTROY}{Destroy an existing sparse array}
 
 \begin{capi}
 \begin{ccode}
-int NGA_Sprs_array_create(int idim, int jdim, int type)
+int NGA_Sprs_array_destroy(int s_a)
 \end{ccode}
 \begin{funcargs}
 \inarg{int}{s_a}{handle for sparse array}
@@ -11362,7 +11411,32 @@ int NGA_Sprs_array_create(int idim, int jdim, int type)
 
 \begin{fapi}
 \begin{fcode}
-integer function nga_sprs_array_create(idim, jdim, type)
+logical function nga_sprs_destroy(s_a)
+\end{fcode}
+\inarg{integer}{s_a}{handle for sparse array}
+\end{fapi}
+
+\gcoll
+
+\begin{desc}
+This function destroys and existing sparse array and frees up resources used by
+the array. It returns true if the operation was successful.
+\end{desc}
+
+\apih{SPRS ARRAY DUPLICATE}{Duplicate an existing sparse array}
+
+\begin{capi}
+\begin{ccode}
+int NGA_Sprs_array_destroy(int s_a)
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{s_a}{handle for sparse array}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+integer function nga_sprs_array_destroy(s_a)
 \end{fcode}
 \inarg{integer}{s_a}{handle for sparse array}
 \end{fapi}
@@ -11398,15 +11472,92 @@ subroutine nga_sprs_array_export(s_a, file)
 
 \begin{desc}
 This function will export the non-zero values of a sparse matrix to a file. The
-format is
+data is written in a matrix market format
 \begin{verbatim}
+          %%MatrixMarket matrix coordinate real general
+          idim, jdim, nnz
           i(1), j(1), val(1)
           i(2), j(2), val(2)
                 :
-          i(N), j(N), val(N)
+          i(nnz), j(nnz), val(nnz)
 \end{verbatim}
-for N non-zero values. This function is designed to be a debugging tool and
-should not be used for extremely large matrices.
+for nnz non-zero values.
+\end{desc}
+
+\apih{SPRS ARRAY GET BLOCK}{Retrieve a subblock of the sparse array}
+\begin{capi}
+\begin{ccode}
+void NGA_Sprs_array_get_block{int s_a, int irow, int icol, int **idx, int **jdx,
+void **data, int *ilo, int *ihi, int *jlo, int *jhi)
+void NGA_Sprs_array_get_block64{int s_a, int64_t irow, int64_t icol,
+int64_t **idx, int64_t **jdx, void **data, int64_t *ilo, int64_t *ihi,
+int64_t *jlo, int64_t *jhi)
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{s_a}{sparse array handle}
+\inarg{int}{irow}{row index of block}
+\inarg{int}{icol}{column index of block}
+\outarg{int**}{idx}{array of starting indices for rows in block}
+\outarg{int**}{jdx}{array containing column indices of values}
+\outarg{void**}{data}{array containing values}
+\outarg{int*}{ilo}{lower row index of block}
+\outarg{int*}{ihi}{upper row index of block}
+\outarg{int*}{jlo}{lower column index of block}
+\outarg{int*}{jhi}{upper column index of block}
+\end{funcargs}
+\end{capi}
+
+\ncoll
+
+\begin{desc}
+This function returns arrays in compressed sparse row format (CSR) containing a
+block from the sparse array. The block is indexed by irow and icol, both of
+which are in the range 0 to nprocs-1. The index irow corresponds to the row
+partition (it also corresponds to the process that the data is actually located
+on) and icol corresponds to the column partition within the row. If the block
+contains no data then idx, jdx and data will all return as NULL pointers. The
+remaining parameters ilo, ihi, jlo, jhi are the bounding indices of the block in
+the sparse array. These indices are 0-based.
+
+Note that this function allocates the arrays idx, jdx, data so these arrays must
+subsequently be freed by the calling program. The idx array is of length
+ihi-ilo+2. The extra value at the end is included so that the number of non-zero
+values in row i can always be calculated using idx[i+1]-idx[i], even when i =
+ihi-ilo. The absolute row index of row i in the block can be calculated using
+i + ilo. The elements within each row are not sorted so that the column indices
+are in ascending order. This does not appear to be an issue for most
+applications.
+
+This function is not availabe at present in the Fortran interface.
+\end{desc} 
+
+\apih{SPRS ARRAY GET COLUMN}{Extract the diagonal values of a sparse matrix}
+
+\begin{capi}
+\begin{ccode}
+int NGA_Sprs_array_get_column(int s_a, int icol)
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{s_a}{handle for sparse array}
+\inarg{int}{g_d}{index of column to be extracted}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+integer function nga_sprs_array_get_column(s_a, icol)
+\end{fcode}
+\inarg{int}{s_a}{handle for sparse array}
+\inarg{int}{g_d}{index of column to be extracted}
+\end{fapi}
+
+\gcoll
+
+\begin{desc}
+This function will extract the values indexed by icol from a sparse array and
+return them in a 1D  global array. The index icol is 0-based for both C and
+Fortran interfaces. The return vector is allocated by this routine and must be
+destroyed by the application.
 \end{desc}
 
 \apih{SPRS ARRAY GET DIAG}{Extract the diagonal values of a sparse matrix}
@@ -11465,7 +11616,35 @@ g_d, where g_d is a 1-dimensional vector containing the diagoanl values of the
 diagonal matrix. The result is stored in s_a
 \end{desc}
 
-\apih{SPRS ARRAY MATVEC MULTIPLY}{Multiplay a sparse matrix by a vector}
+\apih{SPRS ARRAY MATMAT MULTIPLY}{Multiply two sparse matrices to get a third
+sparse matrix}
+
+\begin{capi}
+\begin{ccode}
+int NGA_Sprs_array_matmat_multiply(int s_a, int s_b)
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{s_a}{handle for sparse array}
+\inarg{int}{s_b}{handle for sparse array}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+integer function nga_sprs_array_matmat_multiply(s_a, s_b)
+\end{fcode}
+\inarg{integer}{s_a}{handle for sparse array}
+\inarg{integer}{s_b}{handle for sparse array}
+\end{fapi}
+
+\gcoll
+
+\begin{desc}
+This function multiplies sparse matrix A times sparse matrix B to return a
+handle to product sparse matrix C.
+\end{desc}
+
+\apih{SPRS ARRAY MATVEC MULTIPLY}{Multiply a sparse matrix by a vector}
 
 \begin{capi}
 \begin{ccode}
@@ -11523,36 +11702,42 @@ g_d, where g_d is a 1-dimensional vector containing the diagoanl values of the
 diagonal matrix. The result is stored in s_a.
 \end{desc}
 
-\apih{SPRS ARRAY ROW DISTRIBUTION}{What rows are owned by each process}
-
+\apih{SPRS ARRAY ROW DISTRIBUTION}{Find rows of sparse array owned by process
+iproc}
 \begin{capi}
 \begin{ccode}
-void NGA_Sprs_array_row_distribution(int s_a, int idim, int iproc, int *ilo, int *ihi)
+void NGA_Sprs_array_row_distribution(int s_a, int iproc, int *lo, int *hi)
+void NGA_Sprs_array_row_distribution64(int s_a, int iproc, int64_t *lo, int64_t *hi)
 \end{ccode}
 \begin{funcargs}
-\inarg{int}{s_a}{handle for sparse array}
-\inarg{int}{iproc}{process rank}
-\outarg{int*}{ilo}{lowest row index owned by process iproc}
-\outarg{int*}{ihi}{highest row index owned by process iproc}
+\inarg{int}{s_a}{sparse array handle}
+\inarg{int}{iproc}{processor rank}
+\outarg{int*}{lo}{lower index range of rows held by process}
+\outarg{int*}{hi}{upper index range of rows held by process}
 \end{funcargs}
 \end{capi}
 
 \begin{fapi}
 \begin{fcode}
-subroutine nga_sprs_array_row_distribution(s_a, iproc, ilo, ihi)
+subroutine nga_sprs_array_row_distribution(s_a, idx, jdx, val)
 \end{fcode}
-\inarg{integer}{s_a}{handle for sparse array}
-\inarg{integer}{iproc}{process rank}
-\outarg{integer}{ilo}{lowest row index owned by process iproc}
-\outarg{integer}{ihi}{highest row index owned by process iproc}
+\begin{funcargs}
+\inarg{integer}{s_a}{sparse array handle}
+\inarg{integer}{iproc}{processor rank}
+\outarg{integer}{lo}{lower index range of rows held by process}
+\outarg{integer}{hi}{upper index range of rows held by process}
+\end{funcargs}
 \end{fapi}
 
-\ncoll
+\local
 
 \begin{desc}
-This function returns the row block owned by processor iproc, All rows between
-ilo and ihi, inclusive, are stored on process iproc.
+Return the upper and lower row indices of the range of rows held by process
+iproc. All rows between ilo and ihi, inclusive, are stored on process iproc.
+Both C and Fortran interfaces use 0-based indexing for the row indices.
 \end{desc}
+
+\seealso{SPRS ARRAY ACCESS COL BLOCK}
 
 \apih{SPRS ARRAY SHIFT DIAG}{Shift the diagonal values of the matrix by a constant value}
 
@@ -11571,7 +11756,7 @@ void NGA_Sprs_array_shift_diag(int s_a, void *val)
 subroutine nga_sprs_array_shift_diag(s_a, val)
 \end{fcode}
 \inarg{int}{s_a}{handle for sparse array}
-\inarg{integer/real/complex}{val}{amount to shift diagonal}
+\inarg{type}{val}{amount to shift diagonal}
 \end{fapi}
 
 \gcoll
@@ -12527,6 +12712,38 @@ memory is used.
 
 TODO
 
+\end{desc}
+
+\apih{VERSION}{Returns information on release used to build library}
+
+\begin{capi}
+\begin{ccode}
+void GA_Version(int *major, int *minor, int *patch)
+void NGA_Version(int *major, int *minor, int *patch)
+\end{ccode}
+\begin{funcargs}
+\outarg{int}{major}{major release number}
+\outarg{int}{minor}{minor release number}
+\outarg{int}{patch}{patch/hotfix release number}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+subroutine ga_version(major, minor, patch)
+\end{fcode}
+\begin{funcargs}
+\outarg{integer}{major}{major release number}
+\outarg{integer}{minor}{minor release number}
+\outarg{integer}{patch}{patch/hotfix release number}
+\end{funcargs}
+\end{fapi}
+
+\local
+
+\begin{desc}
+Function to query version information about the release used to build the
+library. This can be used in codes to check for availability of functionality.
 \end{desc}
 
 \apih{WTIME}{Returns time in seconds since an arbitrary time in the past}
