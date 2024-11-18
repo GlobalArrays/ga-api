@@ -7930,6 +7930,82 @@ explicit group handle as one of the arguments.
 
 \end{desc}
 
+\apih{PGROUP SPLIT}{Creates a set of new groups by dividing a parent group into
+equal sized subgroups}
+
+\begin{capi}
+\begin{ccode}
+int GA_Pgroup_split(int p_handle, int num_group)
+int NGA_Pgroup_split(int p_handle, int num_group)
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{p_handle}{processor group handle of parent}
+\inarg{int}{num_group}{number of new groups}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+integer function ga_pgroup_split(p_handle, num_group)
+\end{fcode}
+\begin{funcargs}
+\inarg{integer}{p_handle}{processor group handle}
+\inarg{integer}{num_group}{number of new groups}
+\end{funcargs}
+\end{fapi}
+
+\gcoll
+
+\begin{desc}
+
+This function can be used to divide the parent group, represented by p_handle,
+into num_group smaller groups. The function returns the group handle of the subgroup
+containing the calling processor. If num_group does not evenly divide the number
+of processors in p_handle, then one group will contain fewer processors than the
+others. All processors in the group referenced by p_handle must make a
+call to this function.
+
+\end{desc}
+
+\seealso{PGROUP CREATE,PGROUP DESTROY}
+
+\apih{PGROUP SPLIT IRREG}{Creates a set of new groups based on a color variable}
+
+\begin{capi}
+\begin{ccode}
+int GA_Pgroup_split_irreg(int p_handle, int color)
+int NGA_Pgroup_split_irreg(int p_handle, int color)
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{p_handle}{processor group handle of parent}
+\inarg{int}{color}{color variable of calling process}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+integer function ga_pgroup_split_irreg(p_handle, color)
+\end{fcode}
+\begin{funcargs}
+\inarg{integer}{p_handle}{processor group handle}
+\inarg{integer}{color}{color variable of calling process}
+\end{funcargs}
+\end{fapi}
+
+\gcoll
+
+\begin{desc}
+
+This function can be used to divide the parent group, represented by p_handle,
+into subgroups of different sizes based on the color variable. All processes
+with the same color variable end up in the same group.  The function returns the
+group handle of the subgroup containing the calling processor. Color variables
+should be greater than or equal to zero.
+All processors in the group referenced by p_handle must make a
+call to this function.
+
+\end{desc}
+
 \seealso{PGROUP CREATE,PGROUP DESTROY}
 
 \apih{PGROUP SYNC}{Synchronizes processes in a processor group}
@@ -12527,6 +12603,36 @@ memory is used.
 
 TODO
 
+\end{desc}
+
+\apih{VERSION}{Returns version information about the current build}
+
+\begin{capi}
+\begin{ccode}
+void NGA_Version(int *major, int *minor, int *patch)
+void GA_Version(int *major, int *minor, int *patch)
+\end{ccode}
+\begin{funcargs}
+\outarg{int}{major}{major release version}
+\outarg{int}{minor}{minor release version}
+\outarg{int}{patch}{patch/hotfix release number}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+subroutine nga_version(integer major, integer minor, integer patch)
+\end{fcode}
+\begin{funcargs}
+\outarg{integer}{major}{major release version}
+\outarg{integer}{minor}{minor release version}
+\outarg{integer}{patch}{patch/hotfix release number}
+\end{funcargs}
+\end{fapi}
+
+\begin{desc}
+This function can be used to query Global Arrays about which version
+was used to build the library.
 \end{desc}
 
 \apih{WTIME}{Returns time in seconds since an arbitrary time in the past}
