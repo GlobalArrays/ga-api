@@ -11398,6 +11398,42 @@ Arrays using 64-bit integers.
 
 \seealso{SPRS ARRAY DESTROY}
 
+\apih{SPRS ARRAY CREATE FROM DENSE}{Creates a sparse array from a dense array}
+\begin{capi}
+\begin{ccode}
+int NGA_Sprs_array_create_from_dense(int g_a)
+int NGA_Sprs_array_create_from_dense64(int g_a)
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{g_a}{handle for dense array}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+integer function nga_sprs_array_create_from_dense(g_a)
+\end{fcode}
+\begin{funcargs}
+\inarg{integer}{g_a}{handle for dense array}
+\end{funcargs}
+\end{fapi}
+
+\gcoll
+
+\begin{desc}
+This function returns a handle to a sparse array formed from the non-zero data
+values in the dense array g_b. All diagonal values in g_b are included in the
+sparse array, regardless of whether or not they are zero.
+\end{desc}
+
+\begin{cdesc}
+If the 64-bit function is used to create the sparse array, then the index
+locations will be stored as 64-bit integers and all other operations on this
+array should use the 64-bit versions, if available.
+\end{cdesc}
+
+\seealso{SPRS ARRAY DESTROY}
+
 \apih{SPRS ARRAY DESTROY}{Destroy an existing sparse array}
 
 \begin{capi}
@@ -11422,6 +11458,36 @@ logical function nga_sprs_destroy(s_a)
 This function destroys and existing sparse array and frees up resources used by
 the array. It returns true if the operation was successful.
 \end{desc}
+
+\apih{SPRS ARRAY DNSSPRS MULTIPLY}{Multiply a dense matrix by a sparse matrix to
+get a dense matrix}
+
+\begin{capi}
+\begin{ccode}
+int NGA_Sprs_array_dnssprs_multiply(int g_a, int s_b)
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{g_a}{handle for dense array}
+\inarg{int}{s_b}{handle for sparse array}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+integer function nga_sprs_array_dnssprs_multiply(g_a, s_b)
+\end{fcode}
+\inarg{integer}{g_a}{handle for dense array}
+\inarg{integer}{s_b}{handle for sparse array}
+\end{fapi}
+
+\gcoll
+
+\begin{desc}
+This function multiplies dense matrix A times sparse matrix B to return a
+handle to product dense matrix C.
+\end{desc}
+
+\seealso{SPRS ARRAY SPRSDNS MULTIPLY,SPRS ARRAY MATMAT MULTIPLY}
 
 \apih{SPRS ARRAY DUPLICATE}{Duplicate an existing sparse array}
 
@@ -11767,6 +11833,36 @@ amount. In order for this routine to work correctly, all diagonal values in the
 matrix must be present. If a diagonal value in the original matrix is zero, it
 should be added to the matrix anyway.
 \end{desc}
+
+\apih{SPRS ARRAY SPRSDNS MULTIPLY}{Multiply a sparse matrix by a dense matrix to
+get a dense matrix}
+
+\begin{capi}
+\begin{ccode}
+int NGA_Sprs_array_sprsdns_multiply(int s_a, int g_b)
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{s_a}{handle for sparse array}
+\inarg{int}{g_b}{handle for dense array}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+integer function nga_sprs_array_sprsdns_multiply(s_a, g_b)
+\end{fcode}
+\inarg{integer}{s_a}{handle for sparse array}
+\inarg{integer}{g_b}{handle for dense array}
+\end{fapi}
+
+\gcoll
+
+\begin{desc}
+This function multiplies sparse matrix A times dense matrix B to return a
+handle to product dense matrix C.
+\end{desc}
+
+\seealso{SPRS ARRAY DNSSPRS MULTIPLY,SPRS ARRAY MATMAT MULTIPLY}
 
 \apih{STEP MAX}{Computes a global array's step max}
 
