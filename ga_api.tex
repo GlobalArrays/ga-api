@@ -11510,6 +11510,36 @@ array should use the 64-bit versions, if available.
 
 \seealso{SPRS ARRAY DESTROY}
 
+\apih{SPRS ARRAY CREATE FROM SPARSE}{Creates a conventional dense array from a
+sparse  array}
+\begin{capi}
+\begin{ccode}
+int NGA_Sprs_array_create_from_sparse(int s_a)
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{s_a}{handle for sparse array}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+integer function nga_sprs_array_create_from_sparse(s_a)
+\end{fcode}
+\begin{funcargs}
+\inarg{integer}{s_a}{handle for sparse array}
+\end{funcargs}
+\end{fapi}
+
+\gcoll
+
+\begin{desc}
+This function returns a handle to a conventional dense array formed from a
+sparse array. All values in the sparse array are copied to the dense array and
+all other values are set to zero.
+\end{desc}
+
+\seealso{SPRS ARRAY DESTROY}
+
 \apih{SPRS ARRAY DESTROY}{Destroy an existing sparse array}
 
 \begin{capi}
@@ -11533,6 +11563,62 @@ logical function nga_sprs_destroy(s_a)
 \begin{desc}
 This function destroys and existing sparse array and frees up resources used by
 the array. It returns true if the operation was successful.
+\end{desc}
+
+\apih{SPRS ARRAY DIAG LEFT MULTIPLY}{Left multiply the sparse matrix by a diagonal matrix}
+
+\begin{capi}
+\begin{ccode}
+void NGA_Sprs_array_diag_left_multiply(int s_a, int g_d)
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{s_a}{handle for sparse array}
+\inarg{int}{g_d}{handle for global array representing diagonal matrix}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+subroutine nga_sprs_array_diag_left_multiply(s_a, g_d)
+\end{fcode}
+\inarg{integer}{s_a}{handle for sparse array}
+\inarg{integer}{g_d}{handle for global array representing diagonal matrix}
+\end{fapi}
+
+\gcoll
+
+\begin{desc}
+This function will left multiply the sparse matrix s_a by the diagonal matrix
+g_d, where g_d is a 1-dimensional vector containing the diagoanl values of the
+diagonal matrix. The result is stored in s_a
+\end{desc}
+
+\apih{SPRS ARRAY DIAG RIGHT MULTIPLY}{Right multiply the sparse matrix by a diagonal matrix}
+
+\begin{capi}
+\begin{ccode}
+void NGA_Sprs_array_diag_right_multiply(int s_a, int g_d)
+\end{ccode}
+\begin{funcargs}
+\inarg{int}{s_a}{handle for sparse array}
+\inarg{int}{g_d}{handle for global array representing diagonal matrix}
+\end{funcargs}
+\end{capi}
+
+\begin{fapi}
+\begin{fcode}
+subroutine nga_sprs_array_diag_right_multiply(s_a, g_d)
+\end{fcode}
+\inarg{integer}{s_a}{handle for sparse array}
+\inarg{integer}{g_d}{handle for global array representing diagonal matrix}
+\end{fapi}
+
+\gcoll
+
+\begin{desc}
+This function will right multiply the sparse matrix s_a by the diagonal matrix
+g_d, where g_d is a 1-dimensional vector containing the diagonal values of the
+diagonal matrix. The result is stored in s_a.
 \end{desc}
 
 \apih{SPRS ARRAY DNSSPRS MULTIPLY}{Multiply a dense matrix by a sparse matrix to
@@ -11569,7 +11655,7 @@ handle to product dense matrix C.
 
 \begin{capi}
 \begin{ccode}
-int NGA_Sprs_array_destroy(int s_a)
+int NGA_Sprs_array_duplicate(int s_a)
 \end{ccode}
 \begin{funcargs}
 \inarg{int}{s_a}{handle for sparse array}
@@ -11578,7 +11664,7 @@ int NGA_Sprs_array_destroy(int s_a)
 
 \begin{fapi}
 \begin{fcode}
-integer function nga_sprs_array_destroy(s_a)
+integer function nga_sprs_array_duplicate(s_a)
 \end{fcode}
 \inarg{integer}{s_a}{handle for sparse array}
 \end{fapi}
@@ -11678,6 +11764,7 @@ This function is not availabe at present in the Fortran interface.
 \begin{capi}
 \begin{ccode}
 int NGA_Sprs_array_get_column(int s_a, int icol)
+int NGA_Sprs_array_get_column64(int s_a, int64_t icol)
 \end{ccode}
 \begin{funcargs}
 \inarg{int}{s_a}{handle for sparse array}
@@ -11728,34 +11815,6 @@ subroutine nga_sprs_array_get_diag(s_a, g_d)
 This function will extract the diagonal values from a square matrix and return
 them in a vector (1-dimensional global array). The return vector is allocated by
 this routine and must be destroyed by the application.
-\end{desc}
-
-\apih{SPRS ARRAY LEFT DIAG MULTIPLY}{Left multiply the sparse matrix by a diagonal matrix}
-
-\begin{capi}
-\begin{ccode}
-void NGA_Sprs_array_left_diag_multiply(int s_a, int g_d)
-\end{ccode}
-\begin{funcargs}
-\inarg{int}{s_a}{handle for sparse array}
-\inarg{int}{g_d}{handle for global array representing diagonal matrix}
-\end{funcargs}
-\end{capi}
-
-\begin{fapi}
-\begin{fcode}
-subroutine nga_sprs_array_left_diag_multiply(s_a, g_d)
-\end{fcode}
-\inarg{integer}{s_a}{handle for sparse array}
-\inarg{integer}{g_d}{handle for global array representing diagonal matrix}
-\end{fapi}
-
-\gcoll
-
-\begin{desc}
-This function will left multiply the sparse matrix s_a by the diagonal matrix
-g_d, where g_d is a 1-dimensional vector containing the diagoanl values of the
-diagonal matrix. The result is stored in s_a
 \end{desc}
 
 \apih{SPRS ARRAY MATMAT MULTIPLY}{Multiply two sparse matrices to get a third
@@ -11814,34 +11873,6 @@ subroutine nga_sprs_array_matvec_multiply(s_a, g_a, g_v)
 This function performs a sparse matrix-vector multiplication. The sparse matrix
 represented by the handle s_a is multiplied by the vector g_a (a standard
 1-dimensional global array) to get the vector g_v.
-\end{desc}
-
-\apih{SPRS ARRAY RIGHT DIAG MULTIPLY}{Right multiply the sparse matrix by a diagonal matrix}
-
-\begin{capi}
-\begin{ccode}
-void NGA_Sprs_array_right_diag_multiply(int s_a, int g_d)
-\end{ccode}
-\begin{funcargs}
-\inarg{int}{s_a}{handle for sparse array}
-\inarg{int}{g_d}{handle for global array representing diagonal matrix}
-\end{funcargs}
-\end{capi}
-
-\begin{fapi}
-\begin{fcode}
-subroutine nga_sprs_array_right_diag_multiply(s_a, g_d)
-\end{fcode}
-\inarg{integer}{s_a}{handle for sparse array}
-\inarg{integer}{g_d}{handle for global array representing diagonal matrix}
-\end{fapi}
-
-\gcoll
-
-\begin{desc}
-This function will right multiply the sparse matrix s_a by the diagonal matrix
-g_d, where g_d is a 1-dimensional vector containing the diagoanl values of the
-diagonal matrix. The result is stored in s_a.
 \end{desc}
 
 \apih{SPRS ARRAY ROW DISTRIBUTION}{Find rows of sparse array owned by process
