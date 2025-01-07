@@ -5069,8 +5069,8 @@ Allocate and initialize internal data structures in Global Arrays.
 
 \begin{capi}
 \begin{ccode}
-void NGA_Initialize_comm(MPI_Comm comm)
-void GA_Initialize_comm(MPI_Comm comm)
+int NGA_Initialize_comm(MPI_Comm comm)
+int GA_Initialize_comm(MPI_Comm comm)
 \end{ccode}
 \begin{funcargs}
 \inarg{MPI_Comm}{comm}{MPI communicator used to initialize GA}
@@ -5079,8 +5079,8 @@ void GA_Initialize_comm(MPI_Comm comm)
 
 \begin{fapi}
 \begin{fcode}
-subroutine nga_initialize_comm(comm)
-subroutine ga_initialize_comm(comm)
+logical function nga_initialize_comm(comm)
+logical function ga_initialize_comm(comm)
 \end{fcode}
 \begin{funcargs}
 \inarg{MPI_Comm}{comm}{MPI communicator used to initialize GA}
@@ -5092,13 +5092,48 @@ subroutine ga_initialize_comm(comm)
 \begin{desc}
 
 Allocate and initialize internal data structures in Global Arrays on a
-restrictied set of processors described by comm. This can be used to initialize
+restricted set of processors described by comm. This can be used to initialize
 a GA application that is being called as a subroutine by an application that
 does not used GA without requiring that the calling application initialize GA.
 
 Note that if you are using the Progress Ranks runtime, you need to take care
 that the communicator you pass to the GA application has the correct properties.
 Specifically, the communicator must have at least 2 ranks per SMP node.
+
+This initialization returns a logical value that is used to guarantee that the
+program does not hang when exiting the subroutine initializing GA. This can
+happen when using the progress ranks runtime. A properly constructed function
+using this initialization is shown below.
+\end{desc}
+
+\begin{fdesc}
+\begin{verbatim}
+subroutine my_ga_app(...., comm)
+  MPI_Comm comm
+  if (nga_initialize(comm)) then
+!   Main body of code here
+  endif
+end
+\end{verbatim}
+\end{fdesc}
+
+\begin{cdesc}
+\begin{verbatim}
+void my_ga_app(...., MPI_Comm comm)
+{
+  if (NGA_Initialize(comm)) {
+    /* Main body of code here */
+  }
+}
+\end{verbatim}
+\end{cdesc}
+
+\begin{desc}
+For the progress rank runtime or other runtimes that use a helper process to
+manage asynchronous progress, the conditional guarantees that the function or
+subroutine exits cleanly. Without the conditional, the progress ranks will
+attempt to execute the code after the application has finished, usually with
+poor results.
 \end{desc}
 
 \seealso{INITIALIZE,INITIALIZE LTD}
@@ -10538,7 +10573,7 @@ around the visible data on each processor. The local data of the global array
 residing on each processor will have a layer width(n) ghosts cells wide on
 either side of the visible data along the dimension n.
 
-An example is shown in Figure \ref{setirregdist}.
+An example is shown in the figure below.
 
 \begin{figure}
 \centering
