@@ -51,7 +51,7 @@ apih            = re.compile(r'^\\apih{(.*)}{(.*)}$')
 inarg           = re.compile(r'^\\inarg{(.*)}{(.*)}{(.*)}$')
 outarg          = re.compile(r'^\\outarg{(.*)}{(.*)}{(.*)}$')
 inoutarg        = re.compile(r'^\\inoutarg{(.*)}{(.*)}{(.*)}$')
-includegraphics = re.compile(r'^\\includegraphics{(.*)}$')
+includegraphics = re.compile(r'\\includegraphics(?:\[[^\]]*\])?{([^}]*)}')
 seealso         = re.compile(r'^\\seealso{(.*)}$')
 
 style_out="color: rgb(102, 0, 0);"
@@ -92,7 +92,9 @@ def normalize_whitespace(str):
 
 def main():
     if len(sys.argv) != 3 and len(sys.argv) != 4:
-        raise ValueError, "usage: ./gen_html_api.py input_dir language [output_filename]"
+        raise ValueError("usage: ./gen_html_api.py input_dir language [output_filename]")
+    print(extra_header)
+
     path = sys.argv[1]
     lang = sys.argv[2]
     name = ""
@@ -105,7 +107,9 @@ def main():
         path += '/'
     files = os.listdir(path)
     out = open(name,'w')
-    out.write(pre % lang_to_pretty[lang])
+    pre1 = pre
+    pre1 = re.sub(r'(?<!%)%(?!s)', '%%', pre1)  # Replace % not followed by 's'
+    out.write(pre1 % lang_to_pretty[lang])
     need_rule = False
     in_code = False
     code = ""
@@ -119,12 +123,12 @@ def main():
     # sort filenames but ignore the .tex extension
     for file in sorted(files, key=lambda x: x[:-4]):
         if file[-4:] != '.tex' or file[0] == '.':
-            print "skipping file %s" % path+file
+            print("skipping file %s" % path+file)
             continue
         if os.path.isdir(path+file):
-            print "skipping dir %s" % path+file
+            print("skipping dir %s" % path+file)
             continue
-        print "parsing %s" % path+file
+        print("parsing %s" % path+file)
         for line in open(path+file):
             if 'apih' in line:
                 line = line.strip()
@@ -135,7 +139,7 @@ def main():
                     need_rule = True
                 match = apih.match(line)
                 if not match:
-                    raise ValueError, "apih error, line %s" % line
+                    raise ValueError("apih error, line %s" % line)
                 name,desc = match.groups()
                 link = name.replace(" ", "_")
                 out.write('<h3 id="%s">%s</h3>\n' % (link, name))
@@ -177,7 +181,7 @@ def main():
                 if 'inoutarg' in line:
                     match = inoutarg.match(line.strip())
                     if not match:
-                        print "in %s\nline: %s" % (path+file,line)
+                        print("in %s\nline: %s" % (path+file,line))
                         assert(False)
                     type,name,desc = match.groups()
                     out.write('<tr><td>%s</td><td>%s</td><td>%s</td><td><span style="%s">input</span>/<span style="%s">output</span></td>\n' % (
@@ -185,7 +189,7 @@ def main():
                 elif 'inarg' in line:
                     match = inarg.match(line.strip())
                     if not match:
-                        print "in %s\nline: %s" % (path+file,line)
+                        print("in %s\nline: %s" % (path+file,line))
                         assert(False)
                     type,name,desc = match.groups()
                     out.write('<tr><td>%s</td><td>%s</td><td>%s</td><td><span style="%s">input</span></td>\n' % (
@@ -193,13 +197,13 @@ def main():
                 elif 'outarg' in line:
                     match = outarg.match(line.strip())
                     if not match:
-                        print "in %s\nline: %s" % (path+file,line)
+                        print("in %s\nline: %s" % (path+file,line))
                         assert(False)
                     type,name,desc = match.groups()
                     out.write('<tr><td>%s</td><td>%s</td><td>%s</td><td><span style="%s">output</span></td>\n' % (
                         type,name,desc,style_out))
                 else:
-                    print "in %s\nline: %s" % (path+file,line)
+                    print("in %s\nline: %s" % (path+file,line))
                     assert(False)
             elif "\\wcoll" in line:
                 out.write("<p>Collective on the world processor group.</p>\n")
@@ -242,7 +246,7 @@ def main():
                     if "includegraphics" in line:
                         match = includegraphics.match(line.strip())
                         if not match:
-                            print "in %s\nline: %s" % (path+file,line)
+                            print("in %s\nline: %s" % (path+file,line))
                             assert(False)
                         graphics_file = match.group(1)
                         graphics_file += ".png"

@@ -39,7 +39,7 @@ post="""
 
 def main():
     if len(sys.argv) != 3 and len(sys.argv) != 4:
-        raise ValueError, "usage: ./gen_html_index.py input_dir language [output_filename]"
+        raise ValueError("usage: ./gen_html_index.py input_dir language [output_filename]")
     path = sys.argv[1]
     lang = sys.argv[2]
     name = ""
@@ -56,18 +56,18 @@ def main():
     # sort filenames but ignore the .tex extension
     for file in sorted(files, key=lambda x: x[:-4]):
         if file[-4:] != '.tex':
-            print "skipping file %s" % path+file
+            print("skipping file %s" % path+file)
             continue
         if os.path.isdir(path+file):
-            print "skipping dir %s" % path+file
+            print("skipping dir %s" % path+file)
             continue
-        print "parsing %s" % path+file
+        print("parsing %s" % path+file)
         for line in open(path+file):
             if 'apih' in line:
                 line = line.strip()
                 match = apih.match(line)
                 if not match:
-                    raise ValueError, "apih error, line %s" % line
+                    raise ValueError("apih error, line %s" % line)
                 name,desc = match.groups()
                 link = name.replace(" ", "_")
                 out.write('<dt><a target="api" href="%s_op_api.html#%s">%s</a></dt>\n' % (
